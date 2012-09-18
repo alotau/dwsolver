@@ -1,0 +1,9 @@
+Minimize
+ objective: 7 x13 + 10 x14
+ 
+Subject to
+ c1: x13 - x14 = 1
+ b1: x13 <= 65
+ b2: x14 <= 65
+
+end

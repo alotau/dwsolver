@@ -1,0 +1,44 @@
+Change log for DWSOLVER.
+
+--------------------------------------------------------------------------------
+- Version 1.2
+- Released October 22, 2010
+- Contact Joseph.L.Rios@nasa.gov
+--------------------------------------------------------------------------------
+
+Found and fixed a memory allocation error in the subproblem thread.  Error
+was only visible when there were more rows in the master problem than there
+were variables in a given subproblem.  None of the prior examples exhibited this
+behavior.
+
+Added command line option to enforce integral constraints in the subproblems.
+This is important if experimenting with the integerization heuristic (-i flag).
+
+Added some comments throughout.
+
+--------------------------------------------------------------------------------
+- Version 1.1
+- Released October 15, 2010
+- Contact Joseph.L.Rios@nasa.gov
+--------------------------------------------------------------------------------
+
+Fixed distribution package which was missing a header file.  Added automatic
+detection of OSX build so that the --enable-named-semaphores flag is now not
+necessary when building on Mac (it will be set automatically).
+
+
+--------------------------------------------------------------------------------
+- Version 1.0
+- Released September 8, 2010
+- Contact Joseph.L.Rios@nasa.gov
+--------------------------------------------------------------------------------
+
+Initial release.  Dantzig-Wolfe Solver (DWSOLVER) is a general, parallel
+implementation of the Dantzig-Wolfe Decomposition algorithm built upon the
+GNU Linear Programming Kit (GLPK).  This is a command-line only tool.  All
+input and output is file-based.  The user must supply a decomposed linear
+program as input.  For details, execute "dwsolver --help".  For examples, see
+the "examples" directory.  Current major limitations include the necessity of
+bounded subproblems, necessity of every master variable appearing in exactly
+one subproblem.  For a large number of problems, these are not major issues. 
+For other problems, there are some workarounds as described in the examples.

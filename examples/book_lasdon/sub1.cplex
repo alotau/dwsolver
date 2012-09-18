@@ -1,0 +1,8 @@
+Minimize
+ objective: - 1 x1 - 1 x2
+ 
+Subject to
+ c1: x1   + 3 x2 <= 30
+ c2: 2 x1 + 1 x2 <= 20
+
+end

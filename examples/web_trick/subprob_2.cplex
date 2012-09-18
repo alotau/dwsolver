@@ -1,0 +1,7 @@
+Minimize
+ objective: x1
+
+Subject To
+ Con1: 1 x1 <= 3
+
+end 

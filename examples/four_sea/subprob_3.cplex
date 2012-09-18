@@ -1,0 +1,1704 @@
+MINIMIZE
+ objective: 1 w(AC4_3,SEA,199)
+SUBJECT TO
+ Temporality(AC4_3,SEA,200): w(AC4_3,SEA,200) - w(AC4_3,SEA,199) >= 0
+ Temporality(AC4_3,SEA,201): w(AC4_3,SEA,201) - w(AC4_3,SEA,200) >= 0
+ Temporality(AC4_3,SEA,202): w(AC4_3,SEA,202) - w(AC4_3,SEA,201) >= 0
+ Temporality(AC4_3,SEA,203): w(AC4_3,SEA,203) - w(AC4_3,SEA,202) >= 0
+ Temporality(AC4_3,SEA,204): w(AC4_3,SEA,204) - w(AC4_3,SEA,203) >= 0
+ Temporality(AC4_3,SEA,205): w(AC4_3,SEA,205) - w(AC4_3,SEA,204) >= 0
+ Temporality(AC4_3,SEA,206): w(AC4_3,SEA,206) - w(AC4_3,SEA,205) >= 0
+ Temporality(AC4_3,SEA,207): w(AC4_3,SEA,207) - w(AC4_3,SEA,206) >= 0
+ Temporality(AC4_3,SEA,208): w(AC4_3,SEA,208) - w(AC4_3,SEA,207) >= 0
+ Temporality(AC4_3,SEA,209): w(AC4_3,SEA,209) - w(AC4_3,SEA,208) >= 0
+ Temporality(AC4_3,SEA,210): w(AC4_3,SEA,210) - w(AC4_3,SEA,209) >= 0
+ Temporality(AC4_3,SEA,211): w(AC4_3,SEA,211) - w(AC4_3,SEA,210) >= 0
+ Temporality(AC4_3,SEA,212): w(AC4_3,SEA,212) - w(AC4_3,SEA,211) >= 0
+ Temporality(AC4_3,SEA,213): w(AC4_3,SEA,213) - w(AC4_3,SEA,212) >= 0
+ Temporality(AC4_3,SEA,214): w(AC4_3,SEA,214) - w(AC4_3,SEA,213) >= 0
+ Temporality(AC4_3,SEA,215): w(AC4_3,SEA,215) - w(AC4_3,SEA,214) >= 0
+ Temporality(AC4_3,SEA,216): w(AC4_3,SEA,216) - w(AC4_3,SEA,215) >= 0
+ Temporality(AC4_3,SEA,217): w(AC4_3,SEA,217) - w(AC4_3,SEA,216) >= 0
+ Temporality(AC4_3,SEA,218): w(AC4_3,SEA,218) - w(AC4_3,SEA,217) >= 0
+ Temporality(AC4_3,LAS,21): w(AC4_3,LAS,21) - w(AC4_3,LAS,20) >= 0
+ Temporality(AC4_3,LAS,22): w(AC4_3,LAS,22) - w(AC4_3,LAS,21) >= 0
+ Temporality(AC4_3,LAS,23): w(AC4_3,LAS,23) - w(AC4_3,LAS,22) >= 0
+ Temporality(AC4_3,LAS,24): w(AC4_3,LAS,24) - w(AC4_3,LAS,23) >= 0
+ Temporality(AC4_3,LAS,25): w(AC4_3,LAS,25) - w(AC4_3,LAS,24) >= 0
+ Temporality(AC4_3,LAS,26): w(AC4_3,LAS,26) - w(AC4_3,LAS,25) >= 0
+ Temporality(AC4_3,LAS,27): w(AC4_3,LAS,27) - w(AC4_3,LAS,26) >= 0
+ Temporality(AC4_3,LAS,28): w(AC4_3,LAS,28) - w(AC4_3,LAS,27) >= 0
+ Temporality(AC4_3,LAS,29): w(AC4_3,LAS,29) - w(AC4_3,LAS,28) >= 0
+ Temporality(AC4_3,LAS,30): w(AC4_3,LAS,30) - w(AC4_3,LAS,29) >= 0
+ Temporality(AC4_3,LAS,31): w(AC4_3,LAS,31) - w(AC4_3,LAS,30) >= 0
+ Temporality(AC4_3,LAS,32): w(AC4_3,LAS,32) - w(AC4_3,LAS,31) >= 0
+ Temporality(AC4_3,LAS,33): w(AC4_3,LAS,33) - w(AC4_3,LAS,32) >= 0
+ Temporality(AC4_3,LAS,34): w(AC4_3,LAS,34) - w(AC4_3,LAS,33) >= 0
+ Temporality(AC4_3,LAS,35): w(AC4_3,LAS,35) - w(AC4_3,LAS,34) >= 0
+ Temporality(AC4_3,LAS,36): w(AC4_3,LAS,36) - w(AC4_3,LAS,35) >= 0
+ Temporality(AC4_3,LAS,37): w(AC4_3,LAS,37) - w(AC4_3,LAS,36) >= 0
+ Temporality(AC4_3,LAS,38): w(AC4_3,LAS,38) - w(AC4_3,LAS,37) >= 0
+ Temporality(AC4_3,LAS,39): w(AC4_3,LAS,39) - w(AC4_3,LAS,38) >= 0
+ Sector_Time(AC4_3,LAS,20): w(AC4_3,ZLA16,21) - w(AC4_3,LAS,20) <= 0
+ Sector_Time(AC4_3,LAS,21): w(AC4_3,ZLA16,22) - w(AC4_3,LAS,21) <= 0
+ Sector_Time(AC4_3,LAS,22): w(AC4_3,ZLA16,23) - w(AC4_3,LAS,22) <= 0
+ Sector_Time(AC4_3,LAS,23): w(AC4_3,ZLA16,24) - w(AC4_3,LAS,23) <= 0
+ Sector_Time(AC4_3,LAS,24): w(AC4_3,ZLA16,25) - w(AC4_3,LAS,24) <= 0
+ Sector_Time(AC4_3,LAS,25): w(AC4_3,ZLA16,26) - w(AC4_3,LAS,25) <= 0
+ Sector_Time(AC4_3,LAS,26): w(AC4_3,ZLA16,27) - w(AC4_3,LAS,26) <= 0
+ Sector_Time(AC4_3,LAS,27): w(AC4_3,ZLA16,28) - w(AC4_3,LAS,27) <= 0
+ Sector_Time(AC4_3,LAS,28): w(AC4_3,ZLA16,29) - w(AC4_3,LAS,28) <= 0
+ Sector_Time(AC4_3,LAS,29): w(AC4_3,ZLA16,30) - w(AC4_3,LAS,29) <= 0
+ Sector_Time(AC4_3,LAS,30): w(AC4_3,ZLA16,31) - w(AC4_3,LAS,30) <= 0
+ Sector_Time(AC4_3,LAS,31): w(AC4_3,ZLA16,32) - w(AC4_3,LAS,31) <= 0
+ Sector_Time(AC4_3,LAS,32): w(AC4_3,ZLA16,33) - w(AC4_3,LAS,32) <= 0
+ Sector_Time(AC4_3,LAS,33): w(AC4_3,ZLA16,34) - w(AC4_3,LAS,33) <= 0
+ Sector_Time(AC4_3,LAS,34): w(AC4_3,ZLA16,35) - w(AC4_3,LAS,34) <= 0
+ Sector_Time(AC4_3,LAS,35): w(AC4_3,ZLA16,36) - w(AC4_3,LAS,35) <= 0
+ Sector_Time(AC4_3,LAS,36): w(AC4_3,ZLA16,37) - w(AC4_3,LAS,36) <= 0
+ Sector_Time(AC4_3,LAS,37): w(AC4_3,ZLA16,38) - w(AC4_3,LAS,37) <= 0
+ Sector_Time(AC4_3,LAS,38): w(AC4_3,ZLA16,39) - w(AC4_3,LAS,38) <= 0
+ Sector_Time(AC4_3,LAS,39): w(AC4_3,ZLA16,40) - w(AC4_3,LAS,39) <= 0
+ Sector_Time(AC4_3,ZLA16,21): w(AC4_3,ZOA46,36) - w(AC4_3,ZLA16,21) <= 0
+ Sector_Time(AC4_3,ZLA16,22): w(AC4_3,ZOA46,37) - w(AC4_3,ZLA16,22) <= 0
+ Temporality(AC4_3,ZLA16,22): w(AC4_3,ZLA16,22) - w(AC4_3,ZLA16,21) >= 0
+ Sector_Time(AC4_3,ZLA16,23): w(AC4_3,ZOA46,38) - w(AC4_3,ZLA16,23) <= 0
+ Temporality(AC4_3,ZLA16,23): w(AC4_3,ZLA16,23) - w(AC4_3,ZLA16,22) >= 0
+ Sector_Time(AC4_3,ZLA16,24): w(AC4_3,ZOA46,39) - w(AC4_3,ZLA16,24) <= 0
+ Temporality(AC4_3,ZLA16,24): w(AC4_3,ZLA16,24) - w(AC4_3,ZLA16,23) >= 0
+ Sector_Time(AC4_3,ZLA16,25): w(AC4_3,ZOA46,40) - w(AC4_3,ZLA16,25) <= 0
+ Temporality(AC4_3,ZLA16,25): w(AC4_3,ZLA16,25) - w(AC4_3,ZLA16,24) >= 0
+ Sector_Time(AC4_3,ZLA16,26): w(AC4_3,ZOA46,41) - w(AC4_3,ZLA16,26) <= 0
+ Temporality(AC4_3,ZLA16,26): w(AC4_3,ZLA16,26) - w(AC4_3,ZLA16,25) >= 0
+ Sector_Time(AC4_3,ZLA16,27): w(AC4_3,ZOA46,42) - w(AC4_3,ZLA16,27) <= 0
+ Temporality(AC4_3,ZLA16,27): w(AC4_3,ZLA16,27) - w(AC4_3,ZLA16,26) >= 0
+ Sector_Time(AC4_3,ZLA16,28): w(AC4_3,ZOA46,43) - w(AC4_3,ZLA16,28) <= 0
+ Temporality(AC4_3,ZLA16,28): w(AC4_3,ZLA16,28) - w(AC4_3,ZLA16,27) >= 0
+ Sector_Time(AC4_3,ZLA16,29): w(AC4_3,ZOA46,44) - w(AC4_3,ZLA16,29) <= 0
+ Temporality(AC4_3,ZLA16,29): w(AC4_3,ZLA16,29) - w(AC4_3,ZLA16,28) >= 0
+ Sector_Time(AC4_3,ZLA16,30): w(AC4_3,ZOA46,45) - w(AC4_3,ZLA16,30) <= 0
+ Temporality(AC4_3,ZLA16,30): w(AC4_3,ZLA16,30) - w(AC4_3,ZLA16,29) >= 0
+ Sector_Time(AC4_3,ZLA16,31): w(AC4_3,ZOA46,46) - w(AC4_3,ZLA16,31) <= 0
+ Temporality(AC4_3,ZLA16,31): w(AC4_3,ZLA16,31) - w(AC4_3,ZLA16,30) >= 0
+ Sector_Time(AC4_3,ZLA16,32): w(AC4_3,ZOA46,47) - w(AC4_3,ZLA16,32) <= 0
+ Temporality(AC4_3,ZLA16,32): w(AC4_3,ZLA16,32) - w(AC4_3,ZLA16,31) >= 0
+ Sector_Time(AC4_3,ZLA16,33): w(AC4_3,ZOA46,48) - w(AC4_3,ZLA16,33) <= 0
+ Temporality(AC4_3,ZLA16,33): w(AC4_3,ZLA16,33) - w(AC4_3,ZLA16,32) >= 0
+ Sector_Time(AC4_3,ZLA16,34): w(AC4_3,ZOA46,49) - w(AC4_3,ZLA16,34) <= 0
+ Temporality(AC4_3,ZLA16,34): w(AC4_3,ZLA16,34) - w(AC4_3,ZLA16,33) >= 0
+ Sector_Time(AC4_3,ZLA16,35): w(AC4_3,ZOA46,50) - w(AC4_3,ZLA16,35) <= 0
+ Temporality(AC4_3,ZLA16,35): w(AC4_3,ZLA16,35) - w(AC4_3,ZLA16,34) >= 0
+ Sector_Time(AC4_3,ZLA16,36): w(AC4_3,ZOA46,51) - w(AC4_3,ZLA16,36) <= 0
+ Temporality(AC4_3,ZLA16,36): w(AC4_3,ZLA16,36) - w(AC4_3,ZLA16,35) >= 0
+ Sector_Time(AC4_3,ZLA16,37): w(AC4_3,ZOA46,52) - w(AC4_3,ZLA16,37) <= 0
+ Temporality(AC4_3,ZLA16,37): w(AC4_3,ZLA16,37) - w(AC4_3,ZLA16,36) >= 0
+ Sector_Time(AC4_3,ZLA16,38): w(AC4_3,ZOA46,53) - w(AC4_3,ZLA16,38) <= 0
+ Temporality(AC4_3,ZLA16,38): w(AC4_3,ZLA16,38) - w(AC4_3,ZLA16,37) >= 0
+ Sector_Time(AC4_3,ZLA16,39): w(AC4_3,ZOA46,54) - w(AC4_3,ZLA16,39) <= 0
+ Temporality(AC4_3,ZLA16,39): w(AC4_3,ZLA16,39) - w(AC4_3,ZLA16,38) >= 0
+ Sector_Time(AC4_3,ZLA16,40): w(AC4_3,ZOA46,55) - w(AC4_3,ZLA16,40) <= 0
+ Temporality(AC4_3,ZLA16,40): w(AC4_3,ZLA16,40) - w(AC4_3,ZLA16,39) >= 0
+ Sector_Time(AC4_3,ZOA46,36): w(AC4_3,ZOA45,69) - w(AC4_3,ZOA46,36) <= 0
+ Sector_Time(AC4_3,ZOA46,37): w(AC4_3,ZOA45,70) - w(AC4_3,ZOA46,37) <= 0
+ Temporality(AC4_3,ZOA46,37): w(AC4_3,ZOA46,37) - w(AC4_3,ZOA46,36) >= 0
+ Sector_Time(AC4_3,ZOA46,38): w(AC4_3,ZOA45,71) - w(AC4_3,ZOA46,38) <= 0
+ Temporality(AC4_3,ZOA46,38): w(AC4_3,ZOA46,38) - w(AC4_3,ZOA46,37) >= 0
+ Sector_Time(AC4_3,ZOA46,39): w(AC4_3,ZOA45,72) - w(AC4_3,ZOA46,39) <= 0
+ Temporality(AC4_3,ZOA46,39): w(AC4_3,ZOA46,39) - w(AC4_3,ZOA46,38) >= 0
+ Sector_Time(AC4_3,ZOA46,40): w(AC4_3,ZOA45,73) - w(AC4_3,ZOA46,40) <= 0
+ Temporality(AC4_3,ZOA46,40): w(AC4_3,ZOA46,40) - w(AC4_3,ZOA46,39) >= 0
+ Sector_Time(AC4_3,ZOA46,41): w(AC4_3,ZOA45,74) - w(AC4_3,ZOA46,41) <= 0
+ Temporality(AC4_3,ZOA46,41): w(AC4_3,ZOA46,41) - w(AC4_3,ZOA46,40) >= 0
+ Sector_Time(AC4_3,ZOA46,42): w(AC4_3,ZOA45,75) - w(AC4_3,ZOA46,42) <= 0
+ Temporality(AC4_3,ZOA46,42): w(AC4_3,ZOA46,42) - w(AC4_3,ZOA46,41) >= 0
+ Sector_Time(AC4_3,ZOA46,43): w(AC4_3,ZOA45,76) - w(AC4_3,ZOA46,43) <= 0
+ Temporality(AC4_3,ZOA46,43): w(AC4_3,ZOA46,43) - w(AC4_3,ZOA46,42) >= 0
+ Sector_Time(AC4_3,ZOA46,44): w(AC4_3,ZOA45,77) - w(AC4_3,ZOA46,44) <= 0
+ Temporality(AC4_3,ZOA46,44): w(AC4_3,ZOA46,44) - w(AC4_3,ZOA46,43) >= 0
+ Sector_Time(AC4_3,ZOA46,45): w(AC4_3,ZOA45,78) - w(AC4_3,ZOA46,45) <= 0
+ Temporality(AC4_3,ZOA46,45): w(AC4_3,ZOA46,45) - w(AC4_3,ZOA46,44) >= 0
+ Sector_Time(AC4_3,ZOA46,46): w(AC4_3,ZOA45,79) - w(AC4_3,ZOA46,46) <= 0
+ Temporality(AC4_3,ZOA46,46): w(AC4_3,ZOA46,46) - w(AC4_3,ZOA46,45) >= 0
+ Sector_Time(AC4_3,ZOA46,47): w(AC4_3,ZOA45,80) - w(AC4_3,ZOA46,47) <= 0
+ Temporality(AC4_3,ZOA46,47): w(AC4_3,ZOA46,47) - w(AC4_3,ZOA46,46) >= 0
+ Sector_Time(AC4_3,ZOA46,48): w(AC4_3,ZOA45,81) - w(AC4_3,ZOA46,48) <= 0
+ Temporality(AC4_3,ZOA46,48): w(AC4_3,ZOA46,48) - w(AC4_3,ZOA46,47) >= 0
+ Sector_Time(AC4_3,ZOA46,49): w(AC4_3,ZOA45,82) - w(AC4_3,ZOA46,49) <= 0
+ Temporality(AC4_3,ZOA46,49): w(AC4_3,ZOA46,49) - w(AC4_3,ZOA46,48) >= 0
+ Sector_Time(AC4_3,ZOA46,50): w(AC4_3,ZOA45,83) - w(AC4_3,ZOA46,50) <= 0
+ Temporality(AC4_3,ZOA46,50): w(AC4_3,ZOA46,50) - w(AC4_3,ZOA46,49) >= 0
+ Sector_Time(AC4_3,ZOA46,51): w(AC4_3,ZOA45,84) - w(AC4_3,ZOA46,51) <= 0
+ Temporality(AC4_3,ZOA46,51): w(AC4_3,ZOA46,51) - w(AC4_3,ZOA46,50) >= 0
+ Sector_Time(AC4_3,ZOA46,52): w(AC4_3,ZOA45,85) - w(AC4_3,ZOA46,52) <= 0
+ Temporality(AC4_3,ZOA46,52): w(AC4_3,ZOA46,52) - w(AC4_3,ZOA46,51) >= 0
+ Sector_Time(AC4_3,ZOA46,53): w(AC4_3,ZOA45,86) - w(AC4_3,ZOA46,53) <= 0
+ Temporality(AC4_3,ZOA46,53): w(AC4_3,ZOA46,53) - w(AC4_3,ZOA46,52) >= 0
+ Sector_Time(AC4_3,ZOA46,54): w(AC4_3,ZOA45,87) - w(AC4_3,ZOA46,54) <= 0
+ Temporality(AC4_3,ZOA46,54): w(AC4_3,ZOA46,54) - w(AC4_3,ZOA46,53) >= 0
+ Sector_Time(AC4_3,ZOA46,55): w(AC4_3,ZOA45,88) - w(AC4_3,ZOA46,55) <= 0
+ Temporality(AC4_3,ZOA46,55): w(AC4_3,ZOA46,55) - w(AC4_3,ZOA46,54) >= 0
+ Sector_Time(AC4_3,ZOA45,69): w(AC4_3,ZLC43,92) - w(AC4_3,ZOA45,69) <= 0
+ Sector_Time(AC4_3,ZOA45,70): w(AC4_3,ZLC43,93) - w(AC4_3,ZOA45,70) <= 0
+ Temporality(AC4_3,ZOA45,70): w(AC4_3,ZOA45,70) - w(AC4_3,ZOA45,69) >= 0
+ Sector_Time(AC4_3,ZOA45,71): w(AC4_3,ZLC43,94) - w(AC4_3,ZOA45,71) <= 0
+ Temporality(AC4_3,ZOA45,71): w(AC4_3,ZOA45,71) - w(AC4_3,ZOA45,70) >= 0
+ Sector_Time(AC4_3,ZOA45,72): w(AC4_3,ZLC43,95) - w(AC4_3,ZOA45,72) <= 0
+ Temporality(AC4_3,ZOA45,72): w(AC4_3,ZOA45,72) - w(AC4_3,ZOA45,71) >= 0
+ Sector_Time(AC4_3,ZOA45,73): w(AC4_3,ZLC43,96) - w(AC4_3,ZOA45,73) <= 0
+ Temporality(AC4_3,ZOA45,73): w(AC4_3,ZOA45,73) - w(AC4_3,ZOA45,72) >= 0
+ Sector_Time(AC4_3,ZOA45,74): w(AC4_3,ZLC43,97) - w(AC4_3,ZOA45,74) <= 0
+ Temporality(AC4_3,ZOA45,74): w(AC4_3,ZOA45,74) - w(AC4_3,ZOA45,73) >= 0
+ Sector_Time(AC4_3,ZOA45,75): w(AC4_3,ZLC43,98) - w(AC4_3,ZOA45,75) <= 0
+ Temporality(AC4_3,ZOA45,75): w(AC4_3,ZOA45,75) - w(AC4_3,ZOA45,74) >= 0
+ Sector_Time(AC4_3,ZOA45,76): w(AC4_3,ZLC43,99) - w(AC4_3,ZOA45,76) <= 0
+ Temporality(AC4_3,ZOA45,76): w(AC4_3,ZOA45,76) - w(AC4_3,ZOA45,75) >= 0
+ Sector_Time(AC4_3,ZOA45,77): w(AC4_3,ZLC43,100) - w(AC4_3,ZOA45,77) <= 0
+ Temporality(AC4_3,ZOA45,77): w(AC4_3,ZOA45,77) - w(AC4_3,ZOA45,76) >= 0
+ Sector_Time(AC4_3,ZOA45,78): w(AC4_3,ZLC43,101) - w(AC4_3,ZOA45,78) <= 0
+ Temporality(AC4_3,ZOA45,78): w(AC4_3,ZOA45,78) - w(AC4_3,ZOA45,77) >= 0
+ Sector_Time(AC4_3,ZOA45,79): w(AC4_3,ZLC43,102) - w(AC4_3,ZOA45,79) <= 0
+ Temporality(AC4_3,ZOA45,79): w(AC4_3,ZOA45,79) - w(AC4_3,ZOA45,78) >= 0
+ Sector_Time(AC4_3,ZOA45,80): w(AC4_3,ZLC43,103) - w(AC4_3,ZOA45,80) <= 0
+ Temporality(AC4_3,ZOA45,80): w(AC4_3,ZOA45,80) - w(AC4_3,ZOA45,79) >= 0
+ Sector_Time(AC4_3,ZOA45,81): w(AC4_3,ZLC43,104) - w(AC4_3,ZOA45,81) <= 0
+ Temporality(AC4_3,ZOA45,81): w(AC4_3,ZOA45,81) - w(AC4_3,ZOA45,80) >= 0
+ Sector_Time(AC4_3,ZOA45,82): w(AC4_3,ZLC43,105) - w(AC4_3,ZOA45,82) <= 0
+ Temporality(AC4_3,ZOA45,82): w(AC4_3,ZOA45,82) - w(AC4_3,ZOA45,81) >= 0
+ Sector_Time(AC4_3,ZOA45,83): w(AC4_3,ZLC43,106) - w(AC4_3,ZOA45,83) <= 0
+ Temporality(AC4_3,ZOA45,83): w(AC4_3,ZOA45,83) - w(AC4_3,ZOA45,82) >= 0
+ Sector_Time(AC4_3,ZOA45,84): w(AC4_3,ZLC43,107) - w(AC4_3,ZOA45,84) <= 0
+ Temporality(AC4_3,ZOA45,84): w(AC4_3,ZOA45,84) - w(AC4_3,ZOA45,83) >= 0
+ Sector_Time(AC4_3,ZOA45,85): w(AC4_3,ZLC43,108) - w(AC4_3,ZOA45,85) <= 0
+ Temporality(AC4_3,ZOA45,85): w(AC4_3,ZOA45,85) - w(AC4_3,ZOA45,84) >= 0
+ Sector_Time(AC4_3,ZOA45,86): w(AC4_3,ZLC43,109) - w(AC4_3,ZOA45,86) <= 0
+ Temporality(AC4_3,ZOA45,86): w(AC4_3,ZOA45,86) - w(AC4_3,ZOA45,85) >= 0
+ Sector_Time(AC4_3,ZOA45,87): w(AC4_3,ZLC43,110) - w(AC4_3,ZOA45,87) <= 0
+ Temporality(AC4_3,ZOA45,87): w(AC4_3,ZOA45,87) - w(AC4_3,ZOA45,86) >= 0
+ Sector_Time(AC4_3,ZOA45,88): w(AC4_3,ZLC43,111) - w(AC4_3,ZOA45,88) <= 0
+ Temporality(AC4_3,ZOA45,88): w(AC4_3,ZOA45,88) - w(AC4_3,ZOA45,87) >= 0
+ Sector_Time(AC4_3,ZLC43,92): w(AC4_3,ZSE10,98) - w(AC4_3,ZLC43,92) <= 0
+ Sector_Time(AC4_3,ZLC43,93): w(AC4_3,ZSE10,99) - w(AC4_3,ZLC43,93) <= 0
+ Temporality(AC4_3,ZLC43,93): w(AC4_3,ZLC43,93) - w(AC4_3,ZLC43,92) >= 0
+ Sector_Time(AC4_3,ZLC43,94): w(AC4_3,ZSE10,100) - w(AC4_3,ZLC43,94) <= 0
+ Temporality(AC4_3,ZLC43,94): w(AC4_3,ZLC43,94) - w(AC4_3,ZLC43,93) >= 0
+ Sector_Time(AC4_3,ZLC43,95): w(AC4_3,ZSE10,101) - w(AC4_3,ZLC43,95) <= 0
+ Temporality(AC4_3,ZLC43,95): w(AC4_3,ZLC43,95) - w(AC4_3,ZLC43,94) >= 0
+ Sector_Time(AC4_3,ZLC43,96): w(AC4_3,ZSE10,102) - w(AC4_3,ZLC43,96) <= 0
+ Temporality(AC4_3,ZLC43,96): w(AC4_3,ZLC43,96) - w(AC4_3,ZLC43,95) >= 0
+ Sector_Time(AC4_3,ZLC43,97): w(AC4_3,ZSE10,103) - w(AC4_3,ZLC43,97) <= 0
+ Temporality(AC4_3,ZLC43,97): w(AC4_3,ZLC43,97) - w(AC4_3,ZLC43,96) >= 0
+ Sector_Time(AC4_3,ZLC43,98): w(AC4_3,ZSE10,104) - w(AC4_3,ZLC43,98) <= 0
+ Temporality(AC4_3,ZLC43,98): w(AC4_3,ZLC43,98) - w(AC4_3,ZLC43,97) >= 0
+ Sector_Time(AC4_3,ZLC43,99): w(AC4_3,ZSE10,105) - w(AC4_3,ZLC43,99) <= 0
+ Temporality(AC4_3,ZLC43,99): w(AC4_3,ZLC43,99) - w(AC4_3,ZLC43,98) >= 0
+ Sector_Time(AC4_3,ZLC43,100): w(AC4_3,ZSE10,106) - w(AC4_3,ZLC43,100) <= 0
+ Temporality(AC4_3,ZLC43,100): w(AC4_3,ZLC43,100) - w(AC4_3,ZLC43,99) >= 0
+ Sector_Time(AC4_3,ZLC43,101): w(AC4_3,ZSE10,107) - w(AC4_3,ZLC43,101) <= 0
+ Temporality(AC4_3,ZLC43,101): w(AC4_3,ZLC43,101) - w(AC4_3,ZLC43,100) >= 0
+ Sector_Time(AC4_3,ZLC43,102): w(AC4_3,ZSE10,108) - w(AC4_3,ZLC43,102) <= 0
+ Temporality(AC4_3,ZLC43,102): w(AC4_3,ZLC43,102) - w(AC4_3,ZLC43,101) >= 0
+ Sector_Time(AC4_3,ZLC43,103): w(AC4_3,ZSE10,109) - w(AC4_3,ZLC43,103) <= 0
+ Temporality(AC4_3,ZLC43,103): w(AC4_3,ZLC43,103) - w(AC4_3,ZLC43,102) >= 0
+ Sector_Time(AC4_3,ZLC43,104): w(AC4_3,ZSE10,110) - w(AC4_3,ZLC43,104) <= 0
+ Temporality(AC4_3,ZLC43,104): w(AC4_3,ZLC43,104) - w(AC4_3,ZLC43,103) >= 0
+ Sector_Time(AC4_3,ZLC43,105): w(AC4_3,ZSE10,111) - w(AC4_3,ZLC43,105) <= 0
+ Temporality(AC4_3,ZLC43,105): w(AC4_3,ZLC43,105) - w(AC4_3,ZLC43,104) >= 0
+ Sector_Time(AC4_3,ZLC43,106): w(AC4_3,ZSE10,112) - w(AC4_3,ZLC43,106) <= 0
+ Temporality(AC4_3,ZLC43,106): w(AC4_3,ZLC43,106) - w(AC4_3,ZLC43,105) >= 0
+ Sector_Time(AC4_3,ZLC43,107): w(AC4_3,ZSE10,113) - w(AC4_3,ZLC43,107) <= 0
+ Temporality(AC4_3,ZLC43,107): w(AC4_3,ZLC43,107) - w(AC4_3,ZLC43,106) >= 0
+ Sector_Time(AC4_3,ZLC43,108): w(AC4_3,ZSE10,114) - w(AC4_3,ZLC43,108) <= 0
+ Temporality(AC4_3,ZLC43,108): w(AC4_3,ZLC43,108) - w(AC4_3,ZLC43,107) >= 0
+ Sector_Time(AC4_3,ZLC43,109): w(AC4_3,ZSE10,115) - w(AC4_3,ZLC43,109) <= 0
+ Temporality(AC4_3,ZLC43,109): w(AC4_3,ZLC43,109) - w(AC4_3,ZLC43,108) >= 0
+ Sector_Time(AC4_3,ZLC43,110): w(AC4_3,ZSE10,116) - w(AC4_3,ZLC43,110) <= 0
+ Temporality(AC4_3,ZLC43,110): w(AC4_3,ZLC43,110) - w(AC4_3,ZLC43,109) >= 0
+ Sector_Time(AC4_3,ZLC43,111): w(AC4_3,ZSE10,117) - w(AC4_3,ZLC43,111) <= 0
+ Temporality(AC4_3,ZLC43,111): w(AC4_3,ZLC43,111) - w(AC4_3,ZLC43,110) >= 0
+ Sector_Time(AC4_3,ZSE10,98): w(AC4_3,ZSE05,134) - w(AC4_3,ZSE10,98) <= 0
+ Sector_Time(AC4_3,ZSE10,99): w(AC4_3,ZSE05,135) - w(AC4_3,ZSE10,99) <= 0
+ Temporality(AC4_3,ZSE10,99): w(AC4_3,ZSE10,99) - w(AC4_3,ZSE10,98) >= 0
+ Sector_Time(AC4_3,ZSE10,100): w(AC4_3,ZSE05,136) - w(AC4_3,ZSE10,100) <= 0
+ Temporality(AC4_3,ZSE10,100): w(AC4_3,ZSE10,100) - w(AC4_3,ZSE10,99) >= 0
+ Sector_Time(AC4_3,ZSE10,101): w(AC4_3,ZSE05,137) - w(AC4_3,ZSE10,101) <= 0
+ Temporality(AC4_3,ZSE10,101): w(AC4_3,ZSE10,101) - w(AC4_3,ZSE10,100) >= 0
+ Sector_Time(AC4_3,ZSE10,102): w(AC4_3,ZSE05,138) - w(AC4_3,ZSE10,102) <= 0
+ Temporality(AC4_3,ZSE10,102): w(AC4_3,ZSE10,102) - w(AC4_3,ZSE10,101) >= 0
+ Sector_Time(AC4_3,ZSE10,103): w(AC4_3,ZSE05,139) - w(AC4_3,ZSE10,103) <= 0
+ Temporality(AC4_3,ZSE10,103): w(AC4_3,ZSE10,103) - w(AC4_3,ZSE10,102) >= 0
+ Sector_Time(AC4_3,ZSE10,104): w(AC4_3,ZSE05,140) - w(AC4_3,ZSE10,104) <= 0
+ Temporality(AC4_3,ZSE10,104): w(AC4_3,ZSE10,104) - w(AC4_3,ZSE10,103) >= 0
+ Sector_Time(AC4_3,ZSE10,105): w(AC4_3,ZSE05,141) - w(AC4_3,ZSE10,105) <= 0
+ Temporality(AC4_3,ZSE10,105): w(AC4_3,ZSE10,105) - w(AC4_3,ZSE10,104) >= 0
+ Sector_Time(AC4_3,ZSE10,106): w(AC4_3,ZSE05,142) - w(AC4_3,ZSE10,106) <= 0
+ Temporality(AC4_3,ZSE10,106): w(AC4_3,ZSE10,106) - w(AC4_3,ZSE10,105) >= 0
+ Sector_Time(AC4_3,ZSE10,107): w(AC4_3,ZSE05,143) - w(AC4_3,ZSE10,107) <= 0
+ Temporality(AC4_3,ZSE10,107): w(AC4_3,ZSE10,107) - w(AC4_3,ZSE10,106) >= 0
+ Sector_Time(AC4_3,ZSE10,108): w(AC4_3,ZSE05,144) - w(AC4_3,ZSE10,108) <= 0
+ Temporality(AC4_3,ZSE10,108): w(AC4_3,ZSE10,108) - w(AC4_3,ZSE10,107) >= 0
+ Sector_Time(AC4_3,ZSE10,109): w(AC4_3,ZSE05,145) - w(AC4_3,ZSE10,109) <= 0
+ Temporality(AC4_3,ZSE10,109): w(AC4_3,ZSE10,109) - w(AC4_3,ZSE10,108) >= 0
+ Sector_Time(AC4_3,ZSE10,110): w(AC4_3,ZSE05,146) - w(AC4_3,ZSE10,110) <= 0
+ Temporality(AC4_3,ZSE10,110): w(AC4_3,ZSE10,110) - w(AC4_3,ZSE10,109) >= 0
+ Sector_Time(AC4_3,ZSE10,111): w(AC4_3,ZSE05,147) - w(AC4_3,ZSE10,111) <= 0
+ Temporality(AC4_3,ZSE10,111): w(AC4_3,ZSE10,111) - w(AC4_3,ZSE10,110) >= 0
+ Sector_Time(AC4_3,ZSE10,112): w(AC4_3,ZSE05,148) - w(AC4_3,ZSE10,112) <= 0
+ Temporality(AC4_3,ZSE10,112): w(AC4_3,ZSE10,112) - w(AC4_3,ZSE10,111) >= 0
+ Sector_Time(AC4_3,ZSE10,113): w(AC4_3,ZSE05,149) - w(AC4_3,ZSE10,113) <= 0
+ Temporality(AC4_3,ZSE10,113): w(AC4_3,ZSE10,113) - w(AC4_3,ZSE10,112) >= 0
+ Sector_Time(AC4_3,ZSE10,114): w(AC4_3,ZSE05,150) - w(AC4_3,ZSE10,114) <= 0
+ Temporality(AC4_3,ZSE10,114): w(AC4_3,ZSE10,114) - w(AC4_3,ZSE10,113) >= 0
+ Sector_Time(AC4_3,ZSE10,115): w(AC4_3,ZSE05,151) - w(AC4_3,ZSE10,115) <= 0
+ Temporality(AC4_3,ZSE10,115): w(AC4_3,ZSE10,115) - w(AC4_3,ZSE10,114) >= 0
+ Sector_Time(AC4_3,ZSE10,116): w(AC4_3,ZSE05,152) - w(AC4_3,ZSE10,116) <= 0
+ Temporality(AC4_3,ZSE10,116): w(AC4_3,ZSE10,116) - w(AC4_3,ZSE10,115) >= 0
+ Sector_Time(AC4_3,ZSE10,117): w(AC4_3,ZSE05,153) - w(AC4_3,ZSE10,117) <= 0
+ Temporality(AC4_3,ZSE10,117): w(AC4_3,ZSE10,117) - w(AC4_3,ZSE10,116) >= 0
+ Sector_Time(AC4_3,ZSE05,134): w(AC4_3,ZSE34,170) - w(AC4_3,ZSE05,134) <= 0
+ Sector_Time(AC4_3,ZSE05,135): w(AC4_3,ZSE34,171) - w(AC4_3,ZSE05,135) <= 0
+ Temporality(AC4_3,ZSE05,135): w(AC4_3,ZSE05,135) - w(AC4_3,ZSE05,134) >= 0
+ Sector_Time(AC4_3,ZSE05,136): w(AC4_3,ZSE34,172) - w(AC4_3,ZSE05,136) <= 0
+ Temporality(AC4_3,ZSE05,136): w(AC4_3,ZSE05,136) - w(AC4_3,ZSE05,135) >= 0
+ Sector_Time(AC4_3,ZSE05,137): w(AC4_3,ZSE34,173) - w(AC4_3,ZSE05,137) <= 0
+ Temporality(AC4_3,ZSE05,137): w(AC4_3,ZSE05,137) - w(AC4_3,ZSE05,136) >= 0
+ Sector_Time(AC4_3,ZSE05,138): w(AC4_3,ZSE34,174) - w(AC4_3,ZSE05,138) <= 0
+ Temporality(AC4_3,ZSE05,138): w(AC4_3,ZSE05,138) - w(AC4_3,ZSE05,137) >= 0
+ Sector_Time(AC4_3,ZSE05,139): w(AC4_3,ZSE34,175) - w(AC4_3,ZSE05,139) <= 0
+ Temporality(AC4_3,ZSE05,139): w(AC4_3,ZSE05,139) - w(AC4_3,ZSE05,138) >= 0
+ Sector_Time(AC4_3,ZSE05,140): w(AC4_3,ZSE34,176) - w(AC4_3,ZSE05,140) <= 0
+ Temporality(AC4_3,ZSE05,140): w(AC4_3,ZSE05,140) - w(AC4_3,ZSE05,139) >= 0
+ Sector_Time(AC4_3,ZSE05,141): w(AC4_3,ZSE34,177) - w(AC4_3,ZSE05,141) <= 0
+ Temporality(AC4_3,ZSE05,141): w(AC4_3,ZSE05,141) - w(AC4_3,ZSE05,140) >= 0
+ Sector_Time(AC4_3,ZSE05,142): w(AC4_3,ZSE34,178) - w(AC4_3,ZSE05,142) <= 0
+ Temporality(AC4_3,ZSE05,142): w(AC4_3,ZSE05,142) - w(AC4_3,ZSE05,141) >= 0
+ Sector_Time(AC4_3,ZSE05,143): w(AC4_3,ZSE34,179) - w(AC4_3,ZSE05,143) <= 0
+ Temporality(AC4_3,ZSE05,143): w(AC4_3,ZSE05,143) - w(AC4_3,ZSE05,142) >= 0
+ Sector_Time(AC4_3,ZSE05,144): w(AC4_3,ZSE34,180) - w(AC4_3,ZSE05,144) <= 0
+ Temporality(AC4_3,ZSE05,144): w(AC4_3,ZSE05,144) - w(AC4_3,ZSE05,143) >= 0
+ Sector_Time(AC4_3,ZSE05,145): w(AC4_3,ZSE34,181) - w(AC4_3,ZSE05,145) <= 0
+ Temporality(AC4_3,ZSE05,145): w(AC4_3,ZSE05,145) - w(AC4_3,ZSE05,144) >= 0
+ Sector_Time(AC4_3,ZSE05,146): w(AC4_3,ZSE34,182) - w(AC4_3,ZSE05,146) <= 0
+ Temporality(AC4_3,ZSE05,146): w(AC4_3,ZSE05,146) - w(AC4_3,ZSE05,145) >= 0
+ Sector_Time(AC4_3,ZSE05,147): w(AC4_3,ZSE34,183) - w(AC4_3,ZSE05,147) <= 0
+ Temporality(AC4_3,ZSE05,147): w(AC4_3,ZSE05,147) - w(AC4_3,ZSE05,146) >= 0
+ Sector_Time(AC4_3,ZSE05,148): w(AC4_3,ZSE34,184) - w(AC4_3,ZSE05,148) <= 0
+ Temporality(AC4_3,ZSE05,148): w(AC4_3,ZSE05,148) - w(AC4_3,ZSE05,147) >= 0
+ Sector_Time(AC4_3,ZSE05,149): w(AC4_3,ZSE34,185) - w(AC4_3,ZSE05,149) <= 0
+ Temporality(AC4_3,ZSE05,149): w(AC4_3,ZSE05,149) - w(AC4_3,ZSE05,148) >= 0
+ Sector_Time(AC4_3,ZSE05,150): w(AC4_3,ZSE34,186) - w(AC4_3,ZSE05,150) <= 0
+ Temporality(AC4_3,ZSE05,150): w(AC4_3,ZSE05,150) - w(AC4_3,ZSE05,149) >= 0
+ Sector_Time(AC4_3,ZSE05,151): w(AC4_3,ZSE34,187) - w(AC4_3,ZSE05,151) <= 0
+ Temporality(AC4_3,ZSE05,151): w(AC4_3,ZSE05,151) - w(AC4_3,ZSE05,150) >= 0
+ Sector_Time(AC4_3,ZSE05,152): w(AC4_3,ZSE34,188) - w(AC4_3,ZSE05,152) <= 0
+ Temporality(AC4_3,ZSE05,152): w(AC4_3,ZSE05,152) - w(AC4_3,ZSE05,151) >= 0
+ Sector_Time(AC4_3,ZSE05,153): w(AC4_3,ZSE34,189) - w(AC4_3,ZSE05,153) <= 0
+ Temporality(AC4_3,ZSE05,153): w(AC4_3,ZSE05,153) - w(AC4_3,ZSE05,152) >= 0
+ Sector_Time(AC4_3,ZSE34,170): w(AC4_3,ZSE02,174) - w(AC4_3,ZSE34,170) <= 0
+ Sector_Time(AC4_3,ZSE34,171): w(AC4_3,ZSE02,175) - w(AC4_3,ZSE34,171) <= 0
+ Temporality(AC4_3,ZSE34,171): w(AC4_3,ZSE34,171) - w(AC4_3,ZSE34,170) >= 0
+ Sector_Time(AC4_3,ZSE34,172): w(AC4_3,ZSE02,176) - w(AC4_3,ZSE34,172) <= 0
+ Temporality(AC4_3,ZSE34,172): w(AC4_3,ZSE34,172) - w(AC4_3,ZSE34,171) >= 0
+ Sector_Time(AC4_3,ZSE34,173): w(AC4_3,ZSE02,177) - w(AC4_3,ZSE34,173) <= 0
+ Temporality(AC4_3,ZSE34,173): w(AC4_3,ZSE34,173) - w(AC4_3,ZSE34,172) >= 0
+ Sector_Time(AC4_3,ZSE34,174): w(AC4_3,ZSE02,178) - w(AC4_3,ZSE34,174) <= 0
+ Temporality(AC4_3,ZSE34,174): w(AC4_3,ZSE34,174) - w(AC4_3,ZSE34,173) >= 0
+ Sector_Time(AC4_3,ZSE34,175): w(AC4_3,ZSE02,179) - w(AC4_3,ZSE34,175) <= 0
+ Temporality(AC4_3,ZSE34,175): w(AC4_3,ZSE34,175) - w(AC4_3,ZSE34,174) >= 0
+ Sector_Time(AC4_3,ZSE34,176): w(AC4_3,ZSE02,180) - w(AC4_3,ZSE34,176) <= 0
+ Temporality(AC4_3,ZSE34,176): w(AC4_3,ZSE34,176) - w(AC4_3,ZSE34,175) >= 0
+ Sector_Time(AC4_3,ZSE34,177): w(AC4_3,ZSE02,181) - w(AC4_3,ZSE34,177) <= 0
+ Temporality(AC4_3,ZSE34,177): w(AC4_3,ZSE34,177) - w(AC4_3,ZSE34,176) >= 0
+ Sector_Time(AC4_3,ZSE34,178): w(AC4_3,ZSE02,182) - w(AC4_3,ZSE34,178) <= 0
+ Temporality(AC4_3,ZSE34,178): w(AC4_3,ZSE34,178) - w(AC4_3,ZSE34,177) >= 0
+ Sector_Time(AC4_3,ZSE34,179): w(AC4_3,ZSE02,183) - w(AC4_3,ZSE34,179) <= 0
+ Temporality(AC4_3,ZSE34,179): w(AC4_3,ZSE34,179) - w(AC4_3,ZSE34,178) >= 0
+ Sector_Time(AC4_3,ZSE34,180): w(AC4_3,ZSE02,184) - w(AC4_3,ZSE34,180) <= 0
+ Temporality(AC4_3,ZSE34,180): w(AC4_3,ZSE34,180) - w(AC4_3,ZSE34,179) >= 0
+ Sector_Time(AC4_3,ZSE34,181): w(AC4_3,ZSE02,185) - w(AC4_3,ZSE34,181) <= 0
+ Temporality(AC4_3,ZSE34,181): w(AC4_3,ZSE34,181) - w(AC4_3,ZSE34,180) >= 0
+ Sector_Time(AC4_3,ZSE34,182): w(AC4_3,ZSE02,186) - w(AC4_3,ZSE34,182) <= 0
+ Temporality(AC4_3,ZSE34,182): w(AC4_3,ZSE34,182) - w(AC4_3,ZSE34,181) >= 0
+ Sector_Time(AC4_3,ZSE34,183): w(AC4_3,ZSE02,187) - w(AC4_3,ZSE34,183) <= 0
+ Temporality(AC4_3,ZSE34,183): w(AC4_3,ZSE34,183) - w(AC4_3,ZSE34,182) >= 0
+ Sector_Time(AC4_3,ZSE34,184): w(AC4_3,ZSE02,188) - w(AC4_3,ZSE34,184) <= 0
+ Temporality(AC4_3,ZSE34,184): w(AC4_3,ZSE34,184) - w(AC4_3,ZSE34,183) >= 0
+ Sector_Time(AC4_3,ZSE34,185): w(AC4_3,ZSE02,189) - w(AC4_3,ZSE34,185) <= 0
+ Temporality(AC4_3,ZSE34,185): w(AC4_3,ZSE34,185) - w(AC4_3,ZSE34,184) >= 0
+ Sector_Time(AC4_3,ZSE34,186): w(AC4_3,ZSE02,190) - w(AC4_3,ZSE34,186) <= 0
+ Temporality(AC4_3,ZSE34,186): w(AC4_3,ZSE34,186) - w(AC4_3,ZSE34,185) >= 0
+ Sector_Time(AC4_3,ZSE34,187): w(AC4_3,ZSE02,191) - w(AC4_3,ZSE34,187) <= 0
+ Temporality(AC4_3,ZSE34,187): w(AC4_3,ZSE34,187) - w(AC4_3,ZSE34,186) >= 0
+ Sector_Time(AC4_3,ZSE34,188): w(AC4_3,ZSE02,192) - w(AC4_3,ZSE34,188) <= 0
+ Temporality(AC4_3,ZSE34,188): w(AC4_3,ZSE34,188) - w(AC4_3,ZSE34,187) >= 0
+ Sector_Time(AC4_3,ZSE34,189): w(AC4_3,ZSE02,193) - w(AC4_3,ZSE34,189) <= 0
+ Temporality(AC4_3,ZSE34,189): w(AC4_3,ZSE34,189) - w(AC4_3,ZSE34,188) >= 0
+ Sector_Time(AC4_3,ZSE02,174): w(AC4_3,ZSESEA,192) - w(AC4_3,ZSE02,174) <= 0
+ Sector_Time(AC4_3,ZSE02,175): w(AC4_3,ZSESEA,193) - w(AC4_3,ZSE02,175) <= 0
+ Temporality(AC4_3,ZSE02,175): w(AC4_3,ZSE02,175) - w(AC4_3,ZSE02,174) >= 0
+ Sector_Time(AC4_3,ZSE02,176): w(AC4_3,ZSESEA,194) - w(AC4_3,ZSE02,176) <= 0
+ Temporality(AC4_3,ZSE02,176): w(AC4_3,ZSE02,176) - w(AC4_3,ZSE02,175) >= 0
+ Sector_Time(AC4_3,ZSE02,177): w(AC4_3,ZSESEA,195) - w(AC4_3,ZSE02,177) <= 0
+ Temporality(AC4_3,ZSE02,177): w(AC4_3,ZSE02,177) - w(AC4_3,ZSE02,176) >= 0
+ Sector_Time(AC4_3,ZSE02,178): w(AC4_3,ZSESEA,196) - w(AC4_3,ZSE02,178) <= 0
+ Temporality(AC4_3,ZSE02,178): w(AC4_3,ZSE02,178) - w(AC4_3,ZSE02,177) >= 0
+ Sector_Time(AC4_3,ZSE02,179): w(AC4_3,ZSESEA,197) - w(AC4_3,ZSE02,179) <= 0
+ Temporality(AC4_3,ZSE02,179): w(AC4_3,ZSE02,179) - w(AC4_3,ZSE02,178) >= 0
+ Sector_Time(AC4_3,ZSE02,180): w(AC4_3,ZSESEA,198) - w(AC4_3,ZSE02,180) <= 0
+ Temporality(AC4_3,ZSE02,180): w(AC4_3,ZSE02,180) - w(AC4_3,ZSE02,179) >= 0
+ Sector_Time(AC4_3,ZSE02,181): w(AC4_3,ZSESEA,199) - w(AC4_3,ZSE02,181) <= 0
+ Temporality(AC4_3,ZSE02,181): w(AC4_3,ZSE02,181) - w(AC4_3,ZSE02,180) >= 0
+ Sector_Time(AC4_3,ZSE02,182): w(AC4_3,ZSESEA,200) - w(AC4_3,ZSE02,182) <= 0
+ Temporality(AC4_3,ZSE02,182): w(AC4_3,ZSE02,182) - w(AC4_3,ZSE02,181) >= 0
+ Sector_Time(AC4_3,ZSE02,183): w(AC4_3,ZSESEA,201) - w(AC4_3,ZSE02,183) <= 0
+ Temporality(AC4_3,ZSE02,183): w(AC4_3,ZSE02,183) - w(AC4_3,ZSE02,182) >= 0
+ Sector_Time(AC4_3,ZSE02,184): w(AC4_3,ZSESEA,202) - w(AC4_3,ZSE02,184) <= 0
+ Temporality(AC4_3,ZSE02,184): w(AC4_3,ZSE02,184) - w(AC4_3,ZSE02,183) >= 0
+ Sector_Time(AC4_3,ZSE02,185): w(AC4_3,ZSESEA,203) - w(AC4_3,ZSE02,185) <= 0
+ Temporality(AC4_3,ZSE02,185): w(AC4_3,ZSE02,185) - w(AC4_3,ZSE02,184) >= 0
+ Sector_Time(AC4_3,ZSE02,186): w(AC4_3,ZSESEA,204) - w(AC4_3,ZSE02,186) <= 0
+ Temporality(AC4_3,ZSE02,186): w(AC4_3,ZSE02,186) - w(AC4_3,ZSE02,185) >= 0
+ Sector_Time(AC4_3,ZSE02,187): w(AC4_3,ZSESEA,205) - w(AC4_3,ZSE02,187) <= 0
+ Temporality(AC4_3,ZSE02,187): w(AC4_3,ZSE02,187) - w(AC4_3,ZSE02,186) >= 0
+ Sector_Time(AC4_3,ZSE02,188): w(AC4_3,ZSESEA,206) - w(AC4_3,ZSE02,188) <= 0
+ Temporality(AC4_3,ZSE02,188): w(AC4_3,ZSE02,188) - w(AC4_3,ZSE02,187) >= 0
+ Sector_Time(AC4_3,ZSE02,189): w(AC4_3,ZSESEA,207) - w(AC4_3,ZSE02,189) <= 0
+ Temporality(AC4_3,ZSE02,189): w(AC4_3,ZSE02,189) - w(AC4_3,ZSE02,188) >= 0
+ Sector_Time(AC4_3,ZSE02,190): w(AC4_3,ZSESEA,208) - w(AC4_3,ZSE02,190) <= 0
+ Temporality(AC4_3,ZSE02,190): w(AC4_3,ZSE02,190) - w(AC4_3,ZSE02,189) >= 0
+ Sector_Time(AC4_3,ZSE02,191): w(AC4_3,ZSESEA,209) - w(AC4_3,ZSE02,191) <= 0
+ Temporality(AC4_3,ZSE02,191): w(AC4_3,ZSE02,191) - w(AC4_3,ZSE02,190) >= 0
+ Sector_Time(AC4_3,ZSE02,192): w(AC4_3,ZSESEA,210) - w(AC4_3,ZSE02,192) <= 0
+ Temporality(AC4_3,ZSE02,192): w(AC4_3,ZSE02,192) - w(AC4_3,ZSE02,191) >= 0
+ Sector_Time(AC4_3,ZSE02,193): w(AC4_3,ZSESEA,211) - w(AC4_3,ZSE02,193) <= 0
+ Temporality(AC4_3,ZSE02,193): w(AC4_3,ZSE02,193) - w(AC4_3,ZSE02,192) >= 0
+ Sector_Time(AC4_3,ZSESEA,192): w(AC4_3,SEA,199) - w(AC4_3,ZSESEA,192) <= 0
+ Sector_Time(AC4_3,ZSESEA,193): w(AC4_3,SEA,200) - w(AC4_3,ZSESEA,193) <= 0
+ Temporality(AC4_3,ZSESEA,193): w(AC4_3,ZSESEA,193) - w(AC4_3,ZSESEA,192) >= 0
+ Sector_Time(AC4_3,ZSESEA,194): w(AC4_3,SEA,201) - w(AC4_3,ZSESEA,194) <= 0
+ Temporality(AC4_3,ZSESEA,194): w(AC4_3,ZSESEA,194) - w(AC4_3,ZSESEA,193) >= 0
+ Sector_Time(AC4_3,ZSESEA,195): w(AC4_3,SEA,202) - w(AC4_3,ZSESEA,195) <= 0
+ Temporality(AC4_3,ZSESEA,195): w(AC4_3,ZSESEA,195) - w(AC4_3,ZSESEA,194) >= 0
+ Sector_Time(AC4_3,ZSESEA,196): w(AC4_3,SEA,203) - w(AC4_3,ZSESEA,196) <= 0
+ Temporality(AC4_3,ZSESEA,196): w(AC4_3,ZSESEA,196) - w(AC4_3,ZSESEA,195) >= 0
+ Sector_Time(AC4_3,ZSESEA,197): w(AC4_3,SEA,204) - w(AC4_3,ZSESEA,197) <= 0
+ Temporality(AC4_3,ZSESEA,197): w(AC4_3,ZSESEA,197) - w(AC4_3,ZSESEA,196) >= 0
+ Sector_Time(AC4_3,ZSESEA,198): w(AC4_3,SEA,205) - w(AC4_3,ZSESEA,198) <= 0
+ Temporality(AC4_3,ZSESEA,198): w(AC4_3,ZSESEA,198) - w(AC4_3,ZSESEA,197) >= 0
+ Sector_Time(AC4_3,ZSESEA,199): w(AC4_3,SEA,206) - w(AC4_3,ZSESEA,199) <= 0
+ Temporality(AC4_3,ZSESEA,199): w(AC4_3,ZSESEA,199) - w(AC4_3,ZSESEA,198) >= 0
+ Sector_Time(AC4_3,ZSESEA,200): w(AC4_3,SEA,207) - w(AC4_3,ZSESEA,200) <= 0
+ Temporality(AC4_3,ZSESEA,200): w(AC4_3,ZSESEA,200) - w(AC4_3,ZSESEA,199) >= 0
+ Sector_Time(AC4_3,ZSESEA,201): w(AC4_3,SEA,208) - w(AC4_3,ZSESEA,201) <= 0
+ Temporality(AC4_3,ZSESEA,201): w(AC4_3,ZSESEA,201) - w(AC4_3,ZSESEA,200) >= 0
+ Sector_Time(AC4_3,ZSESEA,202): w(AC4_3,SEA,209) - w(AC4_3,ZSESEA,202) <= 0
+ Temporality(AC4_3,ZSESEA,202): w(AC4_3,ZSESEA,202) - w(AC4_3,ZSESEA,201) >= 0
+ Sector_Time(AC4_3,ZSESEA,203): w(AC4_3,SEA,210) - w(AC4_3,ZSESEA,203) <= 0
+ Temporality(AC4_3,ZSESEA,203): w(AC4_3,ZSESEA,203) - w(AC4_3,ZSESEA,202) >= 0
+ Sector_Time(AC4_3,ZSESEA,204): w(AC4_3,SEA,211) - w(AC4_3,ZSESEA,204) <= 0
+ Temporality(AC4_3,ZSESEA,204): w(AC4_3,ZSESEA,204) - w(AC4_3,ZSESEA,203) >= 0
+ Sector_Time(AC4_3,ZSESEA,205): w(AC4_3,SEA,212) - w(AC4_3,ZSESEA,205) <= 0
+ Temporality(AC4_3,ZSESEA,205): w(AC4_3,ZSESEA,205) - w(AC4_3,ZSESEA,204) >= 0
+ Sector_Time(AC4_3,ZSESEA,206): w(AC4_3,SEA,213) - w(AC4_3,ZSESEA,206) <= 0
+ Temporality(AC4_3,ZSESEA,206): w(AC4_3,ZSESEA,206) - w(AC4_3,ZSESEA,205) >= 0
+ Sector_Time(AC4_3,ZSESEA,207): w(AC4_3,SEA,214) - w(AC4_3,ZSESEA,207) <= 0
+ Temporality(AC4_3,ZSESEA,207): w(AC4_3,ZSESEA,207) - w(AC4_3,ZSESEA,206) >= 0
+ Sector_Time(AC4_3,ZSESEA,208): w(AC4_3,SEA,215) - w(AC4_3,ZSESEA,208) <= 0
+ Temporality(AC4_3,ZSESEA,208): w(AC4_3,ZSESEA,208) - w(AC4_3,ZSESEA,207) >= 0
+ Sector_Time(AC4_3,ZSESEA,209): w(AC4_3,SEA,216) - w(AC4_3,ZSESEA,209) <= 0
+ Temporality(AC4_3,ZSESEA,209): w(AC4_3,ZSESEA,209) - w(AC4_3,ZSESEA,208) >= 0
+ Sector_Time(AC4_3,ZSESEA,210): w(AC4_3,SEA,217) - w(AC4_3,ZSESEA,210) <= 0
+ Temporality(AC4_3,ZSESEA,210): w(AC4_3,ZSESEA,210) - w(AC4_3,ZSESEA,209) >= 0
+ Sector_Time(AC4_3,ZSESEA,211): w(AC4_3,SEA,218) - w(AC4_3,ZSESEA,211) <= 0
+ Temporality(AC4_3,ZSESEA,211): w(AC4_3,ZSESEA,211) - w(AC4_3,ZSESEA,210) >= 0
+ Temporality(AC3_2,SEA,200): w(AC3_2,SEA,200) - w(AC3_2,SEA,199) >= 0
+ Temporality(AC3_2,SEA,201): w(AC3_2,SEA,201) - w(AC3_2,SEA,200) >= 0
+ Temporality(AC3_2,SEA,202): w(AC3_2,SEA,202) - w(AC3_2,SEA,201) >= 0
+ Temporality(AC3_2,SEA,203): w(AC3_2,SEA,203) - w(AC3_2,SEA,202) >= 0
+ Temporality(AC3_2,SEA,204): w(AC3_2,SEA,204) - w(AC3_2,SEA,203) >= 0
+ Temporality(AC3_2,SEA,205): w(AC3_2,SEA,205) - w(AC3_2,SEA,204) >= 0
+ Temporality(AC3_2,SEA,206): w(AC3_2,SEA,206) - w(AC3_2,SEA,205) >= 0
+ Temporality(AC3_2,SEA,207): w(AC3_2,SEA,207) - w(AC3_2,SEA,206) >= 0
+ Temporality(AC3_2,SEA,208): w(AC3_2,SEA,208) - w(AC3_2,SEA,207) >= 0
+ Temporality(AC3_2,SEA,209): w(AC3_2,SEA,209) - w(AC3_2,SEA,208) >= 0
+ Temporality(AC3_2,SEA,210): w(AC3_2,SEA,210) - w(AC3_2,SEA,209) >= 0
+ Temporality(AC3_2,SEA,211): w(AC3_2,SEA,211) - w(AC3_2,SEA,210) >= 0
+ Temporality(AC3_2,SEA,212): w(AC3_2,SEA,212) - w(AC3_2,SEA,211) >= 0
+ Temporality(AC3_2,SEA,213): w(AC3_2,SEA,213) - w(AC3_2,SEA,212) >= 0
+ Temporality(AC3_2,SEA,214): w(AC3_2,SEA,214) - w(AC3_2,SEA,213) >= 0
+ Temporality(AC3_2,SEA,215): w(AC3_2,SEA,215) - w(AC3_2,SEA,214) >= 0
+ Temporality(AC3_2,SEA,216): w(AC3_2,SEA,216) - w(AC3_2,SEA,215) >= 0
+ Temporality(AC3_2,SEA,217): w(AC3_2,SEA,217) - w(AC3_2,SEA,216) >= 0
+ Temporality(AC3_2,SEA,218): w(AC3_2,SEA,218) - w(AC3_2,SEA,217) >= 0
+ Temporality(AC3_2,LAS,21): w(AC3_2,LAS,21) - w(AC3_2,LAS,20) >= 0
+ Temporality(AC3_2,LAS,22): w(AC3_2,LAS,22) - w(AC3_2,LAS,21) >= 0
+ Temporality(AC3_2,LAS,23): w(AC3_2,LAS,23) - w(AC3_2,LAS,22) >= 0
+ Temporality(AC3_2,LAS,24): w(AC3_2,LAS,24) - w(AC3_2,LAS,23) >= 0
+ Temporality(AC3_2,LAS,25): w(AC3_2,LAS,25) - w(AC3_2,LAS,24) >= 0
+ Temporality(AC3_2,LAS,26): w(AC3_2,LAS,26) - w(AC3_2,LAS,25) >= 0
+ Temporality(AC3_2,LAS,27): w(AC3_2,LAS,27) - w(AC3_2,LAS,26) >= 0
+ Temporality(AC3_2,LAS,28): w(AC3_2,LAS,28) - w(AC3_2,LAS,27) >= 0
+ Temporality(AC3_2,LAS,29): w(AC3_2,LAS,29) - w(AC3_2,LAS,28) >= 0
+ Temporality(AC3_2,LAS,30): w(AC3_2,LAS,30) - w(AC3_2,LAS,29) >= 0
+ Temporality(AC3_2,LAS,31): w(AC3_2,LAS,31) - w(AC3_2,LAS,30) >= 0
+ Temporality(AC3_2,LAS,32): w(AC3_2,LAS,32) - w(AC3_2,LAS,31) >= 0
+ Temporality(AC3_2,LAS,33): w(AC3_2,LAS,33) - w(AC3_2,LAS,32) >= 0
+ Temporality(AC3_2,LAS,34): w(AC3_2,LAS,34) - w(AC3_2,LAS,33) >= 0
+ Temporality(AC3_2,LAS,35): w(AC3_2,LAS,35) - w(AC3_2,LAS,34) >= 0
+ Temporality(AC3_2,LAS,36): w(AC3_2,LAS,36) - w(AC3_2,LAS,35) >= 0
+ Temporality(AC3_2,LAS,37): w(AC3_2,LAS,37) - w(AC3_2,LAS,36) >= 0
+ Temporality(AC3_2,LAS,38): w(AC3_2,LAS,38) - w(AC3_2,LAS,37) >= 0
+ Temporality(AC3_2,LAS,39): w(AC3_2,LAS,39) - w(AC3_2,LAS,38) >= 0
+ Sector_Time(AC3_2,LAS,20): w(AC3_2,ZLA16,21) - w(AC3_2,LAS,20) <= 0
+ Sector_Time(AC3_2,LAS,21): w(AC3_2,ZLA16,22) - w(AC3_2,LAS,21) <= 0
+ Sector_Time(AC3_2,LAS,22): w(AC3_2,ZLA16,23) - w(AC3_2,LAS,22) <= 0
+ Sector_Time(AC3_2,LAS,23): w(AC3_2,ZLA16,24) - w(AC3_2,LAS,23) <= 0
+ Sector_Time(AC3_2,LAS,24): w(AC3_2,ZLA16,25) - w(AC3_2,LAS,24) <= 0
+ Sector_Time(AC3_2,LAS,25): w(AC3_2,ZLA16,26) - w(AC3_2,LAS,25) <= 0
+ Sector_Time(AC3_2,LAS,26): w(AC3_2,ZLA16,27) - w(AC3_2,LAS,26) <= 0
+ Sector_Time(AC3_2,LAS,27): w(AC3_2,ZLA16,28) - w(AC3_2,LAS,27) <= 0
+ Sector_Time(AC3_2,LAS,28): w(AC3_2,ZLA16,29) - w(AC3_2,LAS,28) <= 0
+ Sector_Time(AC3_2,LAS,29): w(AC3_2,ZLA16,30) - w(AC3_2,LAS,29) <= 0
+ Sector_Time(AC3_2,LAS,30): w(AC3_2,ZLA16,31) - w(AC3_2,LAS,30) <= 0
+ Sector_Time(AC3_2,LAS,31): w(AC3_2,ZLA16,32) - w(AC3_2,LAS,31) <= 0
+ Sector_Time(AC3_2,LAS,32): w(AC3_2,ZLA16,33) - w(AC3_2,LAS,32) <= 0
+ Sector_Time(AC3_2,LAS,33): w(AC3_2,ZLA16,34) - w(AC3_2,LAS,33) <= 0
+ Sector_Time(AC3_2,LAS,34): w(AC3_2,ZLA16,35) - w(AC3_2,LAS,34) <= 0
+ Sector_Time(AC3_2,LAS,35): w(AC3_2,ZLA16,36) - w(AC3_2,LAS,35) <= 0
+ Sector_Time(AC3_2,LAS,36): w(AC3_2,ZLA16,37) - w(AC3_2,LAS,36) <= 0
+ Sector_Time(AC3_2,LAS,37): w(AC3_2,ZLA16,38) - w(AC3_2,LAS,37) <= 0
+ Sector_Time(AC3_2,LAS,38): w(AC3_2,ZLA16,39) - w(AC3_2,LAS,38) <= 0
+ Sector_Time(AC3_2,LAS,39): w(AC3_2,ZLA16,40) - w(AC3_2,LAS,39) <= 0
+ Sector_Time(AC3_2,ZLA16,21): w(AC3_2,ZOA46,36) - w(AC3_2,ZLA16,21) <= 0
+ Sector_Time(AC3_2,ZLA16,22): w(AC3_2,ZOA46,37) - w(AC3_2,ZLA16,22) <= 0
+ Temporality(AC3_2,ZLA16,22): w(AC3_2,ZLA16,22) - w(AC3_2,ZLA16,21) >= 0
+ Sector_Time(AC3_2,ZLA16,23): w(AC3_2,ZOA46,38) - w(AC3_2,ZLA16,23) <= 0
+ Temporality(AC3_2,ZLA16,23): w(AC3_2,ZLA16,23) - w(AC3_2,ZLA16,22) >= 0
+ Sector_Time(AC3_2,ZLA16,24): w(AC3_2,ZOA46,39) - w(AC3_2,ZLA16,24) <= 0
+ Temporality(AC3_2,ZLA16,24): w(AC3_2,ZLA16,24) - w(AC3_2,ZLA16,23) >= 0
+ Sector_Time(AC3_2,ZLA16,25): w(AC3_2,ZOA46,40) - w(AC3_2,ZLA16,25) <= 0
+ Temporality(AC3_2,ZLA16,25): w(AC3_2,ZLA16,25) - w(AC3_2,ZLA16,24) >= 0
+ Sector_Time(AC3_2,ZLA16,26): w(AC3_2,ZOA46,41) - w(AC3_2,ZLA16,26) <= 0
+ Temporality(AC3_2,ZLA16,26): w(AC3_2,ZLA16,26) - w(AC3_2,ZLA16,25) >= 0
+ Sector_Time(AC3_2,ZLA16,27): w(AC3_2,ZOA46,42) - w(AC3_2,ZLA16,27) <= 0
+ Temporality(AC3_2,ZLA16,27): w(AC3_2,ZLA16,27) - w(AC3_2,ZLA16,26) >= 0
+ Sector_Time(AC3_2,ZLA16,28): w(AC3_2,ZOA46,43) - w(AC3_2,ZLA16,28) <= 0
+ Temporality(AC3_2,ZLA16,28): w(AC3_2,ZLA16,28) - w(AC3_2,ZLA16,27) >= 0
+ Sector_Time(AC3_2,ZLA16,29): w(AC3_2,ZOA46,44) - w(AC3_2,ZLA16,29) <= 0
+ Temporality(AC3_2,ZLA16,29): w(AC3_2,ZLA16,29) - w(AC3_2,ZLA16,28) >= 0
+ Sector_Time(AC3_2,ZLA16,30): w(AC3_2,ZOA46,45) - w(AC3_2,ZLA16,30) <= 0
+ Temporality(AC3_2,ZLA16,30): w(AC3_2,ZLA16,30) - w(AC3_2,ZLA16,29) >= 0
+ Sector_Time(AC3_2,ZLA16,31): w(AC3_2,ZOA46,46) - w(AC3_2,ZLA16,31) <= 0
+ Temporality(AC3_2,ZLA16,31): w(AC3_2,ZLA16,31) - w(AC3_2,ZLA16,30) >= 0
+ Sector_Time(AC3_2,ZLA16,32): w(AC3_2,ZOA46,47) - w(AC3_2,ZLA16,32) <= 0
+ Temporality(AC3_2,ZLA16,32): w(AC3_2,ZLA16,32) - w(AC3_2,ZLA16,31) >= 0
+ Sector_Time(AC3_2,ZLA16,33): w(AC3_2,ZOA46,48) - w(AC3_2,ZLA16,33) <= 0
+ Temporality(AC3_2,ZLA16,33): w(AC3_2,ZLA16,33) - w(AC3_2,ZLA16,32) >= 0
+ Sector_Time(AC3_2,ZLA16,34): w(AC3_2,ZOA46,49) - w(AC3_2,ZLA16,34) <= 0
+ Temporality(AC3_2,ZLA16,34): w(AC3_2,ZLA16,34) - w(AC3_2,ZLA16,33) >= 0
+ Sector_Time(AC3_2,ZLA16,35): w(AC3_2,ZOA46,50) - w(AC3_2,ZLA16,35) <= 0
+ Temporality(AC3_2,ZLA16,35): w(AC3_2,ZLA16,35) - w(AC3_2,ZLA16,34) >= 0
+ Sector_Time(AC3_2,ZLA16,36): w(AC3_2,ZOA46,51) - w(AC3_2,ZLA16,36) <= 0
+ Temporality(AC3_2,ZLA16,36): w(AC3_2,ZLA16,36) - w(AC3_2,ZLA16,35) >= 0
+ Sector_Time(AC3_2,ZLA16,37): w(AC3_2,ZOA46,52) - w(AC3_2,ZLA16,37) <= 0
+ Temporality(AC3_2,ZLA16,37): w(AC3_2,ZLA16,37) - w(AC3_2,ZLA16,36) >= 0
+ Sector_Time(AC3_2,ZLA16,38): w(AC3_2,ZOA46,53) - w(AC3_2,ZLA16,38) <= 0
+ Temporality(AC3_2,ZLA16,38): w(AC3_2,ZLA16,38) - w(AC3_2,ZLA16,37) >= 0
+ Sector_Time(AC3_2,ZLA16,39): w(AC3_2,ZOA46,54) - w(AC3_2,ZLA16,39) <= 0
+ Temporality(AC3_2,ZLA16,39): w(AC3_2,ZLA16,39) - w(AC3_2,ZLA16,38) >= 0
+ Sector_Time(AC3_2,ZLA16,40): w(AC3_2,ZOA46,55) - w(AC3_2,ZLA16,40) <= 0
+ Temporality(AC3_2,ZLA16,40): w(AC3_2,ZLA16,40) - w(AC3_2,ZLA16,39) >= 0
+ Sector_Time(AC3_2,ZOA46,36): w(AC3_2,ZOA45,69) - w(AC3_2,ZOA46,36) <= 0
+ Sector_Time(AC3_2,ZOA46,37): w(AC3_2,ZOA45,70) - w(AC3_2,ZOA46,37) <= 0
+ Temporality(AC3_2,ZOA46,37): w(AC3_2,ZOA46,37) - w(AC3_2,ZOA46,36) >= 0
+ Sector_Time(AC3_2,ZOA46,38): w(AC3_2,ZOA45,71) - w(AC3_2,ZOA46,38) <= 0
+ Temporality(AC3_2,ZOA46,38): w(AC3_2,ZOA46,38) - w(AC3_2,ZOA46,37) >= 0
+ Sector_Time(AC3_2,ZOA46,39): w(AC3_2,ZOA45,72) - w(AC3_2,ZOA46,39) <= 0
+ Temporality(AC3_2,ZOA46,39): w(AC3_2,ZOA46,39) - w(AC3_2,ZOA46,38) >= 0
+ Sector_Time(AC3_2,ZOA46,40): w(AC3_2,ZOA45,73) - w(AC3_2,ZOA46,40) <= 0
+ Temporality(AC3_2,ZOA46,40): w(AC3_2,ZOA46,40) - w(AC3_2,ZOA46,39) >= 0
+ Sector_Time(AC3_2,ZOA46,41): w(AC3_2,ZOA45,74) - w(AC3_2,ZOA46,41) <= 0
+ Temporality(AC3_2,ZOA46,41): w(AC3_2,ZOA46,41) - w(AC3_2,ZOA46,40) >= 0
+ Sector_Time(AC3_2,ZOA46,42): w(AC3_2,ZOA45,75) - w(AC3_2,ZOA46,42) <= 0
+ Temporality(AC3_2,ZOA46,42): w(AC3_2,ZOA46,42) - w(AC3_2,ZOA46,41) >= 0
+ Sector_Time(AC3_2,ZOA46,43): w(AC3_2,ZOA45,76) - w(AC3_2,ZOA46,43) <= 0
+ Temporality(AC3_2,ZOA46,43): w(AC3_2,ZOA46,43) - w(AC3_2,ZOA46,42) >= 0
+ Sector_Time(AC3_2,ZOA46,44): w(AC3_2,ZOA45,77) - w(AC3_2,ZOA46,44) <= 0
+ Temporality(AC3_2,ZOA46,44): w(AC3_2,ZOA46,44) - w(AC3_2,ZOA46,43) >= 0
+ Sector_Time(AC3_2,ZOA46,45): w(AC3_2,ZOA45,78) - w(AC3_2,ZOA46,45) <= 0
+ Temporality(AC3_2,ZOA46,45): w(AC3_2,ZOA46,45) - w(AC3_2,ZOA46,44) >= 0
+ Sector_Time(AC3_2,ZOA46,46): w(AC3_2,ZOA45,79) - w(AC3_2,ZOA46,46) <= 0
+ Temporality(AC3_2,ZOA46,46): w(AC3_2,ZOA46,46) - w(AC3_2,ZOA46,45) >= 0
+ Sector_Time(AC3_2,ZOA46,47): w(AC3_2,ZOA45,80) - w(AC3_2,ZOA46,47) <= 0
+ Temporality(AC3_2,ZOA46,47): w(AC3_2,ZOA46,47) - w(AC3_2,ZOA46,46) >= 0
+ Sector_Time(AC3_2,ZOA46,48): w(AC3_2,ZOA45,81) - w(AC3_2,ZOA46,48) <= 0
+ Temporality(AC3_2,ZOA46,48): w(AC3_2,ZOA46,48) - w(AC3_2,ZOA46,47) >= 0
+ Sector_Time(AC3_2,ZOA46,49): w(AC3_2,ZOA45,82) - w(AC3_2,ZOA46,49) <= 0
+ Temporality(AC3_2,ZOA46,49): w(AC3_2,ZOA46,49) - w(AC3_2,ZOA46,48) >= 0
+ Sector_Time(AC3_2,ZOA46,50): w(AC3_2,ZOA45,83) - w(AC3_2,ZOA46,50) <= 0
+ Temporality(AC3_2,ZOA46,50): w(AC3_2,ZOA46,50) - w(AC3_2,ZOA46,49) >= 0
+ Sector_Time(AC3_2,ZOA46,51): w(AC3_2,ZOA45,84) - w(AC3_2,ZOA46,51) <= 0
+ Temporality(AC3_2,ZOA46,51): w(AC3_2,ZOA46,51) - w(AC3_2,ZOA46,50) >= 0
+ Sector_Time(AC3_2,ZOA46,52): w(AC3_2,ZOA45,85) - w(AC3_2,ZOA46,52) <= 0
+ Temporality(AC3_2,ZOA46,52): w(AC3_2,ZOA46,52) - w(AC3_2,ZOA46,51) >= 0
+ Sector_Time(AC3_2,ZOA46,53): w(AC3_2,ZOA45,86) - w(AC3_2,ZOA46,53) <= 0
+ Temporality(AC3_2,ZOA46,53): w(AC3_2,ZOA46,53) - w(AC3_2,ZOA46,52) >= 0
+ Sector_Time(AC3_2,ZOA46,54): w(AC3_2,ZOA45,87) - w(AC3_2,ZOA46,54) <= 0
+ Temporality(AC3_2,ZOA46,54): w(AC3_2,ZOA46,54) - w(AC3_2,ZOA46,53) >= 0
+ Sector_Time(AC3_2,ZOA46,55): w(AC3_2,ZOA45,88) - w(AC3_2,ZOA46,55) <= 0
+ Temporality(AC3_2,ZOA46,55): w(AC3_2,ZOA46,55) - w(AC3_2,ZOA46,54) >= 0
+ Sector_Time(AC3_2,ZOA45,69): w(AC3_2,ZLC43,92) - w(AC3_2,ZOA45,69) <= 0
+ Sector_Time(AC3_2,ZOA45,70): w(AC3_2,ZLC43,93) - w(AC3_2,ZOA45,70) <= 0
+ Temporality(AC3_2,ZOA45,70): w(AC3_2,ZOA45,70) - w(AC3_2,ZOA45,69) >= 0
+ Sector_Time(AC3_2,ZOA45,71): w(AC3_2,ZLC43,94) - w(AC3_2,ZOA45,71) <= 0
+ Temporality(AC3_2,ZOA45,71): w(AC3_2,ZOA45,71) - w(AC3_2,ZOA45,70) >= 0
+ Sector_Time(AC3_2,ZOA45,72): w(AC3_2,ZLC43,95) - w(AC3_2,ZOA45,72) <= 0
+ Temporality(AC3_2,ZOA45,72): w(AC3_2,ZOA45,72) - w(AC3_2,ZOA45,71) >= 0
+ Sector_Time(AC3_2,ZOA45,73): w(AC3_2,ZLC43,96) - w(AC3_2,ZOA45,73) <= 0
+ Temporality(AC3_2,ZOA45,73): w(AC3_2,ZOA45,73) - w(AC3_2,ZOA45,72) >= 0
+ Sector_Time(AC3_2,ZOA45,74): w(AC3_2,ZLC43,97) - w(AC3_2,ZOA45,74) <= 0
+ Temporality(AC3_2,ZOA45,74): w(AC3_2,ZOA45,74) - w(AC3_2,ZOA45,73) >= 0
+ Sector_Time(AC3_2,ZOA45,75): w(AC3_2,ZLC43,98) - w(AC3_2,ZOA45,75) <= 0
+ Temporality(AC3_2,ZOA45,75): w(AC3_2,ZOA45,75) - w(AC3_2,ZOA45,74) >= 0
+ Sector_Time(AC3_2,ZOA45,76): w(AC3_2,ZLC43,99) - w(AC3_2,ZOA45,76) <= 0
+ Temporality(AC3_2,ZOA45,76): w(AC3_2,ZOA45,76) - w(AC3_2,ZOA45,75) >= 0
+ Sector_Time(AC3_2,ZOA45,77): w(AC3_2,ZLC43,100) - w(AC3_2,ZOA45,77) <= 0
+ Temporality(AC3_2,ZOA45,77): w(AC3_2,ZOA45,77) - w(AC3_2,ZOA45,76) >= 0
+ Sector_Time(AC3_2,ZOA45,78): w(AC3_2,ZLC43,101) - w(AC3_2,ZOA45,78) <= 0
+ Temporality(AC3_2,ZOA45,78): w(AC3_2,ZOA45,78) - w(AC3_2,ZOA45,77) >= 0
+ Sector_Time(AC3_2,ZOA45,79): w(AC3_2,ZLC43,102) - w(AC3_2,ZOA45,79) <= 0
+ Temporality(AC3_2,ZOA45,79): w(AC3_2,ZOA45,79) - w(AC3_2,ZOA45,78) >= 0
+ Sector_Time(AC3_2,ZOA45,80): w(AC3_2,ZLC43,103) - w(AC3_2,ZOA45,80) <= 0
+ Temporality(AC3_2,ZOA45,80): w(AC3_2,ZOA45,80) - w(AC3_2,ZOA45,79) >= 0
+ Sector_Time(AC3_2,ZOA45,81): w(AC3_2,ZLC43,104) - w(AC3_2,ZOA45,81) <= 0
+ Temporality(AC3_2,ZOA45,81): w(AC3_2,ZOA45,81) - w(AC3_2,ZOA45,80) >= 0
+ Sector_Time(AC3_2,ZOA45,82): w(AC3_2,ZLC43,105) - w(AC3_2,ZOA45,82) <= 0
+ Temporality(AC3_2,ZOA45,82): w(AC3_2,ZOA45,82) - w(AC3_2,ZOA45,81) >= 0
+ Sector_Time(AC3_2,ZOA45,83): w(AC3_2,ZLC43,106) - w(AC3_2,ZOA45,83) <= 0
+ Temporality(AC3_2,ZOA45,83): w(AC3_2,ZOA45,83) - w(AC3_2,ZOA45,82) >= 0
+ Sector_Time(AC3_2,ZOA45,84): w(AC3_2,ZLC43,107) - w(AC3_2,ZOA45,84) <= 0
+ Temporality(AC3_2,ZOA45,84): w(AC3_2,ZOA45,84) - w(AC3_2,ZOA45,83) >= 0
+ Sector_Time(AC3_2,ZOA45,85): w(AC3_2,ZLC43,108) - w(AC3_2,ZOA45,85) <= 0
+ Temporality(AC3_2,ZOA45,85): w(AC3_2,ZOA45,85) - w(AC3_2,ZOA45,84) >= 0
+ Sector_Time(AC3_2,ZOA45,86): w(AC3_2,ZLC43,109) - w(AC3_2,ZOA45,86) <= 0
+ Temporality(AC3_2,ZOA45,86): w(AC3_2,ZOA45,86) - w(AC3_2,ZOA45,85) >= 0
+ Sector_Time(AC3_2,ZOA45,87): w(AC3_2,ZLC43,110) - w(AC3_2,ZOA45,87) <= 0
+ Temporality(AC3_2,ZOA45,87): w(AC3_2,ZOA45,87) - w(AC3_2,ZOA45,86) >= 0
+ Sector_Time(AC3_2,ZOA45,88): w(AC3_2,ZLC43,111) - w(AC3_2,ZOA45,88) <= 0
+ Temporality(AC3_2,ZOA45,88): w(AC3_2,ZOA45,88) - w(AC3_2,ZOA45,87) >= 0
+ Sector_Time(AC3_2,ZLC43,92): w(AC3_2,ZSE10,98) - w(AC3_2,ZLC43,92) <= 0
+ Sector_Time(AC3_2,ZLC43,93): w(AC3_2,ZSE10,99) - w(AC3_2,ZLC43,93) <= 0
+ Temporality(AC3_2,ZLC43,93): w(AC3_2,ZLC43,93) - w(AC3_2,ZLC43,92) >= 0
+ Sector_Time(AC3_2,ZLC43,94): w(AC3_2,ZSE10,100) - w(AC3_2,ZLC43,94) <= 0
+ Temporality(AC3_2,ZLC43,94): w(AC3_2,ZLC43,94) - w(AC3_2,ZLC43,93) >= 0
+ Sector_Time(AC3_2,ZLC43,95): w(AC3_2,ZSE10,101) - w(AC3_2,ZLC43,95) <= 0
+ Temporality(AC3_2,ZLC43,95): w(AC3_2,ZLC43,95) - w(AC3_2,ZLC43,94) >= 0
+ Sector_Time(AC3_2,ZLC43,96): w(AC3_2,ZSE10,102) - w(AC3_2,ZLC43,96) <= 0
+ Temporality(AC3_2,ZLC43,96): w(AC3_2,ZLC43,96) - w(AC3_2,ZLC43,95) >= 0
+ Sector_Time(AC3_2,ZLC43,97): w(AC3_2,ZSE10,103) - w(AC3_2,ZLC43,97) <= 0
+ Temporality(AC3_2,ZLC43,97): w(AC3_2,ZLC43,97) - w(AC3_2,ZLC43,96) >= 0
+ Sector_Time(AC3_2,ZLC43,98): w(AC3_2,ZSE10,104) - w(AC3_2,ZLC43,98) <= 0
+ Temporality(AC3_2,ZLC43,98): w(AC3_2,ZLC43,98) - w(AC3_2,ZLC43,97) >= 0
+ Sector_Time(AC3_2,ZLC43,99): w(AC3_2,ZSE10,105) - w(AC3_2,ZLC43,99) <= 0
+ Temporality(AC3_2,ZLC43,99): w(AC3_2,ZLC43,99) - w(AC3_2,ZLC43,98) >= 0
+ Sector_Time(AC3_2,ZLC43,100): w(AC3_2,ZSE10,106) - w(AC3_2,ZLC43,100) <= 0
+ Temporality(AC3_2,ZLC43,100): w(AC3_2,ZLC43,100) - w(AC3_2,ZLC43,99) >= 0
+ Sector_Time(AC3_2,ZLC43,101): w(AC3_2,ZSE10,107) - w(AC3_2,ZLC43,101) <= 0
+ Temporality(AC3_2,ZLC43,101): w(AC3_2,ZLC43,101) - w(AC3_2,ZLC43,100) >= 0
+ Sector_Time(AC3_2,ZLC43,102): w(AC3_2,ZSE10,108) - w(AC3_2,ZLC43,102) <= 0
+ Temporality(AC3_2,ZLC43,102): w(AC3_2,ZLC43,102) - w(AC3_2,ZLC43,101) >= 0
+ Sector_Time(AC3_2,ZLC43,103): w(AC3_2,ZSE10,109) - w(AC3_2,ZLC43,103) <= 0
+ Temporality(AC3_2,ZLC43,103): w(AC3_2,ZLC43,103) - w(AC3_2,ZLC43,102) >= 0
+ Sector_Time(AC3_2,ZLC43,104): w(AC3_2,ZSE10,110) - w(AC3_2,ZLC43,104) <= 0
+ Temporality(AC3_2,ZLC43,104): w(AC3_2,ZLC43,104) - w(AC3_2,ZLC43,103) >= 0
+ Sector_Time(AC3_2,ZLC43,105): w(AC3_2,ZSE10,111) - w(AC3_2,ZLC43,105) <= 0
+ Temporality(AC3_2,ZLC43,105): w(AC3_2,ZLC43,105) - w(AC3_2,ZLC43,104) >= 0
+ Sector_Time(AC3_2,ZLC43,106): w(AC3_2,ZSE10,112) - w(AC3_2,ZLC43,106) <= 0
+ Temporality(AC3_2,ZLC43,106): w(AC3_2,ZLC43,106) - w(AC3_2,ZLC43,105) >= 0
+ Sector_Time(AC3_2,ZLC43,107): w(AC3_2,ZSE10,113) - w(AC3_2,ZLC43,107) <= 0
+ Temporality(AC3_2,ZLC43,107): w(AC3_2,ZLC43,107) - w(AC3_2,ZLC43,106) >= 0
+ Sector_Time(AC3_2,ZLC43,108): w(AC3_2,ZSE10,114) - w(AC3_2,ZLC43,108) <= 0
+ Temporality(AC3_2,ZLC43,108): w(AC3_2,ZLC43,108) - w(AC3_2,ZLC43,107) >= 0
+ Sector_Time(AC3_2,ZLC43,109): w(AC3_2,ZSE10,115) - w(AC3_2,ZLC43,109) <= 0
+ Temporality(AC3_2,ZLC43,109): w(AC3_2,ZLC43,109) - w(AC3_2,ZLC43,108) >= 0
+ Sector_Time(AC3_2,ZLC43,110): w(AC3_2,ZSE10,116) - w(AC3_2,ZLC43,110) <= 0
+ Temporality(AC3_2,ZLC43,110): w(AC3_2,ZLC43,110) - w(AC3_2,ZLC43,109) >= 0
+ Sector_Time(AC3_2,ZLC43,111): w(AC3_2,ZSE10,117) - w(AC3_2,ZLC43,111) <= 0
+ Temporality(AC3_2,ZLC43,111): w(AC3_2,ZLC43,111) - w(AC3_2,ZLC43,110) >= 0
+ Sector_Time(AC3_2,ZSE10,98): w(AC3_2,ZSE05,134) - w(AC3_2,ZSE10,98) <= 0
+ Sector_Time(AC3_2,ZSE10,99): w(AC3_2,ZSE05,135) - w(AC3_2,ZSE10,99) <= 0
+ Temporality(AC3_2,ZSE10,99): w(AC3_2,ZSE10,99) - w(AC3_2,ZSE10,98) >= 0
+ Sector_Time(AC3_2,ZSE10,100): w(AC3_2,ZSE05,136) - w(AC3_2,ZSE10,100) <= 0
+ Temporality(AC3_2,ZSE10,100): w(AC3_2,ZSE10,100) - w(AC3_2,ZSE10,99) >= 0
+ Sector_Time(AC3_2,ZSE10,101): w(AC3_2,ZSE05,137) - w(AC3_2,ZSE10,101) <= 0
+ Temporality(AC3_2,ZSE10,101): w(AC3_2,ZSE10,101) - w(AC3_2,ZSE10,100) >= 0
+ Sector_Time(AC3_2,ZSE10,102): w(AC3_2,ZSE05,138) - w(AC3_2,ZSE10,102) <= 0
+ Temporality(AC3_2,ZSE10,102): w(AC3_2,ZSE10,102) - w(AC3_2,ZSE10,101) >= 0
+ Sector_Time(AC3_2,ZSE10,103): w(AC3_2,ZSE05,139) - w(AC3_2,ZSE10,103) <= 0
+ Temporality(AC3_2,ZSE10,103): w(AC3_2,ZSE10,103) - w(AC3_2,ZSE10,102) >= 0
+ Sector_Time(AC3_2,ZSE10,104): w(AC3_2,ZSE05,140) - w(AC3_2,ZSE10,104) <= 0
+ Temporality(AC3_2,ZSE10,104): w(AC3_2,ZSE10,104) - w(AC3_2,ZSE10,103) >= 0
+ Sector_Time(AC3_2,ZSE10,105): w(AC3_2,ZSE05,141) - w(AC3_2,ZSE10,105) <= 0
+ Temporality(AC3_2,ZSE10,105): w(AC3_2,ZSE10,105) - w(AC3_2,ZSE10,104) >= 0
+ Sector_Time(AC3_2,ZSE10,106): w(AC3_2,ZSE05,142) - w(AC3_2,ZSE10,106) <= 0
+ Temporality(AC3_2,ZSE10,106): w(AC3_2,ZSE10,106) - w(AC3_2,ZSE10,105) >= 0
+ Sector_Time(AC3_2,ZSE10,107): w(AC3_2,ZSE05,143) - w(AC3_2,ZSE10,107) <= 0
+ Temporality(AC3_2,ZSE10,107): w(AC3_2,ZSE10,107) - w(AC3_2,ZSE10,106) >= 0
+ Sector_Time(AC3_2,ZSE10,108): w(AC3_2,ZSE05,144) - w(AC3_2,ZSE10,108) <= 0
+ Temporality(AC3_2,ZSE10,108): w(AC3_2,ZSE10,108) - w(AC3_2,ZSE10,107) >= 0
+ Sector_Time(AC3_2,ZSE10,109): w(AC3_2,ZSE05,145) - w(AC3_2,ZSE10,109) <= 0
+ Temporality(AC3_2,ZSE10,109): w(AC3_2,ZSE10,109) - w(AC3_2,ZSE10,108) >= 0
+ Sector_Time(AC3_2,ZSE10,110): w(AC3_2,ZSE05,146) - w(AC3_2,ZSE10,110) <= 0
+ Temporality(AC3_2,ZSE10,110): w(AC3_2,ZSE10,110) - w(AC3_2,ZSE10,109) >= 0
+ Sector_Time(AC3_2,ZSE10,111): w(AC3_2,ZSE05,147) - w(AC3_2,ZSE10,111) <= 0
+ Temporality(AC3_2,ZSE10,111): w(AC3_2,ZSE10,111) - w(AC3_2,ZSE10,110) >= 0
+ Sector_Time(AC3_2,ZSE10,112): w(AC3_2,ZSE05,148) - w(AC3_2,ZSE10,112) <= 0
+ Temporality(AC3_2,ZSE10,112): w(AC3_2,ZSE10,112) - w(AC3_2,ZSE10,111) >= 0
+ Sector_Time(AC3_2,ZSE10,113): w(AC3_2,ZSE05,149) - w(AC3_2,ZSE10,113) <= 0
+ Temporality(AC3_2,ZSE10,113): w(AC3_2,ZSE10,113) - w(AC3_2,ZSE10,112) >= 0
+ Sector_Time(AC3_2,ZSE10,114): w(AC3_2,ZSE05,150) - w(AC3_2,ZSE10,114) <= 0
+ Temporality(AC3_2,ZSE10,114): w(AC3_2,ZSE10,114) - w(AC3_2,ZSE10,113) >= 0
+ Sector_Time(AC3_2,ZSE10,115): w(AC3_2,ZSE05,151) - w(AC3_2,ZSE10,115) <= 0
+ Temporality(AC3_2,ZSE10,115): w(AC3_2,ZSE10,115) - w(AC3_2,ZSE10,114) >= 0
+ Sector_Time(AC3_2,ZSE10,116): w(AC3_2,ZSE05,152) - w(AC3_2,ZSE10,116) <= 0
+ Temporality(AC3_2,ZSE10,116): w(AC3_2,ZSE10,116) - w(AC3_2,ZSE10,115) >= 0
+ Sector_Time(AC3_2,ZSE10,117): w(AC3_2,ZSE05,153) - w(AC3_2,ZSE10,117) <= 0
+ Temporality(AC3_2,ZSE10,117): w(AC3_2,ZSE10,117) - w(AC3_2,ZSE10,116) >= 0
+ Sector_Time(AC3_2,ZSE05,134): w(AC3_2,ZSE34,170) - w(AC3_2,ZSE05,134) <= 0
+ Sector_Time(AC3_2,ZSE05,135): w(AC3_2,ZSE34,171) - w(AC3_2,ZSE05,135) <= 0
+ Temporality(AC3_2,ZSE05,135): w(AC3_2,ZSE05,135) - w(AC3_2,ZSE05,134) >= 0
+ Sector_Time(AC3_2,ZSE05,136): w(AC3_2,ZSE34,172) - w(AC3_2,ZSE05,136) <= 0
+ Temporality(AC3_2,ZSE05,136): w(AC3_2,ZSE05,136) - w(AC3_2,ZSE05,135) >= 0
+ Sector_Time(AC3_2,ZSE05,137): w(AC3_2,ZSE34,173) - w(AC3_2,ZSE05,137) <= 0
+ Temporality(AC3_2,ZSE05,137): w(AC3_2,ZSE05,137) - w(AC3_2,ZSE05,136) >= 0
+ Sector_Time(AC3_2,ZSE05,138): w(AC3_2,ZSE34,174) - w(AC3_2,ZSE05,138) <= 0
+ Temporality(AC3_2,ZSE05,138): w(AC3_2,ZSE05,138) - w(AC3_2,ZSE05,137) >= 0
+ Sector_Time(AC3_2,ZSE05,139): w(AC3_2,ZSE34,175) - w(AC3_2,ZSE05,139) <= 0
+ Temporality(AC3_2,ZSE05,139): w(AC3_2,ZSE05,139) - w(AC3_2,ZSE05,138) >= 0
+ Sector_Time(AC3_2,ZSE05,140): w(AC3_2,ZSE34,176) - w(AC3_2,ZSE05,140) <= 0
+ Temporality(AC3_2,ZSE05,140): w(AC3_2,ZSE05,140) - w(AC3_2,ZSE05,139) >= 0
+ Sector_Time(AC3_2,ZSE05,141): w(AC3_2,ZSE34,177) - w(AC3_2,ZSE05,141) <= 0
+ Temporality(AC3_2,ZSE05,141): w(AC3_2,ZSE05,141) - w(AC3_2,ZSE05,140) >= 0
+ Sector_Time(AC3_2,ZSE05,142): w(AC3_2,ZSE34,178) - w(AC3_2,ZSE05,142) <= 0
+ Temporality(AC3_2,ZSE05,142): w(AC3_2,ZSE05,142) - w(AC3_2,ZSE05,141) >= 0
+ Sector_Time(AC3_2,ZSE05,143): w(AC3_2,ZSE34,179) - w(AC3_2,ZSE05,143) <= 0
+ Temporality(AC3_2,ZSE05,143): w(AC3_2,ZSE05,143) - w(AC3_2,ZSE05,142) >= 0
+ Sector_Time(AC3_2,ZSE05,144): w(AC3_2,ZSE34,180) - w(AC3_2,ZSE05,144) <= 0
+ Temporality(AC3_2,ZSE05,144): w(AC3_2,ZSE05,144) - w(AC3_2,ZSE05,143) >= 0
+ Sector_Time(AC3_2,ZSE05,145): w(AC3_2,ZSE34,181) - w(AC3_2,ZSE05,145) <= 0
+ Temporality(AC3_2,ZSE05,145): w(AC3_2,ZSE05,145) - w(AC3_2,ZSE05,144) >= 0
+ Sector_Time(AC3_2,ZSE05,146): w(AC3_2,ZSE34,182) - w(AC3_2,ZSE05,146) <= 0
+ Temporality(AC3_2,ZSE05,146): w(AC3_2,ZSE05,146) - w(AC3_2,ZSE05,145) >= 0
+ Sector_Time(AC3_2,ZSE05,147): w(AC3_2,ZSE34,183) - w(AC3_2,ZSE05,147) <= 0
+ Temporality(AC3_2,ZSE05,147): w(AC3_2,ZSE05,147) - w(AC3_2,ZSE05,146) >= 0
+ Sector_Time(AC3_2,ZSE05,148): w(AC3_2,ZSE34,184) - w(AC3_2,ZSE05,148) <= 0
+ Temporality(AC3_2,ZSE05,148): w(AC3_2,ZSE05,148) - w(AC3_2,ZSE05,147) >= 0
+ Sector_Time(AC3_2,ZSE05,149): w(AC3_2,ZSE34,185) - w(AC3_2,ZSE05,149) <= 0
+ Temporality(AC3_2,ZSE05,149): w(AC3_2,ZSE05,149) - w(AC3_2,ZSE05,148) >= 0
+ Sector_Time(AC3_2,ZSE05,150): w(AC3_2,ZSE34,186) - w(AC3_2,ZSE05,150) <= 0
+ Temporality(AC3_2,ZSE05,150): w(AC3_2,ZSE05,150) - w(AC3_2,ZSE05,149) >= 0
+ Sector_Time(AC3_2,ZSE05,151): w(AC3_2,ZSE34,187) - w(AC3_2,ZSE05,151) <= 0
+ Temporality(AC3_2,ZSE05,151): w(AC3_2,ZSE05,151) - w(AC3_2,ZSE05,150) >= 0
+ Sector_Time(AC3_2,ZSE05,152): w(AC3_2,ZSE34,188) - w(AC3_2,ZSE05,152) <= 0
+ Temporality(AC3_2,ZSE05,152): w(AC3_2,ZSE05,152) - w(AC3_2,ZSE05,151) >= 0
+ Sector_Time(AC3_2,ZSE05,153): w(AC3_2,ZSE34,189) - w(AC3_2,ZSE05,153) <= 0
+ Temporality(AC3_2,ZSE05,153): w(AC3_2,ZSE05,153) - w(AC3_2,ZSE05,152) >= 0
+ Sector_Time(AC3_2,ZSE34,170): w(AC3_2,ZSE02,174) - w(AC3_2,ZSE34,170) <= 0
+ Sector_Time(AC3_2,ZSE34,171): w(AC3_2,ZSE02,175) - w(AC3_2,ZSE34,171) <= 0
+ Temporality(AC3_2,ZSE34,171): w(AC3_2,ZSE34,171) - w(AC3_2,ZSE34,170) >= 0
+ Sector_Time(AC3_2,ZSE34,172): w(AC3_2,ZSE02,176) - w(AC3_2,ZSE34,172) <= 0
+ Temporality(AC3_2,ZSE34,172): w(AC3_2,ZSE34,172) - w(AC3_2,ZSE34,171) >= 0
+ Sector_Time(AC3_2,ZSE34,173): w(AC3_2,ZSE02,177) - w(AC3_2,ZSE34,173) <= 0
+ Temporality(AC3_2,ZSE34,173): w(AC3_2,ZSE34,173) - w(AC3_2,ZSE34,172) >= 0
+ Sector_Time(AC3_2,ZSE34,174): w(AC3_2,ZSE02,178) - w(AC3_2,ZSE34,174) <= 0
+ Temporality(AC3_2,ZSE34,174): w(AC3_2,ZSE34,174) - w(AC3_2,ZSE34,173) >= 0
+ Sector_Time(AC3_2,ZSE34,175): w(AC3_2,ZSE02,179) - w(AC3_2,ZSE34,175) <= 0
+ Temporality(AC3_2,ZSE34,175): w(AC3_2,ZSE34,175) - w(AC3_2,ZSE34,174) >= 0
+ Sector_Time(AC3_2,ZSE34,176): w(AC3_2,ZSE02,180) - w(AC3_2,ZSE34,176) <= 0
+ Temporality(AC3_2,ZSE34,176): w(AC3_2,ZSE34,176) - w(AC3_2,ZSE34,175) >= 0
+ Sector_Time(AC3_2,ZSE34,177): w(AC3_2,ZSE02,181) - w(AC3_2,ZSE34,177) <= 0
+ Temporality(AC3_2,ZSE34,177): w(AC3_2,ZSE34,177) - w(AC3_2,ZSE34,176) >= 0
+ Sector_Time(AC3_2,ZSE34,178): w(AC3_2,ZSE02,182) - w(AC3_2,ZSE34,178) <= 0
+ Temporality(AC3_2,ZSE34,178): w(AC3_2,ZSE34,178) - w(AC3_2,ZSE34,177) >= 0
+ Sector_Time(AC3_2,ZSE34,179): w(AC3_2,ZSE02,183) - w(AC3_2,ZSE34,179) <= 0
+ Temporality(AC3_2,ZSE34,179): w(AC3_2,ZSE34,179) - w(AC3_2,ZSE34,178) >= 0
+ Sector_Time(AC3_2,ZSE34,180): w(AC3_2,ZSE02,184) - w(AC3_2,ZSE34,180) <= 0
+ Temporality(AC3_2,ZSE34,180): w(AC3_2,ZSE34,180) - w(AC3_2,ZSE34,179) >= 0
+ Sector_Time(AC3_2,ZSE34,181): w(AC3_2,ZSE02,185) - w(AC3_2,ZSE34,181) <= 0
+ Temporality(AC3_2,ZSE34,181): w(AC3_2,ZSE34,181) - w(AC3_2,ZSE34,180) >= 0
+ Sector_Time(AC3_2,ZSE34,182): w(AC3_2,ZSE02,186) - w(AC3_2,ZSE34,182) <= 0
+ Temporality(AC3_2,ZSE34,182): w(AC3_2,ZSE34,182) - w(AC3_2,ZSE34,181) >= 0
+ Sector_Time(AC3_2,ZSE34,183): w(AC3_2,ZSE02,187) - w(AC3_2,ZSE34,183) <= 0
+ Temporality(AC3_2,ZSE34,183): w(AC3_2,ZSE34,183) - w(AC3_2,ZSE34,182) >= 0
+ Sector_Time(AC3_2,ZSE34,184): w(AC3_2,ZSE02,188) - w(AC3_2,ZSE34,184) <= 0
+ Temporality(AC3_2,ZSE34,184): w(AC3_2,ZSE34,184) - w(AC3_2,ZSE34,183) >= 0
+ Sector_Time(AC3_2,ZSE34,185): w(AC3_2,ZSE02,189) - w(AC3_2,ZSE34,185) <= 0
+ Temporality(AC3_2,ZSE34,185): w(AC3_2,ZSE34,185) - w(AC3_2,ZSE34,184) >= 0
+ Sector_Time(AC3_2,ZSE34,186): w(AC3_2,ZSE02,190) - w(AC3_2,ZSE34,186) <= 0
+ Temporality(AC3_2,ZSE34,186): w(AC3_2,ZSE34,186) - w(AC3_2,ZSE34,185) >= 0
+ Sector_Time(AC3_2,ZSE34,187): w(AC3_2,ZSE02,191) - w(AC3_2,ZSE34,187) <= 0
+ Temporality(AC3_2,ZSE34,187): w(AC3_2,ZSE34,187) - w(AC3_2,ZSE34,186) >= 0
+ Sector_Time(AC3_2,ZSE34,188): w(AC3_2,ZSE02,192) - w(AC3_2,ZSE34,188) <= 0
+ Temporality(AC3_2,ZSE34,188): w(AC3_2,ZSE34,188) - w(AC3_2,ZSE34,187) >= 0
+ Sector_Time(AC3_2,ZSE34,189): w(AC3_2,ZSE02,193) - w(AC3_2,ZSE34,189) <= 0
+ Temporality(AC3_2,ZSE34,189): w(AC3_2,ZSE34,189) - w(AC3_2,ZSE34,188) >= 0
+ Sector_Time(AC3_2,ZSE02,174): w(AC3_2,ZSESEA,192) - w(AC3_2,ZSE02,174) <= 0
+ Sector_Time(AC3_2,ZSE02,175): w(AC3_2,ZSESEA,193) - w(AC3_2,ZSE02,175) <= 0
+ Temporality(AC3_2,ZSE02,175): w(AC3_2,ZSE02,175) - w(AC3_2,ZSE02,174) >= 0
+ Sector_Time(AC3_2,ZSE02,176): w(AC3_2,ZSESEA,194) - w(AC3_2,ZSE02,176) <= 0
+ Temporality(AC3_2,ZSE02,176): w(AC3_2,ZSE02,176) - w(AC3_2,ZSE02,175) >= 0
+ Sector_Time(AC3_2,ZSE02,177): w(AC3_2,ZSESEA,195) - w(AC3_2,ZSE02,177) <= 0
+ Temporality(AC3_2,ZSE02,177): w(AC3_2,ZSE02,177) - w(AC3_2,ZSE02,176) >= 0
+ Sector_Time(AC3_2,ZSE02,178): w(AC3_2,ZSESEA,196) - w(AC3_2,ZSE02,178) <= 0
+ Temporality(AC3_2,ZSE02,178): w(AC3_2,ZSE02,178) - w(AC3_2,ZSE02,177) >= 0
+ Sector_Time(AC3_2,ZSE02,179): w(AC3_2,ZSESEA,197) - w(AC3_2,ZSE02,179) <= 0
+ Temporality(AC3_2,ZSE02,179): w(AC3_2,ZSE02,179) - w(AC3_2,ZSE02,178) >= 0
+ Sector_Time(AC3_2,ZSE02,180): w(AC3_2,ZSESEA,198) - w(AC3_2,ZSE02,180) <= 0
+ Temporality(AC3_2,ZSE02,180): w(AC3_2,ZSE02,180) - w(AC3_2,ZSE02,179) >= 0
+ Sector_Time(AC3_2,ZSE02,181): w(AC3_2,ZSESEA,199) - w(AC3_2,ZSE02,181) <= 0
+ Temporality(AC3_2,ZSE02,181): w(AC3_2,ZSE02,181) - w(AC3_2,ZSE02,180) >= 0
+ Sector_Time(AC3_2,ZSE02,182): w(AC3_2,ZSESEA,200) - w(AC3_2,ZSE02,182) <= 0
+ Temporality(AC3_2,ZSE02,182): w(AC3_2,ZSE02,182) - w(AC3_2,ZSE02,181) >= 0
+ Sector_Time(AC3_2,ZSE02,183): w(AC3_2,ZSESEA,201) - w(AC3_2,ZSE02,183) <= 0
+ Temporality(AC3_2,ZSE02,183): w(AC3_2,ZSE02,183) - w(AC3_2,ZSE02,182) >= 0
+ Sector_Time(AC3_2,ZSE02,184): w(AC3_2,ZSESEA,202) - w(AC3_2,ZSE02,184) <= 0
+ Temporality(AC3_2,ZSE02,184): w(AC3_2,ZSE02,184) - w(AC3_2,ZSE02,183) >= 0
+ Sector_Time(AC3_2,ZSE02,185): w(AC3_2,ZSESEA,203) - w(AC3_2,ZSE02,185) <= 0
+ Temporality(AC3_2,ZSE02,185): w(AC3_2,ZSE02,185) - w(AC3_2,ZSE02,184) >= 0
+ Sector_Time(AC3_2,ZSE02,186): w(AC3_2,ZSESEA,204) - w(AC3_2,ZSE02,186) <= 0
+ Temporality(AC3_2,ZSE02,186): w(AC3_2,ZSE02,186) - w(AC3_2,ZSE02,185) >= 0
+ Sector_Time(AC3_2,ZSE02,187): w(AC3_2,ZSESEA,205) - w(AC3_2,ZSE02,187) <= 0
+ Temporality(AC3_2,ZSE02,187): w(AC3_2,ZSE02,187) - w(AC3_2,ZSE02,186) >= 0
+ Sector_Time(AC3_2,ZSE02,188): w(AC3_2,ZSESEA,206) - w(AC3_2,ZSE02,188) <= 0
+ Temporality(AC3_2,ZSE02,188): w(AC3_2,ZSE02,188) - w(AC3_2,ZSE02,187) >= 0
+ Sector_Time(AC3_2,ZSE02,189): w(AC3_2,ZSESEA,207) - w(AC3_2,ZSE02,189) <= 0
+ Temporality(AC3_2,ZSE02,189): w(AC3_2,ZSE02,189) - w(AC3_2,ZSE02,188) >= 0
+ Sector_Time(AC3_2,ZSE02,190): w(AC3_2,ZSESEA,208) - w(AC3_2,ZSE02,190) <= 0
+ Temporality(AC3_2,ZSE02,190): w(AC3_2,ZSE02,190) - w(AC3_2,ZSE02,189) >= 0
+ Sector_Time(AC3_2,ZSE02,191): w(AC3_2,ZSESEA,209) - w(AC3_2,ZSE02,191) <= 0
+ Temporality(AC3_2,ZSE02,191): w(AC3_2,ZSE02,191) - w(AC3_2,ZSE02,190) >= 0
+ Sector_Time(AC3_2,ZSE02,192): w(AC3_2,ZSESEA,210) - w(AC3_2,ZSE02,192) <= 0
+ Temporality(AC3_2,ZSE02,192): w(AC3_2,ZSE02,192) - w(AC3_2,ZSE02,191) >= 0
+ Sector_Time(AC3_2,ZSE02,193): w(AC3_2,ZSESEA,211) - w(AC3_2,ZSE02,193) <= 0
+ Temporality(AC3_2,ZSE02,193): w(AC3_2,ZSE02,193) - w(AC3_2,ZSE02,192) >= 0
+ Sector_Time(AC3_2,ZSESEA,192): w(AC3_2,SEA,199) - w(AC3_2,ZSESEA,192) <= 0
+ Sector_Time(AC3_2,ZSESEA,193): w(AC3_2,SEA,200) - w(AC3_2,ZSESEA,193) <= 0
+ Temporality(AC3_2,ZSESEA,193): w(AC3_2,ZSESEA,193) - w(AC3_2,ZSESEA,192) >= 0
+ Sector_Time(AC3_2,ZSESEA,194): w(AC3_2,SEA,201) - w(AC3_2,ZSESEA,194) <= 0
+ Temporality(AC3_2,ZSESEA,194): w(AC3_2,ZSESEA,194) - w(AC3_2,ZSESEA,193) >= 0
+ Sector_Time(AC3_2,ZSESEA,195): w(AC3_2,SEA,202) - w(AC3_2,ZSESEA,195) <= 0
+ Temporality(AC3_2,ZSESEA,195): w(AC3_2,ZSESEA,195) - w(AC3_2,ZSESEA,194) >= 0
+ Sector_Time(AC3_2,ZSESEA,196): w(AC3_2,SEA,203) - w(AC3_2,ZSESEA,196) <= 0
+ Temporality(AC3_2,ZSESEA,196): w(AC3_2,ZSESEA,196) - w(AC3_2,ZSESEA,195) >= 0
+ Sector_Time(AC3_2,ZSESEA,197): w(AC3_2,SEA,204) - w(AC3_2,ZSESEA,197) <= 0
+ Temporality(AC3_2,ZSESEA,197): w(AC3_2,ZSESEA,197) - w(AC3_2,ZSESEA,196) >= 0
+ Sector_Time(AC3_2,ZSESEA,198): w(AC3_2,SEA,205) - w(AC3_2,ZSESEA,198) <= 0
+ Temporality(AC3_2,ZSESEA,198): w(AC3_2,ZSESEA,198) - w(AC3_2,ZSESEA,197) >= 0
+ Sector_Time(AC3_2,ZSESEA,199): w(AC3_2,SEA,206) - w(AC3_2,ZSESEA,199) <= 0
+ Temporality(AC3_2,ZSESEA,199): w(AC3_2,ZSESEA,199) - w(AC3_2,ZSESEA,198) >= 0
+ Sector_Time(AC3_2,ZSESEA,200): w(AC3_2,SEA,207) - w(AC3_2,ZSESEA,200) <= 0
+ Temporality(AC3_2,ZSESEA,200): w(AC3_2,ZSESEA,200) - w(AC3_2,ZSESEA,199) >= 0
+ Sector_Time(AC3_2,ZSESEA,201): w(AC3_2,SEA,208) - w(AC3_2,ZSESEA,201) <= 0
+ Temporality(AC3_2,ZSESEA,201): w(AC3_2,ZSESEA,201) - w(AC3_2,ZSESEA,200) >= 0
+ Sector_Time(AC3_2,ZSESEA,202): w(AC3_2,SEA,209) - w(AC3_2,ZSESEA,202) <= 0
+ Temporality(AC3_2,ZSESEA,202): w(AC3_2,ZSESEA,202) - w(AC3_2,ZSESEA,201) >= 0
+ Sector_Time(AC3_2,ZSESEA,203): w(AC3_2,SEA,210) - w(AC3_2,ZSESEA,203) <= 0
+ Temporality(AC3_2,ZSESEA,203): w(AC3_2,ZSESEA,203) - w(AC3_2,ZSESEA,202) >= 0
+ Sector_Time(AC3_2,ZSESEA,204): w(AC3_2,SEA,211) - w(AC3_2,ZSESEA,204) <= 0
+ Temporality(AC3_2,ZSESEA,204): w(AC3_2,ZSESEA,204) - w(AC3_2,ZSESEA,203) >= 0
+ Sector_Time(AC3_2,ZSESEA,205): w(AC3_2,SEA,212) - w(AC3_2,ZSESEA,205) <= 0
+ Temporality(AC3_2,ZSESEA,205): w(AC3_2,ZSESEA,205) - w(AC3_2,ZSESEA,204) >= 0
+ Sector_Time(AC3_2,ZSESEA,206): w(AC3_2,SEA,213) - w(AC3_2,ZSESEA,206) <= 0
+ Temporality(AC3_2,ZSESEA,206): w(AC3_2,ZSESEA,206) - w(AC3_2,ZSESEA,205) >= 0
+ Sector_Time(AC3_2,ZSESEA,207): w(AC3_2,SEA,214) - w(AC3_2,ZSESEA,207) <= 0
+ Temporality(AC3_2,ZSESEA,207): w(AC3_2,ZSESEA,207) - w(AC3_2,ZSESEA,206) >= 0
+ Sector_Time(AC3_2,ZSESEA,208): w(AC3_2,SEA,215) - w(AC3_2,ZSESEA,208) <= 0
+ Temporality(AC3_2,ZSESEA,208): w(AC3_2,ZSESEA,208) - w(AC3_2,ZSESEA,207) >= 0
+ Sector_Time(AC3_2,ZSESEA,209): w(AC3_2,SEA,216) - w(AC3_2,ZSESEA,209) <= 0
+ Temporality(AC3_2,ZSESEA,209): w(AC3_2,ZSESEA,209) - w(AC3_2,ZSESEA,208) >= 0
+ Sector_Time(AC3_2,ZSESEA,210): w(AC3_2,SEA,217) - w(AC3_2,ZSESEA,210) <= 0
+ Temporality(AC3_2,ZSESEA,210): w(AC3_2,ZSESEA,210) - w(AC3_2,ZSESEA,209) >= 0
+ Sector_Time(AC3_2,ZSESEA,211): w(AC3_2,SEA,218) - w(AC3_2,ZSESEA,211) <= 0
+ Temporality(AC3_2,ZSESEA,211): w(AC3_2,ZSESEA,211) - w(AC3_2,ZSESEA,210) >= 0
+Bounds
+ 0 <= w(AC4_3,SEA,199) <= 1
+ 0 <= w(AC4_3,SEA,200) <= 1
+ 0 <= w(AC4_3,SEA,201) <= 1
+ 0 <= w(AC4_3,SEA,202) <= 1
+ 0 <= w(AC4_3,SEA,203) <= 1
+ 0 <= w(AC4_3,SEA,204) <= 1
+ 0 <= w(AC4_3,SEA,205) <= 1
+ 0 <= w(AC4_3,SEA,206) <= 1
+ 0 <= w(AC4_3,SEA,207) <= 1
+ 0 <= w(AC4_3,SEA,208) <= 1
+ 0 <= w(AC4_3,SEA,209) <= 1
+ 0 <= w(AC4_3,SEA,210) <= 1
+ 0 <= w(AC4_3,SEA,211) <= 1
+ 0 <= w(AC4_3,SEA,212) <= 1
+ 0 <= w(AC4_3,SEA,213) <= 1
+ 0 <= w(AC4_3,SEA,214) <= 1
+ 0 <= w(AC4_3,SEA,215) <= 1
+ 0 <= w(AC4_3,SEA,216) <= 1
+ 0 <= w(AC4_3,SEA,217) <= 1
+ 0 <= w(AC4_3,SEA,218) <= 1
+ 0 <= w(AC4_3,LAS,20) <= 1
+ 0 <= w(AC4_3,LAS,21) <= 1
+ 0 <= w(AC4_3,LAS,22) <= 1
+ 0 <= w(AC4_3,LAS,23) <= 1
+ 0 <= w(AC4_3,LAS,24) <= 1
+ 0 <= w(AC4_3,LAS,25) <= 1
+ 0 <= w(AC4_3,LAS,26) <= 1
+ 0 <= w(AC4_3,LAS,27) <= 1
+ 0 <= w(AC4_3,LAS,28) <= 1
+ 0 <= w(AC4_3,LAS,29) <= 1
+ 0 <= w(AC4_3,LAS,30) <= 1
+ 0 <= w(AC4_3,LAS,31) <= 1
+ 0 <= w(AC4_3,LAS,32) <= 1
+ 0 <= w(AC4_3,LAS,33) <= 1
+ 0 <= w(AC4_3,LAS,34) <= 1
+ 0 <= w(AC4_3,LAS,35) <= 1
+ 0 <= w(AC4_3,LAS,36) <= 1
+ 0 <= w(AC4_3,LAS,37) <= 1
+ 0 <= w(AC4_3,LAS,38) <= 1
+ 0 <= w(AC4_3,LAS,39) <= 1
+ 0 <= w(AC4_3,ZLA16,21) <= 1
+ 0 <= w(AC4_3,ZLA16,22) <= 1
+ 0 <= w(AC4_3,ZLA16,23) <= 1
+ 0 <= w(AC4_3,ZLA16,24) <= 1
+ 0 <= w(AC4_3,ZLA16,25) <= 1
+ 0 <= w(AC4_3,ZLA16,26) <= 1
+ 0 <= w(AC4_3,ZLA16,27) <= 1
+ 0 <= w(AC4_3,ZLA16,28) <= 1
+ 0 <= w(AC4_3,ZLA16,29) <= 1
+ 0 <= w(AC4_3,ZLA16,30) <= 1
+ 0 <= w(AC4_3,ZLA16,31) <= 1
+ 0 <= w(AC4_3,ZLA16,32) <= 1
+ 0 <= w(AC4_3,ZLA16,33) <= 1
+ 0 <= w(AC4_3,ZLA16,34) <= 1
+ 0 <= w(AC4_3,ZLA16,35) <= 1
+ 0 <= w(AC4_3,ZLA16,36) <= 1
+ 0 <= w(AC4_3,ZLA16,37) <= 1
+ 0 <= w(AC4_3,ZLA16,38) <= 1
+ 0 <= w(AC4_3,ZLA16,39) <= 1
+ 0 <= w(AC4_3,ZLA16,40) <= 1
+ 0 <= w(AC4_3,ZOA46,36) <= 1
+ 0 <= w(AC4_3,ZOA46,37) <= 1
+ 0 <= w(AC4_3,ZOA46,38) <= 1
+ 0 <= w(AC4_3,ZOA46,39) <= 1
+ 0 <= w(AC4_3,ZOA46,40) <= 1
+ 0 <= w(AC4_3,ZOA46,41) <= 1
+ 0 <= w(AC4_3,ZOA46,42) <= 1
+ 0 <= w(AC4_3,ZOA46,43) <= 1
+ 0 <= w(AC4_3,ZOA46,44) <= 1
+ 0 <= w(AC4_3,ZOA46,45) <= 1
+ 0 <= w(AC4_3,ZOA46,46) <= 1
+ 0 <= w(AC4_3,ZOA46,47) <= 1
+ 0 <= w(AC4_3,ZOA46,48) <= 1
+ 0 <= w(AC4_3,ZOA46,49) <= 1
+ 0 <= w(AC4_3,ZOA46,50) <= 1
+ 0 <= w(AC4_3,ZOA46,51) <= 1
+ 0 <= w(AC4_3,ZOA46,52) <= 1
+ 0 <= w(AC4_3,ZOA46,53) <= 1
+ 0 <= w(AC4_3,ZOA46,54) <= 1
+ 0 <= w(AC4_3,ZOA46,55) <= 1
+ 0 <= w(AC4_3,ZOA45,69) <= 1
+ 0 <= w(AC4_3,ZOA45,70) <= 1
+ 0 <= w(AC4_3,ZOA45,71) <= 1
+ 0 <= w(AC4_3,ZOA45,72) <= 1
+ 0 <= w(AC4_3,ZOA45,73) <= 1
+ 0 <= w(AC4_3,ZOA45,74) <= 1
+ 0 <= w(AC4_3,ZOA45,75) <= 1
+ 0 <= w(AC4_3,ZOA45,76) <= 1
+ 0 <= w(AC4_3,ZOA45,77) <= 1
+ 0 <= w(AC4_3,ZOA45,78) <= 1
+ 0 <= w(AC4_3,ZOA45,79) <= 1
+ 0 <= w(AC4_3,ZOA45,80) <= 1
+ 0 <= w(AC4_3,ZOA45,81) <= 1
+ 0 <= w(AC4_3,ZOA45,82) <= 1
+ 0 <= w(AC4_3,ZOA45,83) <= 1
+ 0 <= w(AC4_3,ZOA45,84) <= 1
+ 0 <= w(AC4_3,ZOA45,85) <= 1
+ 0 <= w(AC4_3,ZOA45,86) <= 1
+ 0 <= w(AC4_3,ZOA45,87) <= 1
+ 0 <= w(AC4_3,ZOA45,88) <= 1
+ 0 <= w(AC4_3,ZLC43,92) <= 1
+ 0 <= w(AC4_3,ZLC43,93) <= 1
+ 0 <= w(AC4_3,ZLC43,94) <= 1
+ 0 <= w(AC4_3,ZLC43,95) <= 1
+ 0 <= w(AC4_3,ZLC43,96) <= 1
+ 0 <= w(AC4_3,ZLC43,97) <= 1
+ 0 <= w(AC4_3,ZLC43,98) <= 1
+ 0 <= w(AC4_3,ZLC43,99) <= 1
+ 0 <= w(AC4_3,ZLC43,100) <= 1
+ 0 <= w(AC4_3,ZLC43,101) <= 1
+ 0 <= w(AC4_3,ZLC43,102) <= 1
+ 0 <= w(AC4_3,ZLC43,103) <= 1
+ 0 <= w(AC4_3,ZLC43,104) <= 1
+ 0 <= w(AC4_3,ZLC43,105) <= 1
+ 0 <= w(AC4_3,ZLC43,106) <= 1
+ 0 <= w(AC4_3,ZLC43,107) <= 1
+ 0 <= w(AC4_3,ZLC43,108) <= 1
+ 0 <= w(AC4_3,ZLC43,109) <= 1
+ 0 <= w(AC4_3,ZLC43,110) <= 1
+ 0 <= w(AC4_3,ZLC43,111) <= 1
+ 0 <= w(AC4_3,ZSE10,98) <= 1
+ 0 <= w(AC4_3,ZSE10,99) <= 1
+ 0 <= w(AC4_3,ZSE10,100) <= 1
+ 0 <= w(AC4_3,ZSE10,101) <= 1
+ 0 <= w(AC4_3,ZSE10,102) <= 1
+ 0 <= w(AC4_3,ZSE10,103) <= 1
+ 0 <= w(AC4_3,ZSE10,104) <= 1
+ 0 <= w(AC4_3,ZSE10,105) <= 1
+ 0 <= w(AC4_3,ZSE10,106) <= 1
+ 0 <= w(AC4_3,ZSE10,107) <= 1
+ 0 <= w(AC4_3,ZSE10,108) <= 1
+ 0 <= w(AC4_3,ZSE10,109) <= 1
+ 0 <= w(AC4_3,ZSE10,110) <= 1
+ 0 <= w(AC4_3,ZSE10,111) <= 1
+ 0 <= w(AC4_3,ZSE10,112) <= 1
+ 0 <= w(AC4_3,ZSE10,113) <= 1
+ 0 <= w(AC4_3,ZSE10,114) <= 1
+ 0 <= w(AC4_3,ZSE10,115) <= 1
+ 0 <= w(AC4_3,ZSE10,116) <= 1
+ 0 <= w(AC4_3,ZSE10,117) <= 1
+ 0 <= w(AC4_3,ZSE05,134) <= 1
+ 0 <= w(AC4_3,ZSE05,135) <= 1
+ 0 <= w(AC4_3,ZSE05,136) <= 1
+ 0 <= w(AC4_3,ZSE05,137) <= 1
+ 0 <= w(AC4_3,ZSE05,138) <= 1
+ 0 <= w(AC4_3,ZSE05,139) <= 1
+ 0 <= w(AC4_3,ZSE05,140) <= 1
+ 0 <= w(AC4_3,ZSE05,141) <= 1
+ 0 <= w(AC4_3,ZSE05,142) <= 1
+ 0 <= w(AC4_3,ZSE05,143) <= 1
+ 0 <= w(AC4_3,ZSE05,144) <= 1
+ 0 <= w(AC4_3,ZSE05,145) <= 1
+ 0 <= w(AC4_3,ZSE05,146) <= 1
+ 0 <= w(AC4_3,ZSE05,147) <= 1
+ 0 <= w(AC4_3,ZSE05,148) <= 1
+ 0 <= w(AC4_3,ZSE05,149) <= 1
+ 0 <= w(AC4_3,ZSE05,150) <= 1
+ 0 <= w(AC4_3,ZSE05,151) <= 1
+ 0 <= w(AC4_3,ZSE05,152) <= 1
+ 0 <= w(AC4_3,ZSE05,153) <= 1
+ 0 <= w(AC4_3,ZSE34,170) <= 1
+ 0 <= w(AC4_3,ZSE34,171) <= 1
+ 0 <= w(AC4_3,ZSE34,172) <= 1
+ 0 <= w(AC4_3,ZSE34,173) <= 1
+ 0 <= w(AC4_3,ZSE34,174) <= 1
+ 0 <= w(AC4_3,ZSE34,175) <= 1
+ 0 <= w(AC4_3,ZSE34,176) <= 1
+ 0 <= w(AC4_3,ZSE34,177) <= 1
+ 0 <= w(AC4_3,ZSE34,178) <= 1
+ 0 <= w(AC4_3,ZSE34,179) <= 1
+ 0 <= w(AC4_3,ZSE34,180) <= 1
+ 0 <= w(AC4_3,ZSE34,181) <= 1
+ 0 <= w(AC4_3,ZSE34,182) <= 1
+ 0 <= w(AC4_3,ZSE34,183) <= 1
+ 0 <= w(AC4_3,ZSE34,184) <= 1
+ 0 <= w(AC4_3,ZSE34,185) <= 1
+ 0 <= w(AC4_3,ZSE34,186) <= 1
+ 0 <= w(AC4_3,ZSE34,187) <= 1
+ 0 <= w(AC4_3,ZSE34,188) <= 1
+ 0 <= w(AC4_3,ZSE34,189) <= 1
+ 0 <= w(AC4_3,ZSE02,174) <= 1
+ 0 <= w(AC4_3,ZSE02,175) <= 1
+ 0 <= w(AC4_3,ZSE02,176) <= 1
+ 0 <= w(AC4_3,ZSE02,177) <= 1
+ 0 <= w(AC4_3,ZSE02,178) <= 1
+ 0 <= w(AC4_3,ZSE02,179) <= 1
+ 0 <= w(AC4_3,ZSE02,180) <= 1
+ 0 <= w(AC4_3,ZSE02,181) <= 1
+ 0 <= w(AC4_3,ZSE02,182) <= 1
+ 0 <= w(AC4_3,ZSE02,183) <= 1
+ 0 <= w(AC4_3,ZSE02,184) <= 1
+ 0 <= w(AC4_3,ZSE02,185) <= 1
+ 0 <= w(AC4_3,ZSE02,186) <= 1
+ 0 <= w(AC4_3,ZSE02,187) <= 1
+ 0 <= w(AC4_3,ZSE02,188) <= 1
+ 0 <= w(AC4_3,ZSE02,189) <= 1
+ 0 <= w(AC4_3,ZSE02,190) <= 1
+ 0 <= w(AC4_3,ZSE02,191) <= 1
+ 0 <= w(AC4_3,ZSE02,192) <= 1
+ 0 <= w(AC4_3,ZSE02,193) <= 1
+ 0 <= w(AC4_3,ZSESEA,192) <= 1
+ 0 <= w(AC4_3,ZSESEA,193) <= 1
+ 0 <= w(AC4_3,ZSESEA,194) <= 1
+ 0 <= w(AC4_3,ZSESEA,195) <= 1
+ 0 <= w(AC4_3,ZSESEA,196) <= 1
+ 0 <= w(AC4_3,ZSESEA,197) <= 1
+ 0 <= w(AC4_3,ZSESEA,198) <= 1
+ 0 <= w(AC4_3,ZSESEA,199) <= 1
+ 0 <= w(AC4_3,ZSESEA,200) <= 1
+ 0 <= w(AC4_3,ZSESEA,201) <= 1
+ 0 <= w(AC4_3,ZSESEA,202) <= 1
+ 0 <= w(AC4_3,ZSESEA,203) <= 1
+ 0 <= w(AC4_3,ZSESEA,204) <= 1
+ 0 <= w(AC4_3,ZSESEA,205) <= 1
+ 0 <= w(AC4_3,ZSESEA,206) <= 1
+ 0 <= w(AC4_3,ZSESEA,207) <= 1
+ 0 <= w(AC4_3,ZSESEA,208) <= 1
+ 0 <= w(AC4_3,ZSESEA,209) <= 1
+ 0 <= w(AC4_3,ZSESEA,210) <= 1
+ 0 <= w(AC4_3,ZSESEA,211) <= 1
+ 0 <= w(AC3_2,SEA,199) <= 1
+ 0 <= w(AC3_2,SEA,200) <= 1
+ 0 <= w(AC3_2,SEA,201) <= 1
+ 0 <= w(AC3_2,SEA,202) <= 1
+ 0 <= w(AC3_2,SEA,203) <= 1
+ 0 <= w(AC3_2,SEA,204) <= 1
+ 0 <= w(AC3_2,SEA,205) <= 1
+ 0 <= w(AC3_2,SEA,206) <= 1
+ 0 <= w(AC3_2,SEA,207) <= 1
+ 0 <= w(AC3_2,SEA,208) <= 1
+ 0 <= w(AC3_2,SEA,209) <= 1
+ 0 <= w(AC3_2,SEA,210) <= 1
+ 0 <= w(AC3_2,SEA,211) <= 1
+ 0 <= w(AC3_2,SEA,212) <= 1
+ 0 <= w(AC3_2,SEA,213) <= 1
+ 0 <= w(AC3_2,SEA,214) <= 1
+ 0 <= w(AC3_2,SEA,215) <= 1
+ 0 <= w(AC3_2,SEA,216) <= 1
+ 0 <= w(AC3_2,SEA,217) <= 1
+ 0 <= w(AC3_2,SEA,218) <= 1
+ 0 <= w(AC3_2,LAS,20) <= 1
+ 0 <= w(AC3_2,LAS,21) <= 1
+ 0 <= w(AC3_2,LAS,22) <= 1
+ 0 <= w(AC3_2,LAS,23) <= 1
+ 0 <= w(AC3_2,LAS,24) <= 1
+ 0 <= w(AC3_2,LAS,25) <= 1
+ 0 <= w(AC3_2,LAS,26) <= 1
+ 0 <= w(AC3_2,LAS,27) <= 1
+ 0 <= w(AC3_2,LAS,28) <= 1
+ 0 <= w(AC3_2,LAS,29) <= 1
+ 0 <= w(AC3_2,LAS,30) <= 1
+ 0 <= w(AC3_2,LAS,31) <= 1
+ 0 <= w(AC3_2,LAS,32) <= 1
+ 0 <= w(AC3_2,LAS,33) <= 1
+ 0 <= w(AC3_2,LAS,34) <= 1
+ 0 <= w(AC3_2,LAS,35) <= 1
+ 0 <= w(AC3_2,LAS,36) <= 1
+ 0 <= w(AC3_2,LAS,37) <= 1
+ 0 <= w(AC3_2,LAS,38) <= 1
+ 0 <= w(AC3_2,LAS,39) <= 1
+ 0 <= w(AC3_2,ZLA16,21) <= 1
+ 0 <= w(AC3_2,ZLA16,22) <= 1
+ 0 <= w(AC3_2,ZLA16,23) <= 1
+ 0 <= w(AC3_2,ZLA16,24) <= 1
+ 0 <= w(AC3_2,ZLA16,25) <= 1
+ 0 <= w(AC3_2,ZLA16,26) <= 1
+ 0 <= w(AC3_2,ZLA16,27) <= 1
+ 0 <= w(AC3_2,ZLA16,28) <= 1
+ 0 <= w(AC3_2,ZLA16,29) <= 1
+ 0 <= w(AC3_2,ZLA16,30) <= 1
+ 0 <= w(AC3_2,ZLA16,31) <= 1
+ 0 <= w(AC3_2,ZLA16,32) <= 1
+ 0 <= w(AC3_2,ZLA16,33) <= 1
+ 0 <= w(AC3_2,ZLA16,34) <= 1
+ 0 <= w(AC3_2,ZLA16,35) <= 1
+ 0 <= w(AC3_2,ZLA16,36) <= 1
+ 0 <= w(AC3_2,ZLA16,37) <= 1
+ 0 <= w(AC3_2,ZLA16,38) <= 1
+ 0 <= w(AC3_2,ZLA16,39) <= 1
+ 0 <= w(AC3_2,ZLA16,40) <= 1
+ 0 <= w(AC3_2,ZOA46,36) <= 1
+ 0 <= w(AC3_2,ZOA46,37) <= 1
+ 0 <= w(AC3_2,ZOA46,38) <= 1
+ 0 <= w(AC3_2,ZOA46,39) <= 1
+ 0 <= w(AC3_2,ZOA46,40) <= 1
+ 0 <= w(AC3_2,ZOA46,41) <= 1
+ 0 <= w(AC3_2,ZOA46,42) <= 1
+ 0 <= w(AC3_2,ZOA46,43) <= 1
+ 0 <= w(AC3_2,ZOA46,44) <= 1
+ 0 <= w(AC3_2,ZOA46,45) <= 1
+ 0 <= w(AC3_2,ZOA46,46) <= 1
+ 0 <= w(AC3_2,ZOA46,47) <= 1
+ 0 <= w(AC3_2,ZOA46,48) <= 1
+ 0 <= w(AC3_2,ZOA46,49) <= 1
+ 0 <= w(AC3_2,ZOA46,50) <= 1
+ 0 <= w(AC3_2,ZOA46,51) <= 1
+ 0 <= w(AC3_2,ZOA46,52) <= 1
+ 0 <= w(AC3_2,ZOA46,53) <= 1
+ 0 <= w(AC3_2,ZOA46,54) <= 1
+ 0 <= w(AC3_2,ZOA46,55) <= 1
+ 0 <= w(AC3_2,ZOA45,69) <= 1
+ 0 <= w(AC3_2,ZOA45,70) <= 1
+ 0 <= w(AC3_2,ZOA45,71) <= 1
+ 0 <= w(AC3_2,ZOA45,72) <= 1
+ 0 <= w(AC3_2,ZOA45,73) <= 1
+ 0 <= w(AC3_2,ZOA45,74) <= 1
+ 0 <= w(AC3_2,ZOA45,75) <= 1
+ 0 <= w(AC3_2,ZOA45,76) <= 1
+ 0 <= w(AC3_2,ZOA45,77) <= 1
+ 0 <= w(AC3_2,ZOA45,78) <= 1
+ 0 <= w(AC3_2,ZOA45,79) <= 1
+ 0 <= w(AC3_2,ZOA45,80) <= 1
+ 0 <= w(AC3_2,ZOA45,81) <= 1
+ 0 <= w(AC3_2,ZOA45,82) <= 1
+ 0 <= w(AC3_2,ZOA45,83) <= 1
+ 0 <= w(AC3_2,ZOA45,84) <= 1
+ 0 <= w(AC3_2,ZOA45,85) <= 1
+ 0 <= w(AC3_2,ZOA45,86) <= 1
+ 0 <= w(AC3_2,ZOA45,87) <= 1
+ 0 <= w(AC3_2,ZOA45,88) <= 1
+ 0 <= w(AC3_2,ZLC43,92) <= 1
+ 0 <= w(AC3_2,ZLC43,93) <= 1
+ 0 <= w(AC3_2,ZLC43,94) <= 1
+ 0 <= w(AC3_2,ZLC43,95) <= 1
+ 0 <= w(AC3_2,ZLC43,96) <= 1
+ 0 <= w(AC3_2,ZLC43,97) <= 1
+ 0 <= w(AC3_2,ZLC43,98) <= 1
+ 0 <= w(AC3_2,ZLC43,99) <= 1
+ 0 <= w(AC3_2,ZLC43,100) <= 1
+ 0 <= w(AC3_2,ZLC43,101) <= 1
+ 0 <= w(AC3_2,ZLC43,102) <= 1
+ 0 <= w(AC3_2,ZLC43,103) <= 1
+ 0 <= w(AC3_2,ZLC43,104) <= 1
+ 0 <= w(AC3_2,ZLC43,105) <= 1
+ 0 <= w(AC3_2,ZLC43,106) <= 1
+ 0 <= w(AC3_2,ZLC43,107) <= 1
+ 0 <= w(AC3_2,ZLC43,108) <= 1
+ 0 <= w(AC3_2,ZLC43,109) <= 1
+ 0 <= w(AC3_2,ZLC43,110) <= 1
+ 0 <= w(AC3_2,ZLC43,111) <= 1
+ 0 <= w(AC3_2,ZSE10,98) <= 1
+ 0 <= w(AC3_2,ZSE10,99) <= 1
+ 0 <= w(AC3_2,ZSE10,100) <= 1
+ 0 <= w(AC3_2,ZSE10,101) <= 1
+ 0 <= w(AC3_2,ZSE10,102) <= 1
+ 0 <= w(AC3_2,ZSE10,103) <= 1
+ 0 <= w(AC3_2,ZSE10,104) <= 1
+ 0 <= w(AC3_2,ZSE10,105) <= 1
+ 0 <= w(AC3_2,ZSE10,106) <= 1
+ 0 <= w(AC3_2,ZSE10,107) <= 1
+ 0 <= w(AC3_2,ZSE10,108) <= 1
+ 0 <= w(AC3_2,ZSE10,109) <= 1
+ 0 <= w(AC3_2,ZSE10,110) <= 1
+ 0 <= w(AC3_2,ZSE10,111) <= 1
+ 0 <= w(AC3_2,ZSE10,112) <= 1
+ 0 <= w(AC3_2,ZSE10,113) <= 1
+ 0 <= w(AC3_2,ZSE10,114) <= 1
+ 0 <= w(AC3_2,ZSE10,115) <= 1
+ 0 <= w(AC3_2,ZSE10,116) <= 1
+ 0 <= w(AC3_2,ZSE10,117) <= 1
+ 0 <= w(AC3_2,ZSE05,134) <= 1
+ 0 <= w(AC3_2,ZSE05,135) <= 1
+ 0 <= w(AC3_2,ZSE05,136) <= 1
+ 0 <= w(AC3_2,ZSE05,137) <= 1
+ 0 <= w(AC3_2,ZSE05,138) <= 1
+ 0 <= w(AC3_2,ZSE05,139) <= 1
+ 0 <= w(AC3_2,ZSE05,140) <= 1
+ 0 <= w(AC3_2,ZSE05,141) <= 1
+ 0 <= w(AC3_2,ZSE05,142) <= 1
+ 0 <= w(AC3_2,ZSE05,143) <= 1
+ 0 <= w(AC3_2,ZSE05,144) <= 1
+ 0 <= w(AC3_2,ZSE05,145) <= 1
+ 0 <= w(AC3_2,ZSE05,146) <= 1
+ 0 <= w(AC3_2,ZSE05,147) <= 1
+ 0 <= w(AC3_2,ZSE05,148) <= 1
+ 0 <= w(AC3_2,ZSE05,149) <= 1
+ 0 <= w(AC3_2,ZSE05,150) <= 1
+ 0 <= w(AC3_2,ZSE05,151) <= 1
+ 0 <= w(AC3_2,ZSE05,152) <= 1
+ 0 <= w(AC3_2,ZSE05,153) <= 1
+ 0 <= w(AC3_2,ZSE34,170) <= 1
+ 0 <= w(AC3_2,ZSE34,171) <= 1
+ 0 <= w(AC3_2,ZSE34,172) <= 1
+ 0 <= w(AC3_2,ZSE34,173) <= 1
+ 0 <= w(AC3_2,ZSE34,174) <= 1
+ 0 <= w(AC3_2,ZSE34,175) <= 1
+ 0 <= w(AC3_2,ZSE34,176) <= 1
+ 0 <= w(AC3_2,ZSE34,177) <= 1
+ 0 <= w(AC3_2,ZSE34,178) <= 1
+ 0 <= w(AC3_2,ZSE34,179) <= 1
+ 0 <= w(AC3_2,ZSE34,180) <= 1
+ 0 <= w(AC3_2,ZSE34,181) <= 1
+ 0 <= w(AC3_2,ZSE34,182) <= 1
+ 0 <= w(AC3_2,ZSE34,183) <= 1
+ 0 <= w(AC3_2,ZSE34,184) <= 1
+ 0 <= w(AC3_2,ZSE34,185) <= 1
+ 0 <= w(AC3_2,ZSE34,186) <= 1
+ 0 <= w(AC3_2,ZSE34,187) <= 1
+ 0 <= w(AC3_2,ZSE34,188) <= 1
+ 0 <= w(AC3_2,ZSE34,189) <= 1
+ 0 <= w(AC3_2,ZSE02,174) <= 1
+ 0 <= w(AC3_2,ZSE02,175) <= 1
+ 0 <= w(AC3_2,ZSE02,176) <= 1
+ 0 <= w(AC3_2,ZSE02,177) <= 1
+ 0 <= w(AC3_2,ZSE02,178) <= 1
+ 0 <= w(AC3_2,ZSE02,179) <= 1
+ 0 <= w(AC3_2,ZSE02,180) <= 1
+ 0 <= w(AC3_2,ZSE02,181) <= 1
+ 0 <= w(AC3_2,ZSE02,182) <= 1
+ 0 <= w(AC3_2,ZSE02,183) <= 1
+ 0 <= w(AC3_2,ZSE02,184) <= 1
+ 0 <= w(AC3_2,ZSE02,185) <= 1
+ 0 <= w(AC3_2,ZSE02,186) <= 1
+ 0 <= w(AC3_2,ZSE02,187) <= 1
+ 0 <= w(AC3_2,ZSE02,188) <= 1
+ 0 <= w(AC3_2,ZSE02,189) <= 1
+ 0 <= w(AC3_2,ZSE02,190) <= 1
+ 0 <= w(AC3_2,ZSE02,191) <= 1
+ 0 <= w(AC3_2,ZSE02,192) <= 1
+ 0 <= w(AC3_2,ZSE02,193) <= 1
+ 0 <= w(AC3_2,ZSESEA,192) <= 1
+ 0 <= w(AC3_2,ZSESEA,193) <= 1
+ 0 <= w(AC3_2,ZSESEA,194) <= 1
+ 0 <= w(AC3_2,ZSESEA,195) <= 1
+ 0 <= w(AC3_2,ZSESEA,196) <= 1
+ 0 <= w(AC3_2,ZSESEA,197) <= 1
+ 0 <= w(AC3_2,ZSESEA,198) <= 1
+ 0 <= w(AC3_2,ZSESEA,199) <= 1
+ 0 <= w(AC3_2,ZSESEA,200) <= 1
+ 0 <= w(AC3_2,ZSESEA,201) <= 1
+ 0 <= w(AC3_2,ZSESEA,202) <= 1
+ 0 <= w(AC3_2,ZSESEA,203) <= 1
+ 0 <= w(AC3_2,ZSESEA,204) <= 1
+ 0 <= w(AC3_2,ZSESEA,205) <= 1
+ 0 <= w(AC3_2,ZSESEA,206) <= 1
+ 0 <= w(AC3_2,ZSESEA,207) <= 1
+ 0 <= w(AC3_2,ZSESEA,208) <= 1
+ 0 <= w(AC3_2,ZSESEA,209) <= 1
+ 0 <= w(AC3_2,ZSESEA,210) <= 1
+ 0 <= w(AC3_2,ZSESEA,211) <= 1
+Generals
+ w(AC4_3,SEA,199)
+ w(AC4_3,SEA,200)
+ w(AC4_3,SEA,201)
+ w(AC4_3,SEA,202)
+ w(AC4_3,SEA,203)
+ w(AC4_3,SEA,204)
+ w(AC4_3,SEA,205)
+ w(AC4_3,SEA,206)
+ w(AC4_3,SEA,207)
+ w(AC4_3,SEA,208)
+ w(AC4_3,SEA,209)
+ w(AC4_3,SEA,210)
+ w(AC4_3,SEA,211)
+ w(AC4_3,SEA,212)
+ w(AC4_3,SEA,213)
+ w(AC4_3,SEA,214)
+ w(AC4_3,SEA,215)
+ w(AC4_3,SEA,216)
+ w(AC4_3,SEA,217)
+ w(AC4_3,SEA,218)
+ w(AC4_3,LAS,20)
+ w(AC4_3,LAS,21)
+ w(AC4_3,LAS,22)
+ w(AC4_3,LAS,23)
+ w(AC4_3,LAS,24)
+ w(AC4_3,LAS,25)
+ w(AC4_3,LAS,26)
+ w(AC4_3,LAS,27)
+ w(AC4_3,LAS,28)
+ w(AC4_3,LAS,29)
+ w(AC4_3,LAS,30)
+ w(AC4_3,LAS,31)
+ w(AC4_3,LAS,32)
+ w(AC4_3,LAS,33)
+ w(AC4_3,LAS,34)
+ w(AC4_3,LAS,35)
+ w(AC4_3,LAS,36)
+ w(AC4_3,LAS,37)
+ w(AC4_3,LAS,38)
+ w(AC4_3,LAS,39)
+ w(AC4_3,ZLA16,21)
+ w(AC4_3,ZLA16,22)
+ w(AC4_3,ZLA16,23)
+ w(AC4_3,ZLA16,24)
+ w(AC4_3,ZLA16,25)
+ w(AC4_3,ZLA16,26)
+ w(AC4_3,ZLA16,27)
+ w(AC4_3,ZLA16,28)
+ w(AC4_3,ZLA16,29)
+ w(AC4_3,ZLA16,30)
+ w(AC4_3,ZLA16,31)
+ w(AC4_3,ZLA16,32)
+ w(AC4_3,ZLA16,33)
+ w(AC4_3,ZLA16,34)
+ w(AC4_3,ZLA16,35)
+ w(AC4_3,ZLA16,36)
+ w(AC4_3,ZLA16,37)
+ w(AC4_3,ZLA16,38)
+ w(AC4_3,ZLA16,39)
+ w(AC4_3,ZLA16,40)
+ w(AC4_3,ZOA46,36)
+ w(AC4_3,ZOA46,37)
+ w(AC4_3,ZOA46,38)
+ w(AC4_3,ZOA46,39)
+ w(AC4_3,ZOA46,40)
+ w(AC4_3,ZOA46,41)
+ w(AC4_3,ZOA46,42)
+ w(AC4_3,ZOA46,43)
+ w(AC4_3,ZOA46,44)
+ w(AC4_3,ZOA46,45)
+ w(AC4_3,ZOA46,46)
+ w(AC4_3,ZOA46,47)
+ w(AC4_3,ZOA46,48)
+ w(AC4_3,ZOA46,49)
+ w(AC4_3,ZOA46,50)
+ w(AC4_3,ZOA46,51)
+ w(AC4_3,ZOA46,52)
+ w(AC4_3,ZOA46,53)
+ w(AC4_3,ZOA46,54)
+ w(AC4_3,ZOA46,55)
+ w(AC4_3,ZOA45,69)
+ w(AC4_3,ZOA45,70)
+ w(AC4_3,ZOA45,71)
+ w(AC4_3,ZOA45,72)
+ w(AC4_3,ZOA45,73)
+ w(AC4_3,ZOA45,74)
+ w(AC4_3,ZOA45,75)
+ w(AC4_3,ZOA45,76)
+ w(AC4_3,ZOA45,77)
+ w(AC4_3,ZOA45,78)
+ w(AC4_3,ZOA45,79)
+ w(AC4_3,ZOA45,80)
+ w(AC4_3,ZOA45,81)
+ w(AC4_3,ZOA45,82)
+ w(AC4_3,ZOA45,83)
+ w(AC4_3,ZOA45,84)
+ w(AC4_3,ZOA45,85)
+ w(AC4_3,ZOA45,86)
+ w(AC4_3,ZOA45,87)
+ w(AC4_3,ZOA45,88)
+ w(AC4_3,ZLC43,92)
+ w(AC4_3,ZLC43,93)
+ w(AC4_3,ZLC43,94)
+ w(AC4_3,ZLC43,95)
+ w(AC4_3,ZLC43,96)
+ w(AC4_3,ZLC43,97)
+ w(AC4_3,ZLC43,98)
+ w(AC4_3,ZLC43,99)
+ w(AC4_3,ZLC43,100)
+ w(AC4_3,ZLC43,101)
+ w(AC4_3,ZLC43,102)
+ w(AC4_3,ZLC43,103)
+ w(AC4_3,ZLC43,104)
+ w(AC4_3,ZLC43,105)
+ w(AC4_3,ZLC43,106)
+ w(AC4_3,ZLC43,107)
+ w(AC4_3,ZLC43,108)
+ w(AC4_3,ZLC43,109)
+ w(AC4_3,ZLC43,110)
+ w(AC4_3,ZLC43,111)
+ w(AC4_3,ZSE10,98)
+ w(AC4_3,ZSE10,99)
+ w(AC4_3,ZSE10,100)
+ w(AC4_3,ZSE10,101)
+ w(AC4_3,ZSE10,102)
+ w(AC4_3,ZSE10,103)
+ w(AC4_3,ZSE10,104)
+ w(AC4_3,ZSE10,105)
+ w(AC4_3,ZSE10,106)
+ w(AC4_3,ZSE10,107)
+ w(AC4_3,ZSE10,108)
+ w(AC4_3,ZSE10,109)
+ w(AC4_3,ZSE10,110)
+ w(AC4_3,ZSE10,111)
+ w(AC4_3,ZSE10,112)
+ w(AC4_3,ZSE10,113)
+ w(AC4_3,ZSE10,114)
+ w(AC4_3,ZSE10,115)
+ w(AC4_3,ZSE10,116)
+ w(AC4_3,ZSE10,117)
+ w(AC4_3,ZSE05,134)
+ w(AC4_3,ZSE05,135)
+ w(AC4_3,ZSE05,136)
+ w(AC4_3,ZSE05,137)
+ w(AC4_3,ZSE05,138)
+ w(AC4_3,ZSE05,139)
+ w(AC4_3,ZSE05,140)
+ w(AC4_3,ZSE05,141)
+ w(AC4_3,ZSE05,142)
+ w(AC4_3,ZSE05,143)
+ w(AC4_3,ZSE05,144)
+ w(AC4_3,ZSE05,145)
+ w(AC4_3,ZSE05,146)
+ w(AC4_3,ZSE05,147)
+ w(AC4_3,ZSE05,148)
+ w(AC4_3,ZSE05,149)
+ w(AC4_3,ZSE05,150)
+ w(AC4_3,ZSE05,151)
+ w(AC4_3,ZSE05,152)
+ w(AC4_3,ZSE05,153)
+ w(AC4_3,ZSE34,170)
+ w(AC4_3,ZSE34,171)
+ w(AC4_3,ZSE34,172)
+ w(AC4_3,ZSE34,173)
+ w(AC4_3,ZSE34,174)
+ w(AC4_3,ZSE34,175)
+ w(AC4_3,ZSE34,176)
+ w(AC4_3,ZSE34,177)
+ w(AC4_3,ZSE34,178)
+ w(AC4_3,ZSE34,179)
+ w(AC4_3,ZSE34,180)
+ w(AC4_3,ZSE34,181)
+ w(AC4_3,ZSE34,182)
+ w(AC4_3,ZSE34,183)
+ w(AC4_3,ZSE34,184)
+ w(AC4_3,ZSE34,185)
+ w(AC4_3,ZSE34,186)
+ w(AC4_3,ZSE34,187)
+ w(AC4_3,ZSE34,188)
+ w(AC4_3,ZSE34,189)
+ w(AC4_3,ZSE02,174)
+ w(AC4_3,ZSE02,175)
+ w(AC4_3,ZSE02,176)
+ w(AC4_3,ZSE02,177)
+ w(AC4_3,ZSE02,178)
+ w(AC4_3,ZSE02,179)
+ w(AC4_3,ZSE02,180)
+ w(AC4_3,ZSE02,181)
+ w(AC4_3,ZSE02,182)
+ w(AC4_3,ZSE02,183)
+ w(AC4_3,ZSE02,184)
+ w(AC4_3,ZSE02,185)
+ w(AC4_3,ZSE02,186)
+ w(AC4_3,ZSE02,187)
+ w(AC4_3,ZSE02,188)
+ w(AC4_3,ZSE02,189)
+ w(AC4_3,ZSE02,190)
+ w(AC4_3,ZSE02,191)
+ w(AC4_3,ZSE02,192)
+ w(AC4_3,ZSE02,193)
+ w(AC4_3,ZSESEA,192)
+ w(AC4_3,ZSESEA,193)
+ w(AC4_3,ZSESEA,194)
+ w(AC4_3,ZSESEA,195)
+ w(AC4_3,ZSESEA,196)
+ w(AC4_3,ZSESEA,197)
+ w(AC4_3,ZSESEA,198)
+ w(AC4_3,ZSESEA,199)
+ w(AC4_3,ZSESEA,200)
+ w(AC4_3,ZSESEA,201)
+ w(AC4_3,ZSESEA,202)
+ w(AC4_3,ZSESEA,203)
+ w(AC4_3,ZSESEA,204)
+ w(AC4_3,ZSESEA,205)
+ w(AC4_3,ZSESEA,206)
+ w(AC4_3,ZSESEA,207)
+ w(AC4_3,ZSESEA,208)
+ w(AC4_3,ZSESEA,209)
+ w(AC4_3,ZSESEA,210)
+ w(AC4_3,ZSESEA,211)
+ w(AC3_2,SEA,199)
+ w(AC3_2,SEA,200)
+ w(AC3_2,SEA,201)
+ w(AC3_2,SEA,202)
+ w(AC3_2,SEA,203)
+ w(AC3_2,SEA,204)
+ w(AC3_2,SEA,205)
+ w(AC3_2,SEA,206)
+ w(AC3_2,SEA,207)
+ w(AC3_2,SEA,208)
+ w(AC3_2,SEA,209)
+ w(AC3_2,SEA,210)
+ w(AC3_2,SEA,211)
+ w(AC3_2,SEA,212)
+ w(AC3_2,SEA,213)
+ w(AC3_2,SEA,214)
+ w(AC3_2,SEA,215)
+ w(AC3_2,SEA,216)
+ w(AC3_2,SEA,217)
+ w(AC3_2,SEA,218)
+ w(AC3_2,LAS,20)
+ w(AC3_2,LAS,21)
+ w(AC3_2,LAS,22)
+ w(AC3_2,LAS,23)
+ w(AC3_2,LAS,24)
+ w(AC3_2,LAS,25)
+ w(AC3_2,LAS,26)
+ w(AC3_2,LAS,27)
+ w(AC3_2,LAS,28)
+ w(AC3_2,LAS,29)
+ w(AC3_2,LAS,30)
+ w(AC3_2,LAS,31)
+ w(AC3_2,LAS,32)
+ w(AC3_2,LAS,33)
+ w(AC3_2,LAS,34)
+ w(AC3_2,LAS,35)
+ w(AC3_2,LAS,36)
+ w(AC3_2,LAS,37)
+ w(AC3_2,LAS,38)
+ w(AC3_2,LAS,39)
+ w(AC3_2,ZLA16,21)
+ w(AC3_2,ZLA16,22)
+ w(AC3_2,ZLA16,23)
+ w(AC3_2,ZLA16,24)
+ w(AC3_2,ZLA16,25)
+ w(AC3_2,ZLA16,26)
+ w(AC3_2,ZLA16,27)
+ w(AC3_2,ZLA16,28)
+ w(AC3_2,ZLA16,29)
+ w(AC3_2,ZLA16,30)
+ w(AC3_2,ZLA16,31)
+ w(AC3_2,ZLA16,32)
+ w(AC3_2,ZLA16,33)
+ w(AC3_2,ZLA16,34)
+ w(AC3_2,ZLA16,35)
+ w(AC3_2,ZLA16,36)
+ w(AC3_2,ZLA16,37)
+ w(AC3_2,ZLA16,38)
+ w(AC3_2,ZLA16,39)
+ w(AC3_2,ZLA16,40)
+ w(AC3_2,ZOA46,36)
+ w(AC3_2,ZOA46,37)
+ w(AC3_2,ZOA46,38)
+ w(AC3_2,ZOA46,39)
+ w(AC3_2,ZOA46,40)
+ w(AC3_2,ZOA46,41)
+ w(AC3_2,ZOA46,42)
+ w(AC3_2,ZOA46,43)
+ w(AC3_2,ZOA46,44)
+ w(AC3_2,ZOA46,45)
+ w(AC3_2,ZOA46,46)
+ w(AC3_2,ZOA46,47)
+ w(AC3_2,ZOA46,48)
+ w(AC3_2,ZOA46,49)
+ w(AC3_2,ZOA46,50)
+ w(AC3_2,ZOA46,51)
+ w(AC3_2,ZOA46,52)
+ w(AC3_2,ZOA46,53)
+ w(AC3_2,ZOA46,54)
+ w(AC3_2,ZOA46,55)
+ w(AC3_2,ZOA45,69)
+ w(AC3_2,ZOA45,70)
+ w(AC3_2,ZOA45,71)
+ w(AC3_2,ZOA45,72)
+ w(AC3_2,ZOA45,73)
+ w(AC3_2,ZOA45,74)
+ w(AC3_2,ZOA45,75)
+ w(AC3_2,ZOA45,76)
+ w(AC3_2,ZOA45,77)
+ w(AC3_2,ZOA45,78)
+ w(AC3_2,ZOA45,79)
+ w(AC3_2,ZOA45,80)
+ w(AC3_2,ZOA45,81)
+ w(AC3_2,ZOA45,82)
+ w(AC3_2,ZOA45,83)
+ w(AC3_2,ZOA45,84)
+ w(AC3_2,ZOA45,85)
+ w(AC3_2,ZOA45,86)
+ w(AC3_2,ZOA45,87)
+ w(AC3_2,ZOA45,88)
+ w(AC3_2,ZLC43,92)
+ w(AC3_2,ZLC43,93)
+ w(AC3_2,ZLC43,94)
+ w(AC3_2,ZLC43,95)
+ w(AC3_2,ZLC43,96)
+ w(AC3_2,ZLC43,97)
+ w(AC3_2,ZLC43,98)
+ w(AC3_2,ZLC43,99)
+ w(AC3_2,ZLC43,100)
+ w(AC3_2,ZLC43,101)
+ w(AC3_2,ZLC43,102)
+ w(AC3_2,ZLC43,103)
+ w(AC3_2,ZLC43,104)
+ w(AC3_2,ZLC43,105)
+ w(AC3_2,ZLC43,106)
+ w(AC3_2,ZLC43,107)
+ w(AC3_2,ZLC43,108)
+ w(AC3_2,ZLC43,109)
+ w(AC3_2,ZLC43,110)
+ w(AC3_2,ZLC43,111)
+ w(AC3_2,ZSE10,98)
+ w(AC3_2,ZSE10,99)
+ w(AC3_2,ZSE10,100)
+ w(AC3_2,ZSE10,101)
+ w(AC3_2,ZSE10,102)
+ w(AC3_2,ZSE10,103)
+ w(AC3_2,ZSE10,104)
+ w(AC3_2,ZSE10,105)
+ w(AC3_2,ZSE10,106)
+ w(AC3_2,ZSE10,107)
+ w(AC3_2,ZSE10,108)
+ w(AC3_2,ZSE10,109)
+ w(AC3_2,ZSE10,110)
+ w(AC3_2,ZSE10,111)
+ w(AC3_2,ZSE10,112)
+ w(AC3_2,ZSE10,113)
+ w(AC3_2,ZSE10,114)
+ w(AC3_2,ZSE10,115)
+ w(AC3_2,ZSE10,116)
+ w(AC3_2,ZSE10,117)
+ w(AC3_2,ZSE05,134)
+ w(AC3_2,ZSE05,135)
+ w(AC3_2,ZSE05,136)
+ w(AC3_2,ZSE05,137)
+ w(AC3_2,ZSE05,138)
+ w(AC3_2,ZSE05,139)
+ w(AC3_2,ZSE05,140)
+ w(AC3_2,ZSE05,141)
+ w(AC3_2,ZSE05,142)
+ w(AC3_2,ZSE05,143)
+ w(AC3_2,ZSE05,144)
+ w(AC3_2,ZSE05,145)
+ w(AC3_2,ZSE05,146)
+ w(AC3_2,ZSE05,147)
+ w(AC3_2,ZSE05,148)
+ w(AC3_2,ZSE05,149)
+ w(AC3_2,ZSE05,150)
+ w(AC3_2,ZSE05,151)
+ w(AC3_2,ZSE05,152)
+ w(AC3_2,ZSE05,153)
+ w(AC3_2,ZSE34,170)
+ w(AC3_2,ZSE34,171)
+ w(AC3_2,ZSE34,172)
+ w(AC3_2,ZSE34,173)
+ w(AC3_2,ZSE34,174)
+ w(AC3_2,ZSE34,175)
+ w(AC3_2,ZSE34,176)
+ w(AC3_2,ZSE34,177)
+ w(AC3_2,ZSE34,178)
+ w(AC3_2,ZSE34,179)
+ w(AC3_2,ZSE34,180)
+ w(AC3_2,ZSE34,181)
+ w(AC3_2,ZSE34,182)
+ w(AC3_2,ZSE34,183)
+ w(AC3_2,ZSE34,184)
+ w(AC3_2,ZSE34,185)
+ w(AC3_2,ZSE34,186)
+ w(AC3_2,ZSE34,187)
+ w(AC3_2,ZSE34,188)
+ w(AC3_2,ZSE34,189)
+ w(AC3_2,ZSE02,174)
+ w(AC3_2,ZSE02,175)
+ w(AC3_2,ZSE02,176)
+ w(AC3_2,ZSE02,177)
+ w(AC3_2,ZSE02,178)
+ w(AC3_2,ZSE02,179)
+ w(AC3_2,ZSE02,180)
+ w(AC3_2,ZSE02,181)
+ w(AC3_2,ZSE02,182)
+ w(AC3_2,ZSE02,183)
+ w(AC3_2,ZSE02,184)
+ w(AC3_2,ZSE02,185)
+ w(AC3_2,ZSE02,186)
+ w(AC3_2,ZSE02,187)
+ w(AC3_2,ZSE02,188)
+ w(AC3_2,ZSE02,189)
+ w(AC3_2,ZSE02,190)
+ w(AC3_2,ZSE02,191)
+ w(AC3_2,ZSE02,192)
+ w(AC3_2,ZSE02,193)
+ w(AC3_2,ZSESEA,192)
+ w(AC3_2,ZSESEA,193)
+ w(AC3_2,ZSESEA,194)
+ w(AC3_2,ZSESEA,195)
+ w(AC3_2,ZSESEA,196)
+ w(AC3_2,ZSESEA,197)
+ w(AC3_2,ZSESEA,198)
+ w(AC3_2,ZSESEA,199)
+ w(AC3_2,ZSESEA,200)
+ w(AC3_2,ZSESEA,201)
+ w(AC3_2,ZSESEA,202)
+ w(AC3_2,ZSESEA,203)
+ w(AC3_2,ZSESEA,204)
+ w(AC3_2,ZSESEA,205)
+ w(AC3_2,ZSESEA,206)
+ w(AC3_2,ZSESEA,207)
+ w(AC3_2,ZSESEA,208)
+ w(AC3_2,ZSESEA,209)
+ w(AC3_2,ZSESEA,210)
+ w(AC3_2,ZSESEA,211)
+End

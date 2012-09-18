@@ -1,0 +1,17 @@
+The problem presented in this directory is from:
+
+Dantzig, George and Thapa, Mukund N. Linear Programming: Theory and Extensions.
+	Springer. 2003.
+
+Specifically, this is example 10.5/10.6 on pages 290 through 298.
+
+Since the current implementation of dwsolver does not allow for unbounded
+subproblems, upper bounds have been added to the subproblem files.  These bounds
+were chosen through quick examination of the connecting constraints in the
+master problem.  No variable could be valued over 64 and still satisfy the 
+connecting constraints.  Thus, an upper bound of 65 is placed on all of the
+decision variables in each of the subproblem files.
+
+To run this example:
+
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g book_test

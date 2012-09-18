@@ -1,0 +1,10 @@
+Minimize
+ objective: -4 x1 - 1 x2 - 6 x3
+
+Subject To
+ Con1: 3 x1 + 2 x2 + 4 x3 = 17
+
+Bounds
+ 0 <= DUMMY <= 1
+
+end 

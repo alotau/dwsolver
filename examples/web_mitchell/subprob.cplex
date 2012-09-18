@@ -1,0 +1,9 @@
+Minimize
+ objective: 999 x1
+
+Subject To
+ Con1: x1 <= 2
+ Con2: x2 >= 0
+ Con3: x3 <= 2
+ AritificialUpperBound: x2 <= 99
+end 

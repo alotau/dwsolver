@@ -1,0 +1,9 @@
+Minimize
+ objective: - 2 y1 - 1 y2
+ 
+Subject to
+ c1: 1 y1        <= 10
+ c2:        1 y2 <= 10
+ c3: 1 y1 + 1 y2 <= 15
+
+end

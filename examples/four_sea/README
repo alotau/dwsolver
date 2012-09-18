@@ -1,0 +1,29 @@
+The problem in this directory is an instance of the model originally published
+by Bertsimas and Stock-Patterson for Traffic Flow Management of the National
+Airspace System.
+
+D. Bertsimas and S. Stock-Patterson.  The Air Traffic Flow Management Problem
+   with En Route Capacities.  Operations Research, 46(3):406-422, May-June 1998.
+   
+This model was implemented for the research completed in several studies by Rios
+and Ross:
+
+Delay Optimization for Airspace Capacity Management with Runtime and Equity
+   Considerations.  In Proceedings of AIAA Guidance, Navigation, and Control
+   Conference and Exhibit, Hilton Head, South Carolina, August 2007.
+
+Solving High-Fidelity, Large-Scale Traffic Flow Management Problems in Reduced
+   Time.  In Proceedings of AIAA Aviation Technology, INtegration and Operations
+   Conference, Anchorage, Alaska, September 2008.
+
+Massively Parallel Dantzig-Wolfe Decomposition Applied to Traffic Flow 
+   Scheduling.  Journal of Aerospace Computing, Information, and Communication.
+   7(1):32-45, January 2010.
+   
+
+The instance provided here involves 8 aircraft departing the same airport at the
+same time destined for the same arrival airport along the same trajectory.  This
+is a toy example to illustrate that 2 of the flights must be held in order to 
+satisfy the arrival capacity constraints of the arrival airport which is set to
+a value of 6.  This results in a total delay of 12 minutes.
+

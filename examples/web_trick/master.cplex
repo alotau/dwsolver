@@ -1,0 +1,8 @@
+Minimize
+ objective: - 7 x1 - 5 x2 - 3 x3
+
+Subject To
+ Con1: 1 x1 + 2 x2 + 1 x3 <= 10
+ Con2: 1 x1               <= 3
+
+end 

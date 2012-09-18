@@ -1,0 +1,15 @@
+The problem presented in this directory is from:
+
+Mitchell, John. An example of Dantzig-Wolfe Decomposition. Accessed online
+     at http://www.rpi.edu/~mitchj/handouts/egdcmp/ on Aug 18, 2010.
+
+Note that the problem was changed slightly to avoid the unbounded subproblem.
+Since it was known a priori that the optimal value for the unbounded variable
+was 1, an upper bound on that variable was set well above that.  Otherwise, 
+the problem is implemented as described on Mitchell's website.
+
+The optimal value is -5.
+
+To run this example:
+
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_file

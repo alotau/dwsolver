@@ -1,0 +1,15 @@
+The problem presented in this directory is from:
+
+Trick, Michael. A Consultants Guide to Solving Large Problems. Accessed online
+     at http://mat.gsia.cmu.edu/classes/mstc/decomp/node4.html on Sept 8, 2009.
+
+This problem is a good example of the need for every variable to exist in a 
+subproblem.  As presented online, Trick leaves x1 in the master problem.
+Clearly, this is mathematically reasonable, however, the dwsolver software
+expects no master variables except those found in subproblems.  The simple
+fix to this problem is to create a new subproblem containing only variable
+x1.
+
+To run this example:
+
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_file

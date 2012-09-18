@@ -1,0 +1,8 @@
+Minimize
+ objective: -4 x1
+ 
+Subject to
+ c1: x1 <= 2
+ c2: x1 >= 1
+
+end

@@ -1,0 +1,9 @@
+Minimize
+ objective: 1 x1 - 1 x2 - 2 x3
+
+Subject To
+ Con1: 1 x1 + 1 x2 + 1 x3  = 3
+
+end
+
+

@@ -1,0 +1,16 @@
+Minimize
+ objective: -4 x1 - 1 x2 - 6 x3
+
+Subject To
+ Con1: 3 x1 + 2 x2 + 4 x3 = 17
+ c0: x1 <= 2
+ ca: x1 >= 1
+ c1: x2 <= 2
+ c2: x2 >= 1
+ c3: x3 <= 2
+ c4: x3 >= 1
+
+Bounds
+ 0 <= DUMMY <= 1
+
+end 

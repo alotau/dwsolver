@@ -1,0 +1,90 @@
+--- /home/jrios/temp/glpk-4.44/src/glpenv05.c	2010-06-03 01:00:00.000000000 -0700
++++ src/glpenv05.c	2010-07-01 16:43:08.000000000 -0700
+@@ -54,7 +54,7 @@
+ *  To free this block the routine glp_free (not free!) must be used. */
+ 
+ void *glp_malloc(int size)
+-{     ENV *env = get_env_ptr();
++{     /*ENV *env = get_env_ptr();
+       MEM *desc;
+       int size_of_desc = align_datasize(sizeof(MEM));
+       if (size < 1 || size > INT_MAX - size_of_desc)
+@@ -81,7 +81,8 @@
+       env->mem_total = xladd(env->mem_total, xlset(size));
+       if (xlcmp(env->mem_tpeak, env->mem_total) < 0)
+          env->mem_tpeak = env->mem_total;
+-      return (void *)((char *)desc + size_of_desc);
++      return (void *)((char *)desc + size_of_desc);*/
++      return malloc(size);
+ }
+ 
+ /***********************************************************************
+@@ -107,14 +108,15 @@
+ *  To free this block the routine glp_free (not free!) must be used. */
+ 
+ void *glp_calloc(int n, int size)
+-{     if (n < 1)
++{     /*if (n < 1)
+          xerror("glp_calloc: n = %d; invalid parameter\n", n);
+       if (size < 1)
+          xerror("glp_calloc: size = %d; invalid parameter\n", size);
+       if (n > INT_MAX / size)
+          xerror("glp_calloc: n = %d; size = %d; array too big\n", n,
+             size);
+-      return xmalloc(n * size);
++      return xmalloc(n * size);*/
++      return calloc(n, size);
+ }
+ 
+ /***********************************************************************
+@@ -132,7 +134,7 @@
+ *  was previuosly allocated by the routine glp_malloc or glp_calloc. */
+ 
+ void glp_free(void *ptr)
+-{     ENV *env = get_env_ptr();
++{     /*ENV *env = get_env_ptr();
+       MEM *desc;
+       int size_of_desc = align_datasize(sizeof(MEM));
+       if (ptr == NULL)
+@@ -155,7 +157,8 @@
+       env->mem_total = xlsub(env->mem_total, xlset(desc->size));
+       memset(desc, '?', size_of_desc);
+       free(desc);
+-      return;
++      return;*/
++      free(ptr);
+ }
+ 
+ /***********************************************************************
+@@ -173,11 +176,13 @@
+ *  dynamic allocation (in GLPK routines) to limit megabytes. */
+ 
+ void glp_mem_limit(int limit)
+-{     ENV *env = get_env_ptr();
++{     /*ENV *env = get_env_ptr();
+       if (limit < 0)
+          xerror("glp_mem_limit: limit = %d; invalid parameter\n",
+             limit);
+-      env->mem_limit = xlmul(xlset(limit), xlset(1 << 20));
++      env->mem_limit = xlmul(xlset(limit), xlset(1 << 20));*/
++      printf("glp_mem_limit: not implemented in this version of glpk.");
++      printf(" Thread safety.\n");
+       return;
+ }
+ 
+@@ -214,11 +219,13 @@
+ 
+ void glp_mem_usage(int *count, int *cpeak, glp_long *total,
+       glp_long *tpeak)
+-{     ENV *env = get_env_ptr();
++{     /*ENV *env = get_env_ptr();
+       if (count != NULL) *count = env->mem_count;
+       if (cpeak != NULL) *cpeak = env->mem_cpeak;
+       if (total != NULL) *total = env->mem_total;
+-      if (tpeak != NULL) *tpeak = env->mem_tpeak;
++      if (tpeak != NULL) *tpeak = env->mem_tpeak;*/
++      printf("glp_mem_usage: not implemented in this version of glpk.");
++      printf(" Thread safety.\n");
+       return;
+ }
+ 

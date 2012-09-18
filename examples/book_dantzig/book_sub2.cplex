@@ -1,0 +1,16 @@
+Minimize
+ objective: 1 x7 + 2 x8 + 3 x9 + 4 x10 + 5 x11 + 6 x12
+ 
+Subject to
+ c1: x7 + x8 + x9    = 4
+ c2: x10 + x11 + x12 = 5
+ c3: x7 + x10        = 3
+ c4: x8 + x11        = 3
+ c5: x9 + x12        = 3
+ b1: x7  <= 65
+ b2: x8  <= 65
+ b3: x9  <= 65
+ b4: x10 <= 65
+ b5: x11 <= 65
+ b6: x12 <= 65
+end

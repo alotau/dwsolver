@@ -1,0 +1,18 @@
+The problem presented in this directory is from:
+
+Bertsimas, Dimitris and Tsitsiklis, John N. Introduction to Linear Optimization.
+     Athena Scientific. 1997.
+
+Specifically, this is example 6.2 on pages 245 through 246.
+
+To run this example with a single subproblem as shown in textbook:
+
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_single
+
+To run this example with two subproblems:
+
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_double
+
+To run this example with three subproblems:
+
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_triple

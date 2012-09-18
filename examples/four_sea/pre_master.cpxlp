@@ -1,0 +1,15 @@
+\* Problem: master *\
+
+Minimize
+ obj: 0 su_1
+\* constant term = 160 *\
+
+Subject To
+ Arrival_Rate(SEA,13): + su_1 = 7
+ Arrival_Rate(SEA,14): + su_2 = 7
+ sub1_convexity: 0 su_1 = 1
+ sub2_convexity: 0 su_1 = 1
+ sub3_convexity: 0 su_1 = 1
+ sub4_convexity: 0 su_1 = 1
+
+End
