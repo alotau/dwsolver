@@ -1,0 +1,15 @@
+
+*.Po
+*.o
+stamp-h1
+examples/book_bertsimas/relaxed_solution
+examples/book_bertsimas/pre_master.cpxlp
+examples/book_bertsimas/out_terminal
+examples/book_bertsimas/done.cpxlp
+config.h
+config.log
+config.status
+libtool
+Makefile
+src/dwsolver
+src/Makefile
