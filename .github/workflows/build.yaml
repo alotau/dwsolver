@@ -21,6 +21,9 @@ jobs:
       - name: Install even more dependencies
         run: sudo apt-get install -y automake
 
+      - name: Use autoreconf to update these old config files
+        run: autoreconf -v
+
       - name: configure the code
         run: ./configure
         
