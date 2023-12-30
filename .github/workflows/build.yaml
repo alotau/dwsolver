@@ -1,0 +1,28 @@
+name: Build C Code
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y gcc
+
+      - name: configure the code
+        run: ./configure
+        
+      - name: Build the code
+        run: make
+
+      - name: Install the code
+        run: make install
+        
+      - name: Test the code
+        run: ./dwsolver --help
