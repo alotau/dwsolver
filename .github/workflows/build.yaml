@@ -40,4 +40,4 @@ jobs:
         run: make install
         
       - name: Test the code
-        run: ./dwsolver --help
+        run: ./src/dwsolver --help
