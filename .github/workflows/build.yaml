@@ -21,14 +21,17 @@ jobs:
       - name: Install even more dependencies
         run: sudo apt-get install -y automake
 
-      - name: Use autoreconf to update these old config files
-        run: autoreconf -v
+      # - name: Use autoreconf to update these old config files
+      #   run: autoreconf -v
+
+      - name: Print compiler info
+        run: gcc --help && gcc -v --help
 
       - name: configure the code
         run: ./configure
         
       - name: Build the code
-        run: make
+        run: make LDFLAGS=--allow-multiple-definition
 
       - name: Install the code
         run: make install
