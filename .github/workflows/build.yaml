@@ -25,7 +25,7 @@ jobs:
       #   run: autoreconf -v
 
       - name: Print compiler info
-        run: gcc --help
+        run: gcc --help && gcc -v --help
 
       - name: configure the code
         run: ./configure
