@@ -7,34 +7,37 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-13
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y gcc
+      # - name: Install dependencies
+      #   run: sudo apt-get update && sudo apt-get install -y gcc
 
-      - name: Install more dependencies
-        run: sudo apt-get install -y autoconf
+      # - name: Install more dependencies
+      #   run: sudo apt-get install -y autoconf
 
-      - name: Install even more dependencies
-        run: sudo apt-get install -y automake
+      # - name: Install even more dependencies
+      #   run: sudo apt-get install -y automake
+
+      - name: Print some info
+        run: gcc --version 
 
       # - name: Use autoreconf to update these old config files
       #   run: autoreconf -v
 
-      - name: Print compiler info
-        run: gcc --help && gcc -v --help
+      # - name: Print compiler info
+      #   run: gcc --help && gcc -v --help
 
       - name: configure the code
         run: ./configure
         
       - name: Build the code
-        run: make LDFLAGS=--allow-multiple-definition
+        run: make
 
       - name: Install the code
         run: make install
         
       - name: Test the code
-        run: ./dwsolver --help
+        run: ./src/dwsolver --help
