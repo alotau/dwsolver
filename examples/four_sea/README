@@ -25,5 +25,7 @@ The instance provided here involves 8 aircraft departing the same airport at the
 same time destined for the same arrival airport along the same trajectory.  This
 is a toy example to illustrate that 2 of the flights must be held in order to 
 satisfy the arrival capacity constraints of the arrival airport which is set to
-a value of 6.  This results in a total delay of 12 minutes.
+a value of 6.  The two that are held per the solution will depend on the race
+between threads, but the total delay (i.e. the optimal solution) will remain
+the same.  This results in a total delay of 12 minutes.
 

@@ -7,7 +7,7 @@ Specifically, this is example 6.2 on pages 245 through 246.
 
 To run this example with a single subproblem as shown in textbook:
 
-<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_single
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guidefile
 
 To run this example with two subproblems:
 

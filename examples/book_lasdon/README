@@ -10,4 +10,4 @@ with variable assignments of x1=8.3333, x2=3.3333, y1=10, y2=5.
 
 To run this example:
 
-<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_file
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guidefile
