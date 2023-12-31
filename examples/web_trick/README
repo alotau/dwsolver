@@ -12,4 +12,4 @@ x1.
 
 To run this example:
 
-<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guide_file
+<PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g guidefile

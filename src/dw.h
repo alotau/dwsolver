@@ -41,12 +41,12 @@
 #ifndef DECOMPOSE_H_
 #define DECOMPOSE_H_
 
-#define BUFF_SIZE 200
+#define BUFF_SIZE             200
 
-#define TOLERANCE 0.000001
+#define TOLERANCE             0.000001
 
-#define STACKMEM 2500000
-#define DW_INFINITY 1000000.0
+#define STACKMEM              2500000
+#define DW_INFINITY           1000000.0
 #define MAX_PHASE2_ITERATIONS 3000
 #define MAX_PHASE1_ITERATIONS 100
 
@@ -68,7 +68,7 @@
 #define IMPORTANCE_AVG   5
 #define IMPORTANCE_VITAL 0
 
-#define DEFAULT_MIP_GAP 0.01
+#define DEFAULT_MIP_GAP  0.01
 
 /* All of these used to be global variables.  I shoved all of them into this
  * struct, created an instance of this struct in main then passed it around
@@ -106,16 +106,16 @@ typedef struct {
 
 /* Globally available variables.  Look into minimizing or eliminating them? */
 
-pthread_attr_t attr;
-pthread_mutex_t master_lp_ready_mutex;
-pthread_cond_t master_lp_ready_cv;
-pthread_mutex_t service_queue_mutex;
-pthread_mutex_t next_iteration_mutex;
-pthread_cond_t next_iteration_cv;
-pthread_mutex_t master_mutex;
-pthread_mutex_t reduced_cost_mutex;
-pthread_mutex_t glpk_mutex;
-pthread_mutex_t fputs_mutex;
+pthread_attr_t   attr;
+pthread_mutex_t  master_lp_ready_mutex;
+pthread_cond_t   master_lp_ready_cv;
+pthread_mutex_t  service_queue_mutex;
+pthread_mutex_t  next_iteration_mutex;
+pthread_cond_t   next_iteration_cv;
+pthread_mutex_t  master_mutex;
+pthread_mutex_t  reduced_cost_mutex;
+pthread_mutex_t  glpk_mutex;
+pthread_mutex_t  fputs_mutex;
 pthread_mutex_t* sub_data_mutex;
 #ifdef USE_NAMED_SEMAPHORES
 sem_t* customers;
