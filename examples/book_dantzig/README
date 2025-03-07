@@ -12,6 +12,10 @@ master problem.  No variable could be valued over 64 and still satisfy the
 connecting constraints.  Thus, an upper bound of 65 is placed on all of the
 decision variables in each of the subproblem files.
 
+There are multiple solutions for this problem, and depending on the race between
+subproblem threads, you may see different assigments to the variables from run
+to run.
+
 To run this example:
 
 <PATH_TO_DANTZIG_WOLFE_EXECUTABLE> -g book_test

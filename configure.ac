@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script
 
-AC_INIT([dwsolver], [1.2], [Joseph.L.Rios@nasa.gov])
+AC_INIT([dwsolver], [1.2.1], [Joseph.L.Rios@nasa.gov])
 
 dnl AC_CONFIG_SRCDIR([include/glpk.h])
 
