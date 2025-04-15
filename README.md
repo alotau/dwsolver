@@ -58,4 +58,5 @@ specified in the .patch file provided with this release.  The changes to GLPK
 were made to implement a thread-friendly version of GLPK necessary for 
 implementation of a parallel Dantzig-Wolfe algorithm.
 
-Please report bugs/comments/suggestions/patches to Joseph.L.Rios@nasa.gov.
+~~Please report bugs/comments/suggestions/patches to Joseph.L.Rios@nasa.gov.~~
+I'm not longer with NASA, so best to just submit through GitHub as an issue.
