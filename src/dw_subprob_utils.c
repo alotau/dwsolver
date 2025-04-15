@@ -1,3 +1,20 @@
+#include <glpk.h>        /* For all of the main GLPK stuff. */
+#include <stdio.h>       /* printf, etc */
+#include <stdlib.h>      /* malloc, etc */
+#include <pthread.h>     /* For threading. */
+
+#ifdef USE_INTEL_MKL
+#include <mkl_spblas.h>  /* Sparse matrix stuff. */
+#include <mkl.h>         /* Other Math Kernel Library stuff. */
+#endif
+
+#include "dw_blas.h"
+#include "dw.h"
+#include "dw_subprob.h"
+#include "dw_support.h"
+#include "dw_phases.h"
+#include "dw_subprob_utils.h"
+
 void initialize_subproblem(subprob_struct* my_data, glp_smcp* simplex_control_params) {
     int id = my_data->my_id;
     my_data->simplex_control_params = simplex_control_params;
