@@ -117,6 +117,7 @@ colamd/colamd.c \
 dw_blas.c \
 dw_support.c \
 dw_phases.c \
+dw_subprob_utils.c \
 dw_subprob.c \
 dw_rounding.c \
 dw_main.c 
@@ -129,6 +130,7 @@ dw.h           glpavl.h  glpgmp.h  glplpf.h  glpnpp.h  glpspx.h \
 dw_phases.h    glpbfd.h  glphbm.h  glpluf.h  glpqmd.h  glpsql.h \
 dw_rounding.h  glpbfx.h  glpios.h  glplux.h  glprgr.h  glpssx.h \
 dw_subprob.h   glpdmp.h  glpipm.h  glpmat.h  glprng.h  glpstd.h \
-dw_support.h   glpenv.h  glpmpl.h  glpscf.h  glptsp.h  glpk.h
+dw_support.h   glpenv.h  glpmpl.h  glpscf.h  glptsp.h  glpk.h \
+dw_subprob_utils.h
 
 ## eof ##
