@@ -16,3 +16,4 @@ src/dwsolver
 *.0
 autom4te.cache/
 **/rs_sorted
+examples/four_sea/pre_master.cpxlp
