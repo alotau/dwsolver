@@ -164,7 +164,6 @@ typedef struct signal_data{
 	int next_iteration_ready;
 	int current_iteration;
 } signal_data;
-signal_data* signals;
-
+extern signal_data* signals;
 
 #endif /*DECOMPOSE_H_*/

@@ -49,6 +49,7 @@
 #include <glpk.h>
 
 int dw_verbosity = OUTPUT_NORMAL;
+int signals = 0; // Define the variable here
 
 void dw_printf(int importance_level, char* format_string, ...) {
 	/* See dw.h for documentation on the interaction between verbosity
