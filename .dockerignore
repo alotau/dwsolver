@@ -1,0 +1,32 @@
+# Version control
+.git/
+
+# Compiled artefacts (stale local builds)
+**/*.Po
+**/*.o
+**/*.a
+stamp-h1
+src/dwsolver
+
+# Configure output
+config.h
+config.log
+config.status
+libtool
+autom4te.cache/
+
+# Autotools-generated Makefiles (regenerated inside container)
+**/Makefile
+
+# Solver run outputs (test artefacts)
+**/done.cpxlp
+**/out_terminal
+**/pre_master.cpxlp
+**/relaxed_solution
+**/rs_sorted
+examples/four_sea/pre_master.cpxlp
+
+# Misc
+tmp/
+.vscode/
+.specify/
