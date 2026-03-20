@@ -67,6 +67,7 @@ jobs:
             mingw-w64-x86_64-winpthreads-git
             make
             automake
+            diffutils
 
       - name: Suppress automake regeneration and refresh config scripts
         run: |
@@ -78,7 +79,7 @@ jobs:
         run: ./configure && make
 
       - name: Add dwsolver to PATH
-        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+        run: echo "$(cygpath -u "$GITHUB_WORKSPACE")/src" >> $GITHUB_PATH
 
       - name: Test
         run: cd tests && bash dw-tests.sh
