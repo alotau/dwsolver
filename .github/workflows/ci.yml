@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Suppress automake regeneration
+        run: touch aclocal.m4 configure Makefile.in src/Makefile.in
+
       - name: Build
         run: ./configure --enable-named-semaphores && make
 
@@ -62,6 +65,9 @@ jobs:
           install: >-
             mingw-w64-x86_64-gcc
             make
+
+      - name: Suppress automake regeneration
+        run: touch aclocal.m4 configure Makefile.in src/Makefile.in
 
       - name: Build
         run: ./configure && make
