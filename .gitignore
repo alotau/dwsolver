@@ -18,3 +18,4 @@ autom4te.cache/
 **/rs_sorted
 examples/four_sea/pre_master.cpxlp
 tmp/
+**/out_obj.txt
