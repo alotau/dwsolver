@@ -29,6 +29,7 @@ RUN ./configure && make
 # ---------------------------------------------------------------------------
 FROM ubuntu:24.04 AS runner
 
+WORKDIR /data
 COPY --from=builder /build/src/dwsolver /usr/local/bin/dwsolver
 
 ENTRYPOINT ["/usr/local/bin/dwsolver"]
