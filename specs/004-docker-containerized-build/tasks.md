@@ -53,8 +53,7 @@
 - [X] T005 [P] [US1] Run `docker run --rm dwsolver 2>&1 | grep -q "Usage:"` and confirm it exits 0 (smoke test: binary executes and prints usage when invoked with no arguments)
 - [X] T006 [P] [US1] Run `docker image inspect dwsolver --format '{{.Size}}'` and confirm the reported byte count is ≤ 209715200 (200 MB), satisfying SC-002 and FR-006
   - **Result**: 99.2 MB ✅
-- [X] T007 [US1] Run `docker run --rm -v "$(pwd)/examples/book_bertsimas:/data" dwsolver --no-write-final-master --quiet -g /data/guidefile` and confirm exit code 0, satisfying FR-001/FR-004/SC-003 (solver reads from mounted volume and solves correctly)
-  - **Note**: Guidefile uses relative paths; need `-w /data` flag: `docker run --rm -v ... -w /data dwsolver ...`
+- [X] T007 [US1] Run `docker run --rm -v "$(pwd)/examples/book_bertsimas:/data" -w /data dwsolver --no-write-final-master --quiet -g /data/guidefile` and confirm exit code 0, satisfying FR-001/FR-004/SC-003 (solver reads from mounted volume and solves correctly)
 
 **Checkpoint**: User Story 1 fully functional. A user with only Docker can solve the Bertsimas example. ✅ MVP complete.
 
