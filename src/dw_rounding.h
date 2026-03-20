@@ -68,7 +68,7 @@ typedef struct {
 
 void* rounding_thread(void* arg) ;
 void* solution_printing_thread(void* arg) ;
-void check_broken_constraints();
+void check_broken_constraints(double* xx);
 void print_zeros(int_thread_data*);
 void print_zeros_simple(int_thread_data*);
 int round_solution(subprob_struct* sub_data, char* zero_file_name);
