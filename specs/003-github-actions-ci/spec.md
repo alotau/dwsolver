@@ -3,7 +3,7 @@
 **Feature Branch**: `003-github-actions-ci`
 **Created**: 2026-03-19
 **Status**: Draft
-**Input**: CI must run `tests/dw-tests.sh` on every pull request and every push to `main`, across macOS, Linux, and Windows.
+**Input**: CI must run `tests/dw-tests.sh` on every pull request and every push to `master`, across macOS, Linux, and Windows.
 
 ---
 
@@ -12,8 +12,8 @@
 DWSOLVER currently has no automated CI. The constitution (Principle III) mandates that
 "CI MUST validate all supported platforms before a branch is eligible to merge into main."
 This spec defines a GitHub Actions workflow that builds the solver and runs the test
-suite on macOS, Linux, and Windows for every pull request targeting `main` and every
-direct push to `main`.
+suite on macOS, Linux, and Windows for every pull request targeting `master` and every
+direct push to `master`.
 
 Windows presents unique build challenges: it requires a POSIX-compatible build
 environment (MinGW-w64 or Cygwin) and a pthreads compatibility layer. The CI workflow
@@ -25,7 +25,7 @@ must handle the platform-specific dependencies transparently.
 
 ### User Story 1 — PRs are automatically gated on macOS and Linux (Priority: P1)
 
-A developer opens a pull request against `main`. GitHub Actions automatically triggers
+A developer opens a pull request against `master`. GitHub Actions automatically triggers
 a build-and-test run on both macOS (Clang) and Linux (GCC). If either platform's
 tests fail, the PR is blocked. The developer sees per-platform pass/fail status
 on the PR page within a reasonable time.
@@ -46,13 +46,13 @@ current working state of the code.
    `./configure --enable-named-semaphores && make` and `tests/dw-tests.sh`,
    and reports a pass/fail status on the PR within 15 minutes.
 
-2. **Given** a PR is opened against `main`,
+2. **Given** a PR is opened against `master`,
    **When** the CI workflow triggers,
    **Then** a build-and-test job runs on Ubuntu (latest) with
    `./configure && make` and `tests/dw-tests.sh`,
    and reports a pass/fail status on the PR within 15 minutes.
 
-3. **Given** a direct push to `main`,
+3. **Given** a direct push to `master`,
    **When** the CI workflow triggers,
    **Then** both macOS and Linux jobs run and results are recorded.
 
@@ -145,14 +145,16 @@ the GitHub UI prevents the merge with "Required status checks have not passed."
 ### Functional Requirements
 
 - **FR-001**: A GitHub Actions workflow file MUST exist at `.github/workflows/ci.yml`.
-- **FR-002**: The workflow MUST trigger on `pull_request` events targeting `main`
-  and on `push` events to `main`.
-- **FR-003**: The workflow MUST include a macOS job that installs autotools, runs
-  `./configure --enable-named-semaphores && make`, and runs `tests/dw-tests.sh`
+- **FR-002**: The workflow MUST trigger on `pull_request` events targeting `master`
+  and on `push` events to `master`.
+- **FR-003**: The workflow MUST include a macOS job that runs
+  `./configure --enable-named-semaphores && make` and runs `bash tests/dw-tests.sh`
   with `dwsolver` on `$PATH`.
-- **FR-004**: The workflow MUST include a Linux (Ubuntu) job that installs autotools
-  and GCC, runs `./configure && make`, and runs `tests/dw-tests.sh` with `dwsolver`
-  on `$PATH`.
+- **FR-004**: The workflow MUST include a Linux (Ubuntu) job that runs
+  `./configure && make` and runs `bash tests/dw-tests.sh` with `dwsolver` on `$PATH`.
+  Note: `tests/dw-tests.sh` must be invoked via `bash` because the script redefines
+  `pushd`/`popd` using `command` — which requires bash built-ins; Ubuntu's `/bin/sh`
+  is dash, which lacks `pushd`.
 - **FR-005**: The workflow MUST include a Windows job using MSYS2 (MinGW-w64) that
   attempts `./configure && make` and `tests/dw-tests.sh`. The Windows job MUST be
   marked `continue-on-error: true` until Windows support is confirmed complete.
@@ -170,7 +172,7 @@ the GitHub UI prevents the merge with "Required status checks have not passed."
 
 - **`.github/workflows/ci.yml`**: The workflow definition file. Single workflow,
   three jobs (`build-macos`, `build-linux`, `build-windows`), triggered by
-  `pull_request` and `push` to `main`.
+  `pull_request` and `push` to `master`.
 - **Branch protection rule on `main`**: Requires `build-macos` and `build-linux`
   to pass before merge. Configured in GitHub repository settings (not in code).
 - **`tests/dw-tests.sh`**: The existing test script, unmodified by this spec.
@@ -206,116 +208,9 @@ the GitHub UI prevents the merge with "Required status checks have not passed."
 - The GitHub repository at `github.com/alotau/dwsolver` allows GitHub Actions
   workflows and has at least one maintainer with permission to set branch
   protection rules.
-- GitHub-hosted `macos-latest` runners provide Homebrew; `ubuntu-latest` provides
-  `apt-get`; `windows-latest` provides MSYS2 via `msys2/setup-msys2`.
+- GitHub-hosted runners provide standard toolchains: Clang + make on macOS, GCC + make on Ubuntu (pre-installed), MSYS2 + MinGW-w64 on Windows via `msys2/setup-msys2@v2`.
+- The `configure` script is pre-generated and committed to the repository; no `autoreconf` step is needed in CI.
 - The `tests/dw-tests.sh` script works correctly after the spec 002 repairs land.
   CI for this spec assumes spec 002 is merged first (or this branch is based on it).
 
-## User Scenarios & Testing *(mandatory)*
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
-
-### User Story 1 - [Brief Title] (Priority: P1)
-
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
-
----
-
-### User Story 2 - [Brief Title] (Priority: P2)
-
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-
----
-
-### User Story 3 - [Brief Title] (Priority: P3)
-
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-
----
-
-[Add more user stories as needed, each with an assigned priority]
-
-### Edge Cases
-
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
-
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
-
-## Requirements *(mandatory)*
-
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
-
-### Functional Requirements
-
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
-
-*Example of marking unclear requirements:*
-
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
-
-### Key Entities *(include if feature involves data)*
-
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
-
-## Success Criteria *(mandatory)*
-
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
-### Measurable Outcomes
-
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
