@@ -10,12 +10,51 @@ subproblems.  The implementation is general in that any linear program that can
 be presented to the software in block-angular form (with some current 
 limitations) can be solved.
 
-## Known Limitations
-This repo was updated to take advantage of GH Actions over a decade after it was 
-previously touched. I could only get the MacOS runner to work properly. Using the
-Ubuntu runner gives errors at the linking phase due to some loose usage of variable
-definitions within [dw.h](./src/dw.h). Trying a few things to fix old C code like
-trying to make vars static, using externs, etc. This was a fools errand. Trying to update multithreaded C code from years ago may be the most dangerous game known to programmers. That said, I would happily take any PRs that show this code being built by a GH Action on an Ubuntu runner.
+## Building
+
+### macOS and Linux
+
+Prerequisites: `gcc`, `make`, `autoconf`, `automake`, and GLPK (via your package
+manager, e.g. `brew install glpk` or `apt-get install libglpk-dev`).
+
+```sh
+./configure && make
+```
+
+The compiled binary is `src/dwsolver`.
+
+### Windows (MSYS2 / MINGW64)
+
+1. Install [MSYS2](https://www.msys2.org/) and open an **MINGW64** shell.
+2. Install the required packages:
+   ```sh
+   pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-winpthreads-git make automake diffutils
+   ```
+3. Build:
+   ```sh
+   ./configure && make
+   ```
+
+The compiled binary is `src/dwsolver.exe`.
+
+> **Note:** Named POSIX semaphores are not supported on Windows. The solver uses
+> unnamed semaphores automatically on that platform; no extra configure flag is
+> needed.
+
+### Docker
+
+A pre-built image is available, or you can build one locally:
+
+```sh
+# Build the image
+docker build -t dwsolver .
+
+# Run the solver (mount a directory containing your .lp files)
+docker run --rm -v "$PWD/examples/book_dantzig:/data" dwsolver book_dantzig.lp
+```
+
+The container's working directory is `/data`.  Any `.lp` input files and output
+files live there; mount the directory that holds your problem files.
 
 ## Examples and Tests
 There is a an [examples](./examples/) directory with several problems plucked from popular textbooks and some websites. There is also a toy version of the problem that initiated the writing of this code related to air traffic management. Each example has a README and should run successfully with a properly built dwsolver executable. There is also a new [tests](./tests/) directory that contains a [test script](./tests/dw-tests.sh) that runs most of the examples.  A couple of the examples have non-deterministic solutions (but deterministic optimum values), and I didn't take the time to write tests that check for the correct optimum for those problems. Again, happy for any PR that runs those examples, parses the output files to pluck out the optimum, and shows it is the expected value.
@@ -48,8 +87,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Additional Info
 See the file [COPYING](COPYING) for the GNU Public License.
-
-See the file [INSTALL](INSTALL) for compilation and installation instructions.
 
 All Dantzig-Wolfe source files created by the author begins with the prefix
 "dw" while all other source files in the src/ directory are GLPK files.  All
