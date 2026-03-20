@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+
+  build-macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: ./configure --enable-named-semaphores && make
+
+      - name: Add dwsolver to PATH
+        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+
+      - name: Test
+        run: cd tests && bash dw-tests.sh
+
+  build-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: ./configure && make
+
+      - name: Add dwsolver to PATH
+        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+
+      - name: Test
+        run: cd tests && bash dw-tests.sh
+
+  build-windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          cache: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            make
+
+      - name: Build
+        run: ./configure && make
+
+      - name: Add dwsolver to PATH
+        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+
+      - name: Test
+        run: cd tests && bash dw-tests.sh
