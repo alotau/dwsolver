@@ -67,7 +67,7 @@ void dw_printf(int importance_level, char* format_string, ...) {
  * a 0.0 primal value.  If any basic variables are valued 0.0, this implies
  * degeneracy.  No big deal.
  */
-void check_degeneracy() {
+void check_degeneracy(void) {
 	int i;
 	for( i = 1; i <= glp_get_num_cols(master_lp); i++ ) {
 		if( glp_get_col_stat(master_lp, i) == GLP_BS ) {
@@ -274,7 +274,7 @@ void free_globals(faux_globals* fg, master_data* md) {
  * found that it increases runtime and can lead to some cycling.  Maybe there
  * is a better way to implement this function? Not currently used anywhere.
  */
-void purge_nonbasics() {
+void purge_nonbasics(void) {
 	int i;
 	int count = 0;
 	int* nb_indices = malloc(sizeof(int)* (glp_get_num_cols(master_lp)+1));
@@ -643,7 +643,7 @@ int check_col_integrality() {
 	return rc;
 }
 
-void check_aux_vars() {
+void check_aux_vars(void) {
 	int i;
 	for( i = 1; i <= D->rows; i++ ) {
 		if( glp_get_col_prim(master_lp, i) <= TOLERANCE ) {
@@ -700,7 +700,7 @@ void get_solution(subprob_struct* sub_data) {
  * enough to declare a problem feasible, but it may find a trivially
  * infeasible constraint.
  */
-int dirty_feas_check() {
+int dirty_feas_check(void) {
 	int i, j;
 	int num_cols;
 	int sum;
