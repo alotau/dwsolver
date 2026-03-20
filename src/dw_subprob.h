@@ -93,6 +93,6 @@ void* subproblem_thread(void* arg);
 int signal_availability(subprob_struct* my_data);
 void prepare_column(double*, double*, subprob_struct* data);
 void organize_solution(subprob_struct*, double*, int);
-void printD();
+void printD(void);
 
 #endif /*SUBPROB_THREAD_H_*/

@@ -491,7 +491,7 @@ void prepare_column(double* solution, double* y, subprob_struct* data) {
 }
 
 /* This is a debugging function that is of dubious use and quality. */
-void printD() {
+void printD(void) {
 	int i, j, begin, end, count;
 	count = 0;
 	for( i = 0; i < D->rows; i++ ) {

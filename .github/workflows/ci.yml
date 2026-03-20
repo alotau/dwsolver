@@ -64,19 +64,24 @@ jobs:
           cache: true
           install: >-
             mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-winpthreads-git
             make
+            automake
+            diffutils
 
-      - name: Suppress automake regeneration
-        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in
+      - name: Suppress automake regeneration and refresh config scripts
+        run: |
+          touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in
+          cp "$(find /usr -name config.guess | head -1)" config.guess
+          cp "$(find /usr -name config.sub   | head -1)" config.sub
 
       - name: Build
         run: ./configure && make
 
-      - name: Add dwsolver to PATH
-        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
-
       - name: Test
-        run: cd tests && bash dw-tests.sh
+        run: |
+          export PATH="$PWD/src:$PATH"
+          cd tests && bash dw-tests.sh
 
   docker:
     runs-on: ubuntu-latest
