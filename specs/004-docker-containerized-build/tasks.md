@@ -20,7 +20,7 @@
 
 **Purpose**: Confirm local prerequisites before any file creation.
 
-- [ ] T001 Confirm branch `004-docker-containerized-build` is checked out and `docker info` succeeds (Docker Engine ≥ 20.10 available locally)
+- [X] T001 Confirm branch `004-docker-containerized-build` is checked out and `docker info` succeeds (Docker Engine ≥ 20.10 available locally)
 
 **Checkpoint**: Branch active, Docker running — proceed to Phase 2.
 
@@ -32,7 +32,8 @@
 
 **⚠️ CRITICAL**: `.dockerignore` MUST exist before any `docker build` attempt.
 
-- [ ] T002 Create `.dockerignore` at repository root excluding `.git/`, `*.o`, `*.a`, `*.Po`, `src/dwsolver`, `config.log`, `config.status`, `config.h`, `stamp-h1`, `libtool`, `autom4te.cache/`, `**/out_terminal`, `**/relaxed_solution`, `**/rs_sorted`, `**/done.cpxlp`, `**/pre_master.cpxlp`, `tmp/`, `.vscode/`, `.specify/` (per data-model.md build context exclusion table and contracts/docker-interface.md)
+- [X] T002 Create `.dockerignore` at repository root excluding `.git/`, `*.o`, `*.a`, `*.Po`, `src/dwsolver`, `config.log`, `config.status`, `config.h`, `stamp-h1`, `libtool`, `autom4te.cache/`, `**/out_terminal`, `**/relaxed_solution`, `**/rs_sorted`, `**/done.cpxlp`, `**/pre_master.cpxlp`, `tmp/`, `.vscode/`, `.specify/` (per data-model.md build context exclusion table and contracts/docker-interface.md)
+  - **Note**: Used `**/*.o`, `**/*.Po` (recursive glob) — Docker's `*.o` only matches root-level files.
 
 **Checkpoint**: `.dockerignore` in place — US1, US2, US3 implementation can now begin.
 
@@ -46,11 +47,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T003 [US1] Create `Dockerfile` at repository root with two-stage build: builder stage (`FROM ubuntu:24.04 AS builder`, `apt-get install -y --no-install-recommends build-essential automake`, `WORKDIR /build`, `COPY . .`, `touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in`, `./configure && make`) and runner stage (`FROM ubuntu:24.04 AS runner`, `COPY --from=builder /build/src/dwsolver /usr/local/bin/dwsolver`, `ENTRYPOINT ["/usr/local/bin/dwsolver"]`) — per quickstart.md Step 2 and contracts/docker-interface.md
-- [ ] T004 [US1] Run `docker build -t dwsolver .` from repository root and confirm it completes with exit code 0 and no error output
-- [ ] T005 [P] [US1] Run `docker run --rm dwsolver 2>&1 | grep -q "Usage:"` and confirm it exits 0 (smoke test: binary executes and prints usage when invoked with no arguments)
-- [ ] T006 [P] [US1] Run `docker image inspect dwsolver --format '{{.Size}}'` and confirm the reported byte count is ≤ 209715200 (200 MB), satisfying SC-002 and FR-006
-- [ ] T007 [US1] Run `docker run --rm -v "$(pwd)/examples/book_bertsimas:/data" dwsolver --no-write-final-master --quiet -g /data/guidefile` and confirm exit code 0, satisfying FR-001/FR-004/SC-003 (solver reads from mounted volume and solves correctly)
+- [X] T003 [US1] Create `Dockerfile` at repository root with two-stage build: builder stage (`FROM ubuntu:24.04 AS builder`, `apt-get install -y --no-install-recommends build-essential automake`, `WORKDIR /build`, `COPY . .`, `touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in`, `./configure && make`) and runner stage (`FROM ubuntu:24.04 AS runner`, `COPY --from=builder /build/src/dwsolver /usr/local/bin/dwsolver`, `ENTRYPOINT ["/usr/local/bin/dwsolver"]`) — per quickstart.md Step 2 and contracts/docker-interface.md
+- [X] T004 [US1] Run `docker build -t dwsolver .` from repository root and confirm it completes with exit code 0 and no error output
+  - **Note**: Also refreshed `config.guess`/`config.sub` from system automake to support aarch64 (Apple Silicon Docker).
+- [X] T005 [P] [US1] Run `docker run --rm dwsolver 2>&1 | grep -q "Usage:"` and confirm it exits 0 (smoke test: binary executes and prints usage when invoked with no arguments)
+- [X] T006 [P] [US1] Run `docker image inspect dwsolver --format '{{.Size}}'` and confirm the reported byte count is ≤ 209715200 (200 MB), satisfying SC-002 and FR-006
+  - **Result**: 99.2 MB ✅
+- [X] T007 [US1] Run `docker run --rm -v "$(pwd)/examples/book_bertsimas:/data" dwsolver --no-write-final-master --quiet -g /data/guidefile` and confirm exit code 0, satisfying FR-001/FR-004/SC-003 (solver reads from mounted volume and solves correctly)
+  - **Note**: Guidefile uses relative paths; need `-w /data` flag: `docker run --rm -v ... -w /data dwsolver ...`
 
 **Checkpoint**: User Story 1 fully functional. A user with only Docker can solve the Bertsimas example. ✅ MVP complete.
 
@@ -64,7 +68,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T008 [US2] Add `docker-build` job to `.github/workflows/ci.yml` after the `build-windows` job: `runs-on: ubuntu-latest`, `timeout-minutes: 30`, `continue-on-error: true`, with steps `actions/checkout@v4` → `docker build -t dwsolver .` → `docker run --rm dwsolver 2>&1 | grep -q "Usage:"` (per contracts/docker-interface.md CI contract and research.md R7)
+- [X] T008 [US2] Add `docker-build` job to `.github/workflows/ci.yml` after the `build-windows` job: `runs-on: ubuntu-latest`, `timeout-minutes: 30`, `continue-on-error: true`, with steps `actions/checkout@v4` → `docker build -t dwsolver .` → `docker run --rm dwsolver 2>&1 | grep -q "Usage:"` (per contracts/docker-interface.md CI contract and research.md R7)
 
 **Checkpoint**: CI job defined. Will become active when the PR is opened in Phase Final. ✅
 
@@ -78,8 +82,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T009 [P] [US3] Verify `.dockerignore` completeness: run `grep -cE '\.git|\.o|src/dwsolver' .dockerignore` and confirm all three patterns are present, satisfying FR-005 and US3 acceptance scenario 1
-- [ ] T010 [P] [US3] Verify runtime image contains no C source files: run `docker run --rm --entrypoint /bin/sh dwsolver -c 'find / -name "*.c" 2>/dev/null | wc -l'` and confirm output is `0`, satisfying FR-006 (multi-stage isolation) and US3 acceptance scenario 2
+- [X] T009 [P] [US3] Verify `.dockerignore` completeness: run `grep -cE '`.git|`.o|src/dwsolver' .dockerignore` and confirm all three patterns are present, satisfying FR-005 and US3 acceptance scenario 1
+- [X] T010 [P] [US3] Verify runtime image contains no C source files: run `docker run --rm --entrypoint /bin/sh dwsolver -c 'find / -name "*.c" 2>/dev/null | wc -l'` and confirm output is `0`, satisfying FR-006 (multi-stage isolation) and US3 acceptance scenario 2
 
 **Checkpoint**: Image is confirmed lean — no source files, no artifacts, binary only. ✅
 

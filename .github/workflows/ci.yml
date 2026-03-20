@@ -77,3 +77,16 @@ jobs:
 
       - name: Test
         run: cd tests && bash dw-tests.sh
+
+  docker-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t dwsolver .
+
+      - name: Smoke test
+        run: docker run --rm dwsolver 2>&1 | grep -q "Usage:"
