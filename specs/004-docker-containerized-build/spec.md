@@ -24,7 +24,7 @@ A researcher or engineer has a set of input files (guide file + data files) on t
 **Acceptance Scenarios**:
 
 1. **Given** a user has Docker installed and has cloned the repository, **When** they run `docker build -t dwsolver .` from the repo root, **Then** the image builds without errors and the resulting image is under 200 MB.
-2. **Given** a successfully built image and a directory containing a dwsolver guide file and its data files, **When** the user runs `docker run --rm -v /path/to/data:/data dwsolver -g /data/guidefile`, **Then** the solver runs, reads all data correctly from the mounted path, and exits with code 0 when the problem is feasible.
+2. **Given** a successfully built image and a directory containing a dwsolver guide file and its data files, **When** the user runs `docker run --rm -w /data -v /path/to/data:/data dwsolver -g guidefile`, **Then** the solver runs, reads all data correctly from the mounted path (including any relative paths referenced from the guide file), and exits with code 0 when the problem is feasible.
 3. **Given** the same image and the bundled `examples/book_bertsimas` example, **When** the user runs the container against the example guide file, **Then** the output matches the expected result from a native build.
 
 ---
