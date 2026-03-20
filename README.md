@@ -1,5 +1,10 @@
 # DWSOLVER (Dantzig-Wolfe Solver)
 
+[![macOS](https://github.com/alotau/dwsolver/actions/workflows/ci-macos.yml/badge.svg)](https://github.com/alotau/dwsolver/actions/workflows/ci-macos.yml)
+[![Linux](https://github.com/alotau/dwsolver/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/alotau/dwsolver/actions/workflows/ci-linux.yml)
+[![Windows](https://github.com/alotau/dwsolver/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/alotau/dwsolver/actions/workflows/ci-windows.yml)
+[![Docker](https://github.com/alotau/dwsolver/actions/workflows/ci-docker.yml/badge.svg)](https://github.com/alotau/dwsolver/actions/workflows/ci-docker.yml)
+
 ## Overview
 The Dantzig-Wolfe Solver program is a stand-alone implementation of the
 Dantzig-Wolfe Decomposition algorithm.  The GNU Linear Programming Kit provides

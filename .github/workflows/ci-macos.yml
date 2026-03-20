@@ -1,0 +1,26 @@
+name: macOS
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Suppress automake regeneration
+        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in
+
+      - name: Build
+        run: ./configure --enable-named-semaphores && make
+
+      - name: Add dwsolver to PATH
+        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+
+      - name: Test
+        run: cd tests && bash dw-tests.sh
