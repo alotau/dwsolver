@@ -126,8 +126,9 @@ docker run --rm dwsolver
 # Solve the bundled Bertsimas example
 docker run --rm \
     -v "$(pwd)/examples/book_bertsimas:/data" \
+    -w /data \
     dwsolver \
-    --no-write-final-master --quiet -g /data/guidefile
+    --no-write-final-master --quiet -g guidefile
 # Expected: solver runs and exits 0; no output (--quiet)
 ```
 
