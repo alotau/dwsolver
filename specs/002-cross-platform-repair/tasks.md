@@ -19,7 +19,7 @@
 
 **Purpose**: Confirm the pre-repair baseline so we have a known-good starting point.
 
-- [ ] T001 Verify baseline macOS build: `make clean && ./configure --enable-named-semaphores && make` in `/Users/joey/Development/dwsolver-repaired` — confirm zero errors and `src/dwsolver` produced
+- [X] T001 Verify baseline macOS build: `make clean && ./configure --enable-named-semaphores && make` in `/Users/joey/Development/dwsolver-repaired` — confirm zero errors and `src/dwsolver` produced
 
 ---
 
@@ -29,11 +29,11 @@
 
 **⚠️ CRITICAL**: No user story verification can run until this phase is complete.
 
-- [ ] T002 Create `src/dw_globals.c` — new file with `#include "dw.h"` and the single authoritative definition of all 18 globals: `attr`, `master_lp_ready_mutex`, `master_lp_ready_cv`, `service_queue_mutex`, `next_iteration_mutex`, `next_iteration_cv`, `master_mutex`, `reduced_cost_mutex`, `glpk_mutex`, `fputs_mutex`, `sub_data_mutex`, `customers` (with `#ifdef USE_NAMED_SEMAPHORES` pointer/value guard), `original_master_lp`, `master_lp`, `parm`, `simplex_control_params`, `D`, `signals`
+- [X] T002 Create `src/dw_globals.c` — new file with `#include "dw.h"` and the single authoritative definition of all 18 globals: `attr`, `master_lp_ready_mutex`, `master_lp_ready_cv`, `service_queue_mutex`, `next_iteration_mutex`, `next_iteration_cv`, `master_mutex`, `reduced_cost_mutex`, `glpk_mutex`, `fputs_mutex`, `sub_data_mutex`, `customers` (with `#ifdef USE_NAMED_SEMAPHORES` pointer/value guard), `original_master_lp`, `master_lp`, `parm`, `simplex_control_params`, `D`, `signals`
 
-- [ ] T003 [P] Edit `src/dw.h` lines 109–167: convert all 18 variable definitions to `extern` declarations (prefix each with `extern`; preserve the `#ifdef USE_NAMED_SEMAPHORES` guard on `customers`). The `typedef` blocks for `D_matrix`, `signal_data`, `master_data`, `new_column`, `hook_struct`, `faux_globals`, `subprob_struct` are NOT globals and must remain unchanged.
+- [X] T003 [P] Edit `src/dw.h` lines 109–167: convert all 18 variable definitions to `extern` declarations (prefix each with `extern`; preserve the `#ifdef USE_NAMED_SEMAPHORES` guard on `customers`). The `typedef` blocks for `D_matrix`, `signal_data`, `master_data`, `new_column`, `hook_struct`, `faux_globals`, `subprob_struct` are NOT globals and must remain unchanged.
 
-- [ ] T004 [P] Edit `src/Makefile.am` line 122: add `dw_globals.c \` to `dwsolver_SOURCES` immediately before `dw_main.c`
+- [X] T004 [P] Edit `src/Makefile.am` line 122: add `dw_globals.c \` to `dwsolver_SOURCES` immediately before `dw_main.c`
 
 **Checkpoint**: Foundational changes complete — user story work can now begin.
 
@@ -45,9 +45,9 @@
 
 **Independent Test**: `make clean && ./configure --enable-named-semaphores && make` completes with zero errors; `tests/dw-tests.sh` reports PASS for all 4 existing examples.
 
-- [ ] T005 [US1] Rebuild after KD-001 fix: from `/Users/joey/Development/dwsolver-repaired` run `make clean && ./configure --enable-named-semaphores && make` — confirm zero linker errors, `src/dwsolver` produced
+- [X] T005 [US1] Rebuild after KD-001 fix: from `/Users/joey/Development/dwsolver-repaired` run `make clean && ./configure --enable-named-semaphores && make` — confirm zero linker errors, `src/dwsolver` produced
 
-- [ ] T006 [US1] Run existing tests: `export PATH="$PWD/src:$PATH" && bash tests/dw-tests.sh` — confirm all 4 tests (`book_bertsimas`, `book_lasdon`, `web_mitchell`, `web_trick`) report PASS
+- [X] T006 [US1] Run existing tests: `export PATH="$PWD/src:$PATH" && bash tests/dw-tests.sh` — confirm all 4 tests (`book_bertsimas`, `book_lasdon`, `web_mitchell`, `web_trick`) report PASS
 
 **Checkpoint**: User Story 1 complete — macOS build and existing tests verified. Linux verification requires a GCC environment (Docker/CI); the fix is structurally correct per C99 §6.9 ¶5.
 
@@ -63,11 +63,11 @@
 - `four_sea`: final `#### Master objective value = 1.200000e+01`
 - `book_dantzig`: final `#### Master objective value = 6.357895e+01`
 
-- [ ] T007 [P] [US2] Add `four_sea` objective-value test to `tests/dw-tests.sh`: `pushd` to `../examples/four_sea`, run `dwsolver -g guidefile > out_obj.txt`, check exit code is 0 (non-zero → FAIL immediately), extract the last `#### Master objective value = ...` line from `out_obj.txt` via `grep`, string-match it against `1.200000e+01` exactly, report PASS/FAIL, `popd`
+- [X] T007 [P] [US2] Add `four_sea` objective-value test to `tests/dw-tests.sh`: `pushd` to `../examples/four_sea`, run `dwsolver -g guidefile > out_obj.txt`, check exit code is 0 (non-zero → FAIL immediately), extract the last `#### Master objective value = ...` line from `out_obj.txt` via `grep`, string-match it against `1.200000e+01` exactly, report PASS/FAIL, `popd`
 
-- [ ] T008 [P] [US2] Add `book_dantzig` objective-value test to `tests/dw-tests.sh`: same pattern as T007 — run `dwsolver -g guidefile > out_obj.txt`, check exit code, grep last `Master objective value` line, string-match against `6.357895e+01` exactly, report PASS/FAIL
+- [X] T008 [P] [US2] Add `book_dantzig` objective-value test to `tests/dw-tests.sh`: same pattern as T007 — run `dwsolver -g guidefile > out_obj.txt`, check exit code, grep last `Master objective value` line, string-match against `6.357895e+01` exactly, report PASS/FAIL
 
-- [ ] T009 [US2] Run full extended test suite: `bash tests/dw-tests.sh` — confirm all 6 tests (4 original + 2 new) report PASS
+- [X] T009 [US2] Run full extended test suite: `bash tests/dw-tests.sh` — confirm all 6 tests (4 original + 2 new) report PASS
 
 **Checkpoint**: User Story 2 complete — all six deterministic examples now have automated coverage.
 
@@ -79,17 +79,17 @@
 
 **Independent Test**: `grep 'sprintf(' src/dw_*.c` returns zero results; full test suite passes.
 
-- [ ] T010 [P] [US3] Edit `src/dw_main.c` line 275: replace `sprintf(local_buffer, "sub%d_convexity", ...)` with `snprintf(local_buffer, BUFF_SIZE, "sub%d_convexity", ...)`
+- [X] T010 [P] [US3] Edit `src/dw_main.c` line 275: replace `sprintf(local_buffer, "sub%d_convexity", ...)` with `snprintf(local_buffer, BUFF_SIZE, "sub%d_convexity", ...)`
 
-- [ ] T011 [P] [US3] Edit `src/dw_main.c` line 496: replace `sprintf(local_buffer, "phase1_step_0.cpxlp")` with `snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp")`
+- [X] T011 [P] [US3] Edit `src/dw_main.c` line 496: replace `sprintf(local_buffer, "phase1_step_0.cpxlp")` with `snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp")`
 
-- [ ] T012 [P] [US3] Edit `src/dw_main.c` line 512: replace `sprintf(local_buffer, "phase1_step_%d.cpxlp", ...)` with `snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", ...)`
+- [X] T012 [P] [US3] Edit `src/dw_main.c` line 512: replace `sprintf(local_buffer, "phase1_step_%d.cpxlp", ...)` with `snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", ...)`
 
-- [ ] T013 [P] [US3] Edit `src/dw_main.c` line 611: replace `sprintf(local_buffer, "master_step_%d.cpxlp", ...)` with `snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", ...)`
+- [X] T013 [P] [US3] Edit `src/dw_main.c` line 611: replace `sprintf(local_buffer, "master_step_%d.cpxlp", ...)` with `snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", ...)`
 
-- [ ] T014 [P] [US3] Edit `src/dw_support.c` line 609: replace `sprintf(filename, "basis_iteration_%d", ...)` with `snprintf(filename, BUFF_SIZE, "basis_iteration_%d", ...)`
+- [X] T014 [P] [US3] Edit `src/dw_support.c` line 609: replace `sprintf(filename, "basis_iteration_%d", ...)` with `snprintf(filename, BUFF_SIZE, "basis_iteration_%d", ...)`
 
-- [ ] T015 [US3] Rebuild and run full test suite: `make && bash tests/dw-tests.sh` — confirm all 6 tests still pass
+- [X] T015 [US3] Rebuild and run full test suite: `make && bash tests/dw-tests.sh` — confirm all 6 tests still pass
 
 **Checkpoint**: User Story 3 complete — zero `sprintf` calls remain in DW source files.
 
@@ -101,7 +101,7 @@
 
 **Independent Test**: Full test suite passes; code review shows each critical `malloc` is followed by `dw_oom_abort(ptr, "context")`.
 
-- [ ] T016 [US4] Add `dw_oom_abort` static inline helper to `src/dw.h` immediately before the `#endif /*DECOMPOSE_H_*/` closing guard:
+- [X] T016 [US4] Add `dw_oom_abort` static inline helper to `src/dw.h` immediately before the `#endif /*DECOMPOSE_H_*/` closing guard:
   ```c
   static inline void dw_oom_abort(void* ptr, const char* ctx) {
       if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
@@ -109,21 +109,21 @@
   ```
   Add `#include <stdlib.h>` near the top of `dw.h` if not already present.
 
-- [ ] T017 [P] [US4] Edit `src/dw_main.c` line 110: add `dw_oom_abort(local_buffer, "local_buffer");` immediately after the `malloc` for `local_buffer`
+- [X] T017 [P] [US4] Edit `src/dw_main.c` line 110: add `dw_oom_abort(local_buffer, "local_buffer");` immediately after the `malloc` for `local_buffer`
 
-- [ ] T018 [P] [US4] Edit `src/dw_main.c` line 118: add `dw_oom_abort(md, "md");` immediately after the `malloc` for `md`
+- [X] T018 [P] [US4] Edit `src/dw_main.c` line 118: add `dw_oom_abort(md, "md");` immediately after the `malloc` for `md`
 
-- [ ] T019 [P] [US4] Edit `src/dw_main.c` line 119: add `dw_oom_abort(globals, "globals");` immediately after the `malloc` for `globals`
+- [X] T019 [P] [US4] Edit `src/dw_main.c` line 119: add `dw_oom_abort(globals, "globals");` immediately after the `malloc` for `globals`
 
-- [ ] T020 [P] [US4] Edit `src/dw_main.c` line 154: add `dw_oom_abort(threads, "threads");` immediately after the `malloc` for `threads`
+- [X] T020 [P] [US4] Edit `src/dw_main.c` line 154: add `dw_oom_abort(threads, "threads");` immediately after the `malloc` for `threads`
 
-- [ ] T021 [P] [US4] Edit `src/dw_main.c` line 155: add `dw_oom_abort(sub_data, "sub_data");` immediately after the `malloc` for `sub_data`
+- [X] T021 [P] [US4] Edit `src/dw_main.c` line 155: add `dw_oom_abort(sub_data, "sub_data");` immediately after the `malloc` for `sub_data`
 
-- [ ] T022 [P] [US4] Edit `src/dw_support.c` line 99: add `dw_oom_abort(D, "D");` immediately after the `malloc` for `D`
+- [X] T022 [P] [US4] Edit `src/dw_support.c` line 99: add `dw_oom_abort(D, "D");` immediately after the `malloc` for `D`
 
-- [ ] T023 [P] [US4] Edit `src/dw_support.c` line 173: add `dw_oom_abort(signals, "signals");` immediately after the `malloc` for `signals`
+- [X] T023 [P] [US4] Edit `src/dw_support.c` line 173: add `dw_oom_abort(signals, "signals");` immediately after the `malloc` for `signals`
 
-- [ ] T024 [US4] Rebuild and run full test suite: `make && bash tests/dw-tests.sh` — confirm all 6 tests still pass
+- [X] T024 [US4] Rebuild and run full test suite: `make && bash tests/dw-tests.sh` — confirm all 6 tests still pass
 
 **Checkpoint**: User Story 4 complete — 7 critical allocation sites are guarded against OOM crashes.
 
@@ -131,12 +131,12 @@
 
 ## Final Phase: Polish & Cross-Cutting Concerns
 
-- [ ] T025 [P] Audit: `grep 'sprintf(' src/dw_*.c` — confirm zero results (FR-006 complete)
-- [ ] T026 [P] Audit: `grep -n 'malloc(' src/dw_main.c src/dw_support.c` — confirm each of the 7 critical sites listed in research.md is followed by `dw_oom_abort`
-- [ ] T027 Run `make clean && ./configure --enable-named-semaphores && make` — final clean build on macOS, zero errors
-- [ ] T028 Run `bash tests/dw-tests.sh` — final run, all 6 tests PASS
-- [ ] T029 Stage and commit all modified files (`src/dw.h`, `src/dw_globals.c`, `src/Makefile.am`, `tests/dw-tests.sh`) with message: `fix: resolve KD-001 Linux linker errors, extend tests, snprintf, malloc guards`
-- [ ] T030 Push branch: `git push origin 002-cross-platform-repair`
+- [X] T025 [P] Audit: `grep 'sprintf(' src/dw_*.c` — confirm zero results (FR-006 complete)
+- [X] T026 [P] Audit: `grep -n 'malloc(' src/dw_main.c src/dw_support.c` — confirm each of the 7 critical sites listed in research.md is followed by `dw_oom_abort`
+- [X] T027 Run `make clean && ./configure --enable-named-semaphores && make` — final clean build on macOS, zero errors
+- [X] T028 Run `bash tests/dw-tests.sh` — final run, all 6 tests PASS
+- [X] T029 Stage and commit all modified files (`src/dw.h`, `src/dw_globals.c`, `src/Makefile.am`, `tests/dw-tests.sh`) with message: `fix: resolve KD-001 Linux linker errors, extend tests, snprintf, malloc guards`
+- [X] T030 Push branch: `git push origin 002-cross-platform-repair`
 
 ---
 
