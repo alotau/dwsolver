@@ -119,6 +119,7 @@ dw_support.c \
 dw_phases.c \
 dw_subprob.c \
 dw_rounding.c \
+dw_globals.c \
 dw_main.c 
 
 dwsolver_CFLAGS = $(AM_CFLAGS)

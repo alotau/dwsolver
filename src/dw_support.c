@@ -97,6 +97,7 @@ void prepare_D(int num_rows, int* ind, double* val) {
 	double sign;
 
 	D           = malloc(sizeof(D_matrix));
+	dw_oom_abort(D, "D");
 	D->cols     = glp_get_num_cols(original_master_lp);
 	D->rows     = num_rows;
 	D->rows_plus= num_rows+1;
@@ -171,6 +172,7 @@ void init_globals(faux_globals* fg) {
 void init_signals(faux_globals* fg) {
 	fg->service_queue = (int*) malloc(sizeof(int)*fg->num_clients);
 	signals       = (signal_data*) malloc(sizeof(signal_data));
+	dw_oom_abort(signals, "signals");
 
 	/* Initialize synchronization variables.  */
 	signals->current_iteration    = 0;
@@ -606,7 +608,7 @@ void write_basis(int iteration) {
 	int basic_var_count = 0;
 	char* filename = malloc(sizeof(char)*BUFF_SIZE);
 	FILE* basis_file;
-	sprintf(filename, "basis_iteration_%d", iteration);
+	snprintf(filename, BUFF_SIZE, "basis_iteration_%d", iteration);
 	if( (basis_file = fopen(filename, "w")) == NULL 	) {
 		dw_printf(IMPORTANCE_VITAL, "Problem opening %s for writing.\n",
 				filename);

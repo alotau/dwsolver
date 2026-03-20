@@ -60,3 +60,43 @@ else
 fi
 popd
 
+echo "Test: Four seas example"
+pushd ../examples/four_sea
+dwsolver -g guidefile > out_obj.txt
+_rc=$?
+if [ "$_rc" -ne 0 ]; then
+   echo "  FAIL: dwsolver exited with code $_rc. Test failed. Exiting."
+   popd
+   exit 1
+fi
+_obj=$(grep "Master objective value" out_obj.txt | tail -1)
+if echo "$_obj" | grep -qF "1.200000e+01"; then
+   echo "  PASS: Got expected objective value."
+   echo ""
+else
+   echo "  FAIL: Unexpected objective value. Got: $_obj. Test failed. Exiting."
+   popd
+   exit 1
+fi
+popd
+
+echo "Test: Dantzig textbook example"
+pushd ../examples/book_dantzig
+dwsolver -g guidefile > out_obj.txt
+_rc=$?
+if [ "$_rc" -ne 0 ]; then
+   echo "  FAIL: dwsolver exited with code $_rc. Test failed. Exiting."
+   popd
+   exit 1
+fi
+_obj=$(grep "Master objective value" out_obj.txt | tail -1)
+if echo "$_obj" | grep -qF "6.357895e+01"; then
+   echo "  PASS: Got expected objective value."
+   echo ""
+else
+   echo "  FAIL: Unexpected objective value. Got: $_obj. Test failed. Exiting."
+   popd
+   exit 1
+fi
+popd
+

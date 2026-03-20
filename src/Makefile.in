@@ -166,7 +166,7 @@ am_dwsolver_OBJECTS = dwsolver-glpapi01.$(OBJEXT) \
 	dwsolver-colamd.$(OBJEXT) dwsolver-dw_blas.$(OBJEXT) \
 	dwsolver-dw_support.$(OBJEXT) dwsolver-dw_phases.$(OBJEXT) \
 	dwsolver-dw_subprob.$(OBJEXT) dwsolver-dw_rounding.$(OBJEXT) \
-	dwsolver-dw_main.$(OBJEXT)
+	dwsolver-dw_globals.$(OBJEXT) dwsolver-dw_main.$(OBJEXT)
 dwsolver_OBJECTS = $(am_dwsolver_OBJECTS)
 dwsolver_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -203,6 +203,7 @@ am__depfiles_remade = ./$(DEPDIR)/dwsolver-amd_1.Po \
 	./$(DEPDIR)/dwsolver-amd_preprocess.Po \
 	./$(DEPDIR)/dwsolver-amd_valid.Po \
 	./$(DEPDIR)/dwsolver-colamd.Po ./$(DEPDIR)/dwsolver-dw_blas.Po \
+	./$(DEPDIR)/dwsolver-dw_globals.Po \
 	./$(DEPDIR)/dwsolver-dw_main.Po \
 	./$(DEPDIR)/dwsolver-dw_phases.Po \
 	./$(DEPDIR)/dwsolver-dw_rounding.Po \
@@ -579,6 +580,7 @@ dw_support.c \
 dw_phases.c \
 dw_subprob.c \
 dw_rounding.c \
+dw_globals.c \
 dw_main.c 
 
 dwsolver_CFLAGS = $(AM_CFLAGS)
@@ -692,6 +694,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-amd_valid.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-colamd.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-dw_blas.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-dw_globals.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-dw_main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-dw_phases.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-dw_rounding.Po@am__quote@ # am--include-marker
@@ -2417,6 +2420,20 @@ dwsolver-dw_rounding.obj: dw_rounding.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -c -o dwsolver-dw_rounding.obj `if test -f 'dw_rounding.c'; then $(CYGPATH_W) 'dw_rounding.c'; else $(CYGPATH_W) '$(srcdir)/dw_rounding.c'; fi`
 
+dwsolver-dw_globals.o: dw_globals.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -MT dwsolver-dw_globals.o -MD -MP -MF $(DEPDIR)/dwsolver-dw_globals.Tpo -c -o dwsolver-dw_globals.o `test -f 'dw_globals.c' || echo '$(srcdir)/'`dw_globals.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dwsolver-dw_globals.Tpo $(DEPDIR)/dwsolver-dw_globals.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dw_globals.c' object='dwsolver-dw_globals.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -c -o dwsolver-dw_globals.o `test -f 'dw_globals.c' || echo '$(srcdir)/'`dw_globals.c
+
+dwsolver-dw_globals.obj: dw_globals.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -MT dwsolver-dw_globals.obj -MD -MP -MF $(DEPDIR)/dwsolver-dw_globals.Tpo -c -o dwsolver-dw_globals.obj `if test -f 'dw_globals.c'; then $(CYGPATH_W) 'dw_globals.c'; else $(CYGPATH_W) '$(srcdir)/dw_globals.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dwsolver-dw_globals.Tpo $(DEPDIR)/dwsolver-dw_globals.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dw_globals.c' object='dwsolver-dw_globals.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -c -o dwsolver-dw_globals.obj `if test -f 'dw_globals.c'; then $(CYGPATH_W) 'dw_globals.c'; else $(CYGPATH_W) '$(srcdir)/dw_globals.c'; fi`
+
 dwsolver-dw_main.o: dw_main.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -MT dwsolver-dw_main.o -MD -MP -MF $(DEPDIR)/dwsolver-dw_main.Tpo -c -o dwsolver-dw_main.o `test -f 'dw_main.c' || echo '$(srcdir)/'`dw_main.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dwsolver-dw_main.Tpo $(DEPDIR)/dwsolver-dw_main.Po
@@ -2577,6 +2594,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/dwsolver-amd_valid.Po
 	-rm -f ./$(DEPDIR)/dwsolver-colamd.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_blas.Po
+	-rm -f ./$(DEPDIR)/dwsolver-dw_globals.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_main.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_phases.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_rounding.Po
@@ -2737,6 +2755,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/dwsolver-amd_valid.Po
 	-rm -f ./$(DEPDIR)/dwsolver-colamd.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_blas.Po
+	-rm -f ./$(DEPDIR)/dwsolver-dw_globals.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_main.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_phases.Po
 	-rm -f ./$(DEPDIR)/dwsolver-dw_rounding.Po

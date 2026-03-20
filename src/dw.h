@@ -104,29 +104,29 @@ typedef struct {
 	double*** x;
 } faux_globals;
 
-/* Globally available variables.  Look into minimizing or eliminating them? */
+/* Globally available variables.  Defined in dw_globals.c; see KD-001. */
 
-pthread_attr_t   attr;
-pthread_mutex_t  master_lp_ready_mutex;
-pthread_cond_t   master_lp_ready_cv;
-pthread_mutex_t  service_queue_mutex;
-pthread_mutex_t  next_iteration_mutex;
-pthread_cond_t   next_iteration_cv;
-pthread_mutex_t  master_mutex;
-pthread_mutex_t  reduced_cost_mutex;
-pthread_mutex_t  glpk_mutex;
-pthread_mutex_t  fputs_mutex;
-pthread_mutex_t* sub_data_mutex;
+extern pthread_attr_t   attr;
+extern pthread_mutex_t  master_lp_ready_mutex;
+extern pthread_cond_t   master_lp_ready_cv;
+extern pthread_mutex_t  service_queue_mutex;
+extern pthread_mutex_t  next_iteration_mutex;
+extern pthread_cond_t   next_iteration_cv;
+extern pthread_mutex_t  master_mutex;
+extern pthread_mutex_t  reduced_cost_mutex;
+extern pthread_mutex_t  glpk_mutex;
+extern pthread_mutex_t  fputs_mutex;
+extern pthread_mutex_t* sub_data_mutex;
 #ifdef USE_NAMED_SEMAPHORES
-sem_t* customers;
+extern sem_t* customers;
 #define CUST_NAMED_SEMAPHORE "/tmp/dw_customers"
 #else
-sem_t customers;
+extern sem_t  customers;
 #endif
-glp_prob* original_master_lp;
-glp_prob* master_lp;
-glp_iocp* parm;
-glp_smcp* simplex_control_params;
+extern glp_prob* original_master_lp;
+extern glp_prob* master_lp;
+extern glp_iocp* parm;
+extern glp_smcp* simplex_control_params;
 
 typedef struct {
 	int cols;
@@ -144,7 +144,7 @@ typedef struct D_matrix {
 	int     cols;
 	int     rows_plus;
 } D_matrix;
-D_matrix* D;
+extern D_matrix* D;
 
 typedef struct hook_struct{
 	char* outfile_name;
@@ -164,7 +164,14 @@ typedef struct signal_data{
 	int next_iteration_ready;
 	int current_iteration;
 } signal_data;
-signal_data* signals;
+extern signal_data* signals;
 
+
+/* Out-of-memory guard.  Call immediately after every critical malloc/calloc.
+ * Terminates with a diagnostic message rather than silently dereferencing
+ * a NULL pointer, which would produce undefined behaviour (C99 §6.5.3.2 ¶4). */
+static inline void dw_oom_abort(void* ptr, const char* ctx) {
+    if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+}
 
 #endif /*DECOMPOSE_H_*/

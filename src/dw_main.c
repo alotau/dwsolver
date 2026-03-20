@@ -108,6 +108,7 @@ int main(int argc, char* argv[]) {
 	double  perturbation;
 
 	char* local_buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(local_buffer, "local_buffer");
 	char** phase1_vars;
 
 	void *status;
@@ -116,7 +117,9 @@ int main(int argc, char* argv[]) {
 	subprob_struct* sub_data;
 
 	master_data*  md      = malloc(sizeof(master_data));
+	dw_oom_abort(md, "md");
 	faux_globals* globals = malloc(sizeof(faux_globals));
+	dw_oom_abort(globals, "globals");
 
 	/* For clocking the program run time. */
 	time_t  t0 = time(NULL);
@@ -152,7 +155,9 @@ int main(int argc, char* argv[]) {
 	num_clients   = globals->num_clients; /* Doesn't change. Make local copy.*/
 	globals->x    = malloc(sizeof(double**)*num_clients);
 	threads       = malloc(sizeof(pthread_t)*num_clients);
+	dw_oom_abort(threads, "threads");
 	sub_data      = malloc(sizeof(subprob_struct)*num_clients);
+	dw_oom_abort(sub_data, "sub_data");
 
 	/* Initialize synchronization variables.  */
 	init_signals(globals);
@@ -272,7 +277,7 @@ int main(int argc, char* argv[]) {
 
 	/* Give each convexity row a name and and fix its bounds at 1.0. */
 	for( i = (D->rows + 1); i <= (D->rows + num_clients); i++ ) {
-		sprintf(local_buffer, "sub%d_convexity", i - D->rows);
+		snprintf(local_buffer, BUFF_SIZE, "sub%d_convexity", i - D->rows);
 		glp_set_row_name(master_lp, i, local_buffer);
 
 		// Fixing row bounds to zero as a first step toward handling bounding
@@ -493,7 +498,7 @@ int main(int argc, char* argv[]) {
 		*obj_count = 0;
 
 		if( globals->write_intermediate_opt_files ) {
-			sprintf(local_buffer, "phase1_step_0.cpxlp");
+			snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp");
 			lpx_write_cpxlp(master_lp, local_buffer);
 		}
 
@@ -509,7 +514,7 @@ int main(int argc, char* argv[]) {
 					obj_names, obj_coefs, obj_count, md);
 
 			if( globals->write_intermediate_opt_files ) {
-				sprintf(local_buffer, "phase1_step_%d.cpxlp", j+1);
+				snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", j+1);
 				lpx_write_cpxlp(master_lp, local_buffer);
 			}
 
@@ -608,7 +613,7 @@ int main(int argc, char* argv[]) {
 				glp_get_num_cols(master_lp));
 
 		if( globals->write_intermediate_opt_files ) {
-			sprintf(local_buffer, "master_step_%d.cpxlp", j);
+			snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", j);
 			lpx_write_cpxlp(master_lp, local_buffer);
 		}
 
