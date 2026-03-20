@@ -78,11 +78,10 @@ jobs:
       - name: Build
         run: ./configure && make
 
-      - name: Add dwsolver to PATH
-        run: echo "$(cygpath -u "$GITHUB_WORKSPACE")/src" >> $GITHUB_PATH
-
       - name: Test
-        run: cd tests && bash dw-tests.sh
+        run: |
+          export PATH="$PWD/src:$PATH"
+          cd tests && bash dw-tests.sh
 
   docker:
     runs-on: ubuntu-latest
