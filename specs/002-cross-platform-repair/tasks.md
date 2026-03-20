@@ -63,9 +63,9 @@
 - `four_sea`: final `#### Master objective value = 1.200000e+01`
 - `book_dantzig`: final `#### Master objective value = 6.357895e+01`
 
-- [ ] T007 [P] [US2] Add `four_sea` objective-value test to `tests/dw-tests.sh`: `pushd` to `../examples/four_sea`, run `dwsolver -g guidefile`, capture last occurrence of `Master objective value` from stdout, assert it equals `1.200000e+01`, report PASS/FAIL, `popd`
+- [ ] T007 [P] [US2] Add `four_sea` objective-value test to `tests/dw-tests.sh`: `pushd` to `../examples/four_sea`, run `dwsolver -g guidefile > out_obj.txt`, check exit code is 0 (non-zero → FAIL immediately), extract the last `#### Master objective value = ...` line from `out_obj.txt` via `grep`, string-match it against `1.200000e+01` exactly, report PASS/FAIL, `popd`
 
-- [ ] T008 [P] [US2] Add `book_dantzig` objective-value test to `tests/dw-tests.sh`: same pattern as T007, assert final `Master objective value` equals `6.357895e+01`
+- [ ] T008 [P] [US2] Add `book_dantzig` objective-value test to `tests/dw-tests.sh`: same pattern as T007 — run `dwsolver -g guidefile > out_obj.txt`, check exit code, grep last `Master objective value` line, string-match against `6.357895e+01` exactly, report PASS/FAIL
 
 - [ ] T009 [US2] Run full extended test suite: `bash tests/dw-tests.sh` — confirm all 6 tests (4 original + 2 new) report PASS
 

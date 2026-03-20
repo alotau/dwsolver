@@ -1,6 +1,6 @@
 # Feature Specification: Cross-Platform Build Repair & Safety Hardening
 
-**Feature Branch**: `fix/002-cross-platform-repair`
+**Feature Branch**: `002-cross-platform-repair`
 **Created**: 2026-03-19
 **Status**: Draft
 **Input**: Known Defects KD-001, KD-004, KD-005, KD-009 from `specs/001-as-built/spec.md`; Platform Status gap (Linux broken, Windows unknown)
@@ -44,7 +44,7 @@ Docker container / CI runner). Zero linker errors. Then run
 **Acceptance Scenarios**:
 
 1. **Given** a clean Linux build environment with GCC,
-   **When** `./configure --enable-named-semaphores && make` is run,
+   **When** `./configure && make` is run (no `--enable-named-semaphores` needed on Linux; that flag is macOS-only),
    **Then** the build completes with zero errors (warnings from GLPK vendor
    code are acceptable).
 
@@ -70,10 +70,12 @@ these two examples without requiring a specific variable-assignment match.
 **Why this priority**: Without this, a regression in either problem would go
 undetected by automated testing.
 
-**Independent Test**: Run `tests/dw-tests.sh` — the two new tests run, parse
-the objective value from output (or solution file), and assert the expected
-values: `four_sea` optimal = 12, `book_dantzig` optimal = known value from
-reference.
+**Independent Test**: Run `tests/dw-tests.sh` — the two new tests run, capture
+the final `#### Master objective value = ...` line from solver stdout (not from
+the solution file, which does not contain the objective), and assert the
+expected values: `four_sea` = `1.200000e+01`, `book_dantzig` = `6.357895e+01`.
+The test must also assert the solver exited with code 0 (non-zero exit must
+not be mistaken for a correct result).
 
 **Acceptance Scenarios**:
 
@@ -83,8 +85,8 @@ reference.
 
 2. **Given** a successfully built `dwsolver`,
    **When** `tests/dw-tests.sh` runs the `book_dantzig` example,
-   **Then** the test reports PASS if the objective value matches the reference
-   value, FAIL otherwise.
+   **Then** the test reports PASS if the objective value equals `6.357895e+01`
+   (confirmed by two independent reference runs), FAIL otherwise.
 
 ---
 
