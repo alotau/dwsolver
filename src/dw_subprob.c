@@ -379,7 +379,7 @@ int signal_availability(subprob_struct* my_data) {
 
 	/* Wait for signal here... */
 	pthread_mutex_lock(&next_iteration_mutex);
-	if (signals->current_iteration == my_data->local_iteration) {
+	while (signals->current_iteration == my_data->local_iteration) {
 		pthread_cond_wait(&next_iteration_cv, &next_iteration_mutex);
 	}
 	pthread_mutex_unlock(&next_iteration_mutex);
