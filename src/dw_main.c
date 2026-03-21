@@ -578,6 +578,50 @@ int main(int argc, char* argv[]) {
 		dw_printf(IMPORTANCE_DIAG, "THE SHIFT IS %3.2f\n", globals->shift);
 		glp_set_obj_coef(master_lp, 0, globals->shift);
 
+		/* Phase 1→Phase 2 transition sync.
+		 *
+		 * The last phase_1_iteration() call broadcasts a wake signal before
+		 * returning.  Both subproblem threads immediately run one more loop
+		 * iteration using Phase 1's zero objective and Phase 1 dual values.
+		 * If those results reach phase_2_iteration() unchanged, the r-obj
+		 * check uses the Phase 1 convexity-constraint dual (r_phase1), which
+		 * can be ≤ 0 at Phase 1 convergence.  That causes rc=0 on the very
+		 * first Phase 2 call, terminating the algorithm at a suboptimal point.
+		 *
+		 * Fix: drain all N in-flight transition results without using them,
+		 * then push fresh Phase 2 dual values from the just-solved master LP
+		 * and re-broadcast.  All subproblems are blocked in signal_availability
+		 * after the drain, so they will pick up the Phase 2 duals and
+		 * phase_one=0 before running their first real Phase 2 iteration.
+		 */
+		for( i = 0; i < num_clients; i++ ) {
+#ifdef USE_NAMED_SEMAPHORES
+			sem_wait(customers);
+#else
+			sem_wait(&customers);
+#endif
+			pthread_mutex_lock(&service_queue_mutex);
+			globals->head_service_queue =
+				(globals->head_service_queue + 1) % num_clients;
+			pthread_mutex_unlock(&service_queue_mutex);
+		}
+		/* Push Phase 2 row_duals and r values from the freshly-solved master. */
+		pthread_mutex_lock(&master_mutex);
+		for( i = 1; i <= D->rows; i++ )
+			md->row_duals[i] = glp_get_row_dual(master_lp, i);
+		pthread_mutex_unlock(&master_mutex);
+		for( i = 0; i < num_clients; i++ ) {
+			pthread_mutex_lock(&sub_data_mutex[i]);
+			sub_data[i].r = glp_get_row_dual(master_lp, D->rows + 1 + i);
+			pthread_mutex_unlock(&sub_data_mutex[i]);
+		}
+		/* Re-broadcast: subproblems wake and run their first true Phase 2
+		 * iteration with correct objective (phase_one=0) and Phase 2 duals. */
+		pthread_mutex_lock(&next_iteration_mutex);
+		signals->current_iteration++;
+		pthread_cond_broadcast(&next_iteration_cv);
+		pthread_mutex_unlock(&next_iteration_mutex);
+
 		/* Clean up. */
 		free(obj_count);
 		free(obj_coefs);
