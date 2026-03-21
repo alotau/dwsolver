@@ -104,11 +104,11 @@ If the initial LP is already feasible (no auxiliary variables), DWSOLVER skips P
 ## Output files
 
 | Output file | Produced | Contents |
-|-------------|----------|---------|
+|-------------|----------|----------|
 | `relaxed_solution` | Always | Continuous optimal variable values from the final master LP solve |
-| `zero_vars` | Always | Variables whose value is zero in the optimal basis |
-| `integer_solution` | Only if `--rounding_flag` passed | Integer-rounded solution produced by `dw_rounding` |
-| `phase1_step_N.cpxlp` | Only if Phase 1 runs, only if `--output-all` | Snapshot of the master LP in CPLEX LP format at each Phase 1 iteration |
-| Basis files | Only if `--output-all` | Per-iteration LP basis snapshots |
+| `zeros_rounded` | Only if `-r` / `--round` passed | Solution with selected zero-valued variables rounded according to the rounding heuristic |
+| `integerized_zeros` | Only if `-i` / `--integerize` passed | Integer-adjusted variant of `zeros_rounded`, enforcing integrality on chosen variables |
+| `basis_iteration_*` | Only if `--write-bases` passed | Per-iteration LP basis snapshots from the master solve |
+| `phase1_step_*.cpxlp`, `master_step_*.cpxlp` | Only if `--write-int-probs` passed | CPLEX LP snapshots of the master problem during Phase 1 (`phase1_step_*.cpxlp`) and Phase 2 (`master_step_*.cpxlp`) |
 
 All output files are written to the working directory.
