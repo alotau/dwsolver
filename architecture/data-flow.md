@@ -32,13 +32,13 @@ flowchart TD
 
     subgraph Final["Finalization"]
         FINAL["Final master LP solve\nGLPK simplex on fully-columned master LP"]
-        ROUND["Rounding — dw_rounding\n(only if --rounding_flag)"]
+        ROUND["Rounding — dw_rounding\n(only if --round / -r)"]
     end
 
     subgraph Outputs["Output Files"]
         OUT_RS["relaxed_solution\n(always)"]
         OUT_ZV["zero_vars\n(always)"]
-        OUT_INT["integer_solution\n(only if --rounding_flag)"]
+        OUT_INT["integer_solution\n(only if --round / -r)"]
     end
 
     GF --> PARSE
