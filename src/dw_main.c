@@ -615,6 +615,14 @@ int main(int argc, char* argv[]) {
 			sub_data[i].r = glp_get_row_dual(master_lp, D->rows + 1 + i);
 			pthread_mutex_unlock(&sub_data_mutex[i]);
 		}
+		/* Mark the transition slot NULL for every subproblem so that
+		 * free_sub_data() does not try to free an uninitialised pointer.
+		 * globals->x[i] is malloc'd (not calloc'd), so the slot that
+		 * corresponds to this extra current_iteration increment would
+		 * otherwise contain garbage. */
+		for( i = 0; i < num_clients; i++ )
+			globals->x[i][signals->current_iteration] = NULL;
+
 		/* Re-broadcast: subproblems wake and run their first true Phase 2
 		 * iteration with correct objective (phase_one=0) and Phase 2 duals. */
 		pthread_mutex_lock(&next_iteration_mutex);
