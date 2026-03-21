@@ -149,11 +149,12 @@ Process:
   9. Final master LP solve
 
 Outputs:
-  relaxed_solution    ← continuous optimal (always)
-  zero_vars           ← variables at zero in optimal basis (always)
-  integer_solution    ← rounded/MIP solution (only if --rounding_flag set)
-  basis files         ← per-iteration LP basis (only if --output-all set)
-  phase1_step_N.cpxlp ← Phase 1 intermediate LPs (only if Phase 1 runs)
+  relaxed_solution   ← continuous optimal (always)
+  zero_vars          ← variables at zero in optimal basis (always)
+  zeros_rounded      ← rounded solution from zeros (only if -r/--round set)
+  integerized_zeros  ← integerized solution from zeros (only if -i/--integerize set)
+  basis snapshots    ← per-iteration LP bases (only if --write-bases set)
+  int LP dumps       ← intermediate integer LPs (only if --write-int-probs set)
 ```
 
 ---
