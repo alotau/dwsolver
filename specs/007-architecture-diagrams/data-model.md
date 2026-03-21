@@ -103,10 +103,10 @@ A file produced at completion. Terminates the data-flow diagram.
 | File | Condition | Content |
 |------|-----------|---------|
 | `relaxed_solution` | Always | Continuous optimal variable values |
-| `zero_vars` | Always | Variables at zero in the optimal basis |
-| `integer_solution` | Only if `--rounding_flag` set | Rounded/MIP solution |
-| `phase1_step_N.cpxlp` | Only if Phase 1 runs | Intermediate LP snapshots |
-| Basis files | Only if `--output-all` set | Per-iteration LP basis |
+| `zeros_rounded` | Only if `-r`/`--round` is set | Variable values after rounding heuristic applied to the relaxed solution |
+| `integerized_zeros` | Only if `-i`/`--integerize` is set | Variables fixed to zero after integerization |
+| `intprob_iter_*.cpxlp` | Only if `--write-int-probs` is set | Intermediate LP snapshots for integer subproblems |
+| `basis_iteration_*` | Only if `--write-bases` is set | Per-iteration LP basis snapshots |
 
 ---
 
