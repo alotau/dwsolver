@@ -95,9 +95,9 @@ All filenames are resolved relative to the working directory at the time `dwsolv
 
 ## Phase 1: when does it run?
 
-Phase 1 runs only when the initial master LP is infeasible with the starting basis — which occurs when the LP requires auxiliary (artificial) variables to reach a feasible point. DWSOLVER detects this by checking the master LP column structure after construction: if any auxiliary variables (`y_i`) have been introduced to handle constraints that cannot be satisfied by the initial subproblem extreme points alone, `need_phase_one` is set and the Phase 1 loop runs.
+Phase 1 runs only when auxiliary (artificial) master variables are actually introduced while building the master LP. Concretely, during master construction if any auxiliary columns named `y_*` are added to handle constraints that cannot be satisfied by the initial subproblem extreme points alone, `need_phase_one` is set and the Phase 1 loop runs.
 
-If the initial LP is already feasible (no auxiliary variables), DWSOLVER skips Phase 1 entirely and proceeds directly to Phase 2. The bypass dashed arrow in the diagram above shows this path.
+If no auxiliary `y_*` columns are added while constructing the master LP, `need_phase_one` remains unset, DWSOLVER skips Phase 1 entirely, and execution proceeds directly to Phase 2. The bypass dashed arrow in the diagram above shows this path.
 
 ---
 
