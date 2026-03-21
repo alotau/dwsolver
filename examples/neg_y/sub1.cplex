@@ -1,0 +1,7 @@
+Minimize
+ obj: - x1
+
+Subject To
+ c1: x1 <= 5
+
+end

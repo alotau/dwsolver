@@ -1,0 +1,10 @@
+Minimize
+ obj: - x1 - y1
+
+Subject To
+ Con1: x1 + y1 >= 3
+
+Bounds
+ 0 <= DUMMY <= 1
+
+end

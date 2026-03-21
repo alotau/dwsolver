@@ -16,7 +16,7 @@
 **Purpose**: Fix the known pre-existing UB that would make the UBSan CI job fail immediately.
 This must land before the sanitizer jobs are added (US2).
 
-- [ ] T001 Fix `printf` format-string UB in `src/dw_support.c`: change `%d` to `%g` (or `%f`) for `DEFAULT_MIP_GAP` in the help/usage output (~line 427); verify with `grep DEFAULT_MIP_GAP src/dw_support.c`
+- [X] T001 Fix `printf` format-string UB in `src/dw_support.c`: change `%d` to `%g` (or `%f`) for `DEFAULT_MIP_GAP` in the help/usage output (~line 427); verify with `grep DEFAULT_MIP_GAP src/dw_support.c`
 
 ---
 
@@ -27,10 +27,10 @@ This phase blocks US1; US2, US3, and US4 can start before it is complete.
 
 **⚠️ Complete T002–T005 before starting Phase 3 (US1)**
 
-- [ ] T002 Add `AC_CONFIG_FILES([tests/Makefile])` to `configure.ac` (after the existing `AC_CONFIG_FILES` line for `src/Makefile`)
-- [ ] T003 [P] Add `tests` to `SUBDIRS` in top-level `Makefile.am` (alongside `src`)
-- [ ] T004 [P] Create `tests/Makefile.am` with `check_PROGRAMS = test_blas`, `TESTS = test_blas`, `test_blas_SOURCES = test_blas.c`, `test_blas_CFLAGS = -I$(top_srcdir)/src`, `test_blas_LDADD = $(top_builddir)/src/dw_blas.o`
-- [ ] T005 Run `autoreconf -fi` from repo root; then `./configure && make` and confirm the build still succeeds with all existing tests passing
+- [X] T002 Add `AC_CONFIG_FILES([tests/Makefile])` to `configure.ac` (after the existing `AC_CONFIG_FILES` line for `src/Makefile`)
+- [X] T003 [P] Add `tests` to `SUBDIRS` in top-level `Makefile.am` (alongside `src`)
+- [X] T004 [P] Create `tests/Makefile.am` with `check_PROGRAMS = test_blas`, `TESTS = test_blas`, `test_blas_SOURCES = test_blas.c`, `test_blas_CFLAGS = -I$(top_srcdir)/src`, `test_blas_LDADD = $(top_builddir)/src/dw_blas.o`
+- [X] T005 Run `autoreconf -fi` from repo root; then `./configure && make` and confirm the build still succeeds with all existing tests passing
 
 **Checkpoint**: `make check` target now exists; `tests/test_blas` will be compiled when `test_blas.c` is created in Phase 3.
 
@@ -44,13 +44,13 @@ This phase blocks US1; US2, US3, and US4 can start before it is complete.
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] Create `tests/test_blas.c`: add `#include` block (`stdio.h`, `stdlib.h`, `math.h`, `src/dw_blas.h`), define `EXPECT_APPROX` and `EXPECT_INT` macros exactly as specified in `data-model.md`, and add empty `main()` that prints `ALL TESTS PASSED` and returns 0
-- [ ] T007 [US1] Add `dw_daxpy` test cases in `tests/test_blas.c`: normal (len=3, alpha=2.0, verify each element), len=0 (no-op), alpha=0.0 (y unchanged), negative alpha (alpha=-1.0)
-- [ ] T008 [US1] Add `dw_ddot` test cases in `tests/test_blas.c`: normal (len=3, known dot product), len=0 (returns 0.0), orthogonal vectors (returns 0.0)
-- [ ] T009 [US1] Add `dw_dcopy` test cases in `tests/test_blas.c`: normal (len=3, verify destination matches source), len=0 (no-op, no memory read)
-- [ ] T010 [US1] Add `dw_ddoti` test cases in `tests/test_blas.c`: normal (nz=2, known sparse dot product), nz=0 (returns 0.0), single element (nz=1)
-- [ ] T011 [US1] Add `dw_dcoogemv` test cases in `tests/test_blas.c`: single non-zero entry (2×2 matrix, verify one output is non-zero and one is zero), full 2×2 dense matrix stored in COO format (verify both output elements)
-- [ ] T012 [US1] Run `make check` and confirm exit code 0, `PASS: test_blas` printed, and all assertions pass; introduce a deliberate off-by-one in `dw_daxpy` temporarily to verify the harness catches it and prints the function name and values before reverting
+- [X] T006 [US1] Create `tests/test_blas.c`: add `#include` block (`stdio.h`, `stdlib.h`, `math.h`, `src/dw_blas.h`), define `EXPECT_APPROX` and `EXPECT_INT` macros exactly as specified in `data-model.md`, and add empty `main()` that prints `ALL TESTS PASSED` and returns 0
+- [X] T007 [US1] Add `dw_daxpy` test cases in `tests/test_blas.c`: normal (len=3, alpha=2.0, verify each element), len=0 (no-op), alpha=0.0 (y unchanged), negative alpha (alpha=-1.0)
+- [X] T008 [US1] Add `dw_ddot` test cases in `tests/test_blas.c`: normal (len=3, known dot product), len=0 (returns 0.0), orthogonal vectors (returns 0.0)
+- [X] T009 [US1] Add `dw_dcopy` test cases in `tests/test_blas.c`: normal (len=3, verify destination matches source), len=0 (no-op, no memory read)
+- [X] T010 [US1] Add `dw_ddoti` test cases in `tests/test_blas.c`: normal (nz=2, known sparse dot product), nz=0 (returns 0.0), single element (nz=1)
+- [X] T011 [US1] Add `dw_dcoogemv` test cases in `tests/test_blas.c`: single non-zero entry (2×2 matrix, verify one output is non-zero and one is zero), full 2×2 dense matrix stored in COO format (verify both output elements)
+- [X] T012 [US1] Run `make check` and confirm exit code 0, `PASS: test_blas` printed, and all assertions pass; introduce a deliberate off-by-one in `dw_daxpy` temporarily to verify the harness catches it and prints the function name and values before reverting
 
 **Checkpoint**: US1 complete — `make check` is a working regression gate for `dw_blas.c`.
 
@@ -66,9 +66,9 @@ This phase blocks US1; US2, US3, and US4 can start before it is complete.
 
 ### Implementation for User Story 2
 
-- [ ] T013 [P] [US2] Add `Linux (ASan+UBSan)` job to `.github/workflows/ci-linux.yml`: copy the structure of the existing Linux job (autotools touch steps, `./configure CFLAGS="-fsanitize=address,undefined -g -O1"`, `make`, `export PATH="$PWD/src:$PATH"`, `cd tests && bash dw-tests.sh`); set `continue-on-error: false`
-- [ ] T014 [P] [US2] Add `Linux (TSan)` job to `.github/workflows/ci-linux.yml`: same structure as T013 but `CFLAGS="-fsanitize=thread -g -O1"`; TSan and ASan+UBSan must be separate jobs and MUST NOT share a binary
-- [ ] T015 [US2] Push branch and verify both sanitizer jobs appear and pass in GitHub Actions; confirm TSan job does not also set ASan flags
+- [X] T013 [P] [US2] Add `Linux (ASan+UBSan)` job to `.github/workflows/ci-linux.yml`: copy the structure of the existing Linux job (autotools touch steps, `./configure CFLAGS="-fsanitize=address,undefined -g -O1"`, `make`, `export PATH="$PWD/src:$PATH"`, `cd tests && bash dw-tests.sh`); set `continue-on-error: false`
+- [X] T014 [P] [US2] Add `Linux (TSan)` job to `.github/workflows/ci-linux.yml`: same structure as T013 but `CFLAGS="-fsanitize=thread -g -O1"`; TSan and ASan+UBSan must be separate jobs and MUST NOT share a binary
+- [X] T015 [US2] Push branch and verify both sanitizer jobs appear and pass in GitHub Actions; confirm TSan job does not also set ASan flags
 
 **Checkpoint**: US2 complete — any future memory error, UB, or data race in the codebase will block CI.
 
@@ -84,22 +84,22 @@ This phase blocks US1; US2, US3, and US4 can start before it is complete.
 
 ### Implementation for User Story 3 — `examples/single_sub/` (num_clients=1 path)
 
-- [ ] T016 [P] [US3] Design and create `examples/single_sub/sub1.cplex` (single-variable LP: `minimize x; x >= 1`), `examples/single_sub/master.cplex` (coupling bound `x <= 10`), and `examples/single_sub/dw_monolithic.cplex` (union of both); choose variable name consistent across all three files
-- [ ] T017 [P] [US3] Create `examples/single_sub/guidefile`: line 1 = `1`, line 2 = `sub1.cplex`, line 3 = `master.cplex`, line 4 = `dw_monolithic.cplex`; run `dwsolver -c examples/single_sub/guidefile | sort > examples/single_sub/ex_relaxed_solution` to capture expected output
-- [ ] T018 [US3] Add `single_sub` test block to `tests/dw-tests.sh`: `pushd ../examples/single_sub; dwsolver -c guidefile | sort > /tmp/rs_sorted; diff ex_relaxed_solution /tmp/rs_sorted || exit 1; popd` following the same pattern as existing tests
+- [X] T016 [P] [US3] Design and create `examples/single_sub/sub1.cplex` (single-variable LP: `minimize x; x >= 1`), `examples/single_sub/master.cplex` (coupling bound `x <= 10`), and `examples/single_sub/dw_monolithic.cplex` (union of both); choose variable name consistent across all three files
+- [X] T017 [P] [US3] Create `examples/single_sub/guidefile`: line 1 = `1`, line 2 = `sub1.cplex`, line 3 = `master.cplex`, line 4 = `dw_monolithic.cplex`; run `dwsolver -c examples/single_sub/guidefile | sort > examples/single_sub/ex_relaxed_solution` to capture expected output
+- [X] T018 [US3] Add `single_sub` test block to `tests/dw-tests.sh`: `pushd ../examples/single_sub; dwsolver -c guidefile | sort > /tmp/rs_sorted; diff ex_relaxed_solution /tmp/rs_sorted || exit 1; popd` following the same pattern as existing tests
 
 ### Implementation for User Story 3 — `examples/one_iter/` (iteration_count==1 bail path)
 
-- [ ] T019 [P] [US3] Design and create `examples/one_iter/sub1.cplex`, `sub2.cplex`, `master.cplex`, `dw_monolithic.cplex`: craft a 2-subproblem LP whose DW relaxation is already optimal at the initial restricted master (so Phase II terminates on `iteration_count==1`); verify by running `dwsolver -v examples/one_iter/guidefile` and inspecting iteration log
-- [ ] T020 [P] [US3] Create `examples/one_iter/guidefile`: line 1 = `2`, lines 2–3 = subproblem filenames, line 4 = master, line 5 = monolithic; note expected obj value from solver output
-- [ ] T021 [US3] Add `one_iter` test block to `tests/dw-tests.sh`: run solver and use `grep` to match the known objective value from solver output, following the same grep-based pattern used in existing tests
+- [X] T019 [P] [US3] Design and create `examples/one_iter/sub1.cplex`, `sub2.cplex`, `master.cplex`, `dw_monolithic.cplex`: craft a 2-subproblem LP whose DW relaxation is already optimal at the initial restricted master (so Phase II terminates on `iteration_count==1`); verify by running `dwsolver -v examples/one_iter/guidefile` and inspecting iteration log
+- [X] T020 [P] [US3] Create `examples/one_iter/guidefile`: line 1 = `2`, lines 2–3 = subproblem filenames, line 4 = master, line 5 = monolithic; note expected obj value from solver output
+- [X] T021 [US3] Add `one_iter` test block to `tests/dw-tests.sh`: run solver and use `grep` to match the known objective value from solver output, following the same grep-based pattern used in existing tests
 
 ### Implementation for User Story 3 — `examples/neg_y/` (y-accumulator sign correction path)
 
-- [ ] T022 [P] [US3] Design and create `examples/neg_y/sub1.cplex`, `sub2.cplex`, `master.cplex`, `dw_monolithic.cplex`: craft a 2-subproblem LP with at least one `GLP_LO` (≥) coupling constraint where the y-accumulator sum exceeds the row lower bound during Phase I (triggering `val_local[1] = -1.0`); verify by running solver with debug/verbose output
-- [ ] T023 [P] [US3] Create `examples/neg_y/guidefile` and capture `ex_relaxed_solution`: run `dwsolver -c examples/neg_y/guidefile | sort > examples/neg_y/ex_relaxed_solution`
-- [ ] T024 [US3] Add `neg_y` test block to `tests/dw-tests.sh` with diff-based check against `ex_relaxed_solution`
-- [ ] T025 [US3] Run `bash tests/dw-tests.sh` (with `src/` on PATH) and confirm all 9 tests pass (6 existing + 3 new); fix any example LP that fails to reproduce the correct objective
+- [X] T022 [P] [US3] Design and create `examples/neg_y/sub1.cplex`, `sub2.cplex`, `master.cplex`, `dw_monolithic.cplex`: craft a 2-subproblem LP with at least one `GLP_LO` (≥) coupling constraint where the y-accumulator sum exceeds the row lower bound during Phase I (triggering `val_local[1] = -1.0`); verify by running solver with debug/verbose output
+- [X] T023 [P] [US3] Create `examples/neg_y/guidefile` and capture `ex_relaxed_solution`: run `dwsolver -c examples/neg_y/guidefile | sort > examples/neg_y/ex_relaxed_solution`
+- [X] T024 [US3] Add `neg_y` test block to `tests/dw-tests.sh` with diff-based check against `ex_relaxed_solution`
+- [X] T025 [US3] Run `bash tests/dw-tests.sh` (with `src/` on PATH) and confirm all 9 tests pass (6 existing + 3 new); fix any example LP that fails to reproduce the correct objective
 
 **Checkpoint**: US3 complete — 3 previously untested code paths each have a named, runnable regression test.
 
@@ -115,12 +115,12 @@ This phase blocks US1; US2, US3, and US4 can start before it is complete.
 
 ### Implementation for User Story 4
 
-- [ ] T026 [US4] Create `tests/test_guidefile.sh`: add shebang, `set -e` guard disabled (must handle failures), helper `assert_exit` function that checks exit code and prints PASS/FAIL with test name, and `PASS_COUNT`/`FAIL_COUNT` counters; binary assumed to be on PATH
-- [ ] T027 [US4] Add "valid 1-subproblem" test case in `tests/test_guidefile.sh`: run `dwsolver examples/single_sub/guidefile`; assert exit code is 0 or 1 (not ≥ 128, which would indicate a crash); assert no `USAGE:` text appears in stderr
-- [ ] T028 [US4] Add "valid 4-subproblem" test case in `tests/test_guidefile.sh`: run an existing 4-subproblem example (e.g. the fourth existing example from `dw-tests.sh`); assert exit code ≠ 128+ and no parse-error text
-- [ ] T029 [US4] Create `tests/fixtures/bad_count.guidefile` (n=3 declared, only 2 filenames listed) and add test case in `tests/test_guidefile.sh` that runs `dwsolver tests/fixtures/bad_count.guidefile`; assert non-zero exit and that an error message (not silence) appears on stderr
-- [ ] T030 [US4] Create `tests/fixtures/missing_file.guidefile` (valid format but references `nonexistent_abc123.cplex`) and add test case in `tests/test_guidefile.sh`; assert non-zero exit and no SIGSEGV (`$?` must not be ≥ 128)
-- [ ] T031 [US4] Print test summary at end of `tests/test_guidefile.sh` (`N passed, M failed`); exit 1 if any failures; run `bash tests/test_guidefile.sh` locally and confirm all cases produce expected results
+- [X] T026 [US4] Create `tests/test_guidefile.sh`: add shebang, `set -e` guard disabled (must handle failures), helper `assert_exit` function that checks exit code and prints PASS/FAIL with test name, and `PASS_COUNT`/`FAIL_COUNT` counters; binary assumed to be on PATH
+- [X] T027 [US4] Add "valid 1-subproblem" test case in `tests/test_guidefile.sh`: run `dwsolver examples/single_sub/guidefile`; assert exit code is 0 or 1 (not ≥ 128, which would indicate a crash); assert no `USAGE:` text appears in stderr
+- [X] T028 [US4] Add "valid 4-subproblem" test case in `tests/test_guidefile.sh`: run an existing 4-subproblem example (e.g. the fourth existing example from `dw-tests.sh`); assert exit code ≠ 128+ and no parse-error text
+- [X] T029 [US4] Create `tests/fixtures/bad_count.guidefile` (n=3 declared, only 2 filenames listed) and add test case in `tests/test_guidefile.sh` that runs `dwsolver tests/fixtures/bad_count.guidefile`; assert non-zero exit and that an error message (not silence) appears on stderr
+- [X] T030 [US4] Create `tests/fixtures/missing_file.guidefile` (valid format but references `nonexistent_abc123.cplex`) and add test case in `tests/test_guidefile.sh`; assert non-zero exit and no SIGSEGV (`$?` must not be ≥ 128)
+- [X] T031 [US4] Print test summary at end of `tests/test_guidefile.sh` (`N passed, M failed`); exit 1 if any failures; run `bash tests/test_guidefile.sh` locally and confirm all cases produce expected results
 
 **Checkpoint**: US4 complete — guidefile parse errors and edge-case counts each have a named, runnable check.
 
@@ -128,10 +128,10 @@ This phase blocks US1; US2, US3, and US4 can start before it is complete.
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T032 [P] Add `README` to `examples/single_sub/`: describe the problem, known optimal, and which code path it exercises (`num_clients=1` semaphore loop)
-- [ ] T033 [P] Add `README` to `examples/one_iter/`: describe the problem, known optimal, and which code path it exercises (`iteration_count==1` bail in `phase_2_iteration`)
-- [ ] T034 [P] Add `README` to `examples/neg_y/`: describe the problem, known optimal, and which code path it exercises (y-accumulator sign correction in `phase_1_iteration`)
-- [ ] T035 Run the full validation: `make check`, `bash tests/dw-tests.sh`, `bash tests/test_guidefile.sh`; confirm combined run completes in under 2 minutes (SC-006); commit all remaining files
+- [X] T032 [P] Add `README` to `examples/single_sub/`: describe the problem, known optimal, and which code path it exercises (`num_clients=1` semaphore loop)
+- [X] T033 [P] Add `README` to `examples/one_iter/`: describe the problem, known optimal, and which code path it exercises (`iteration_count==1` bail in `phase_2_iteration`)
+- [X] T034 [P] Add `README` to `examples/neg_y/`: describe the problem, known optimal, and which code path it exercises (y-accumulator sign correction in `phase_1_iteration`)
+- [X] T035 Run the full validation: `make check`, `bash tests/dw-tests.sh`, `bash tests/test_guidefile.sh`; confirm combined run completes in under 2 minutes (SC-006); commit all remaining files
 
 ---
 

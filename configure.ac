@@ -192,7 +192,7 @@ fi
 
 AC_CONFIG_FILES(
 dnl   [include/Makefile src/Makefile Makefile])
-	[src/Makefile Makefile])
+	[src/Makefile Makefile tests/Makefile])
 AC_OUTPUT
 
 dnl eof

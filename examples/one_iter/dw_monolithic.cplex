@@ -1,0 +1,9 @@
+Minimize
+ obj: - x1 - y1
+
+Subject To
+ Con1: x1 + y1 = 6
+ c1: x1 <= 5
+ c2: y1 <= 3
+
+end

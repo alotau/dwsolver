@@ -27,3 +27,41 @@ jobs:
 
       - name: Test
         run: cd tests && bash dw-tests.sh
+
+  linux-asan-ubsan:
+    name: Linux (ASan+UBSan)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Suppress automake regeneration
+        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
+
+      - name: Build
+        run: ./configure CFLAGS="-fsanitize=address,undefined -g -O1" && make
+
+      - name: Add dwsolver to PATH
+        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+
+      - name: Test
+        run: cd tests && bash dw-tests.sh
+
+  linux-tsan:
+    name: Linux (TSan)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Suppress automake regeneration
+        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
+
+      - name: Build
+        run: ./configure CFLAGS="-fsanitize=thread -g -O1" && make
+
+      - name: Add dwsolver to PATH
+        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+
+      - name: Test
+        run: cd tests && bash dw-tests.sh

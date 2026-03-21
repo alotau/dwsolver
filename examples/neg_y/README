@@ -1,0 +1,35 @@
+GLP_LO coupling / y-accumulator sign correction example
+=========================================================
+
+Problem
+-------
+Minimize  -x1 - y1
+Subject to
+  x1 <= 5         (sub1 constraint)
+  y1 <= 5         (sub2 constraint)
+  x1 + y1 >= 3    (coupling constraint, GLP_LO)
+  x1, y1 >= 0
+
+Known optimal
+-------------
+x1 = 5, y1 = 5
+Objective = -(5 + 5) = -10
+
+Code path exercised
+-------------------
+The ">=" (GLP_LO) coupling constraint exercises two previously untested
+code paths:
+
+1. dw_main.c GLP_LO branch: converts the row to GLP_FX by adding a slack
+   variable (sl_i) and an artificial variable (y_i) for Phase I.
+
+2. phase_1_iteration() first-run sign correction: when the y-accumulator
+   contributions from the initial lambda columns already exceed the lower
+   bound of the coupling row (i.e. x1+y1 > 3 from the initial sub-optimal
+   extreme points), the condition
+
+       glp_get_row_lb(master_lp, i) - y_accumulators[i] < 0.0
+
+   triggers, and the y_i artificial variable's coefficient is flipped to
+   -1.0 so that Phase I drives y_i to zero from the correct direction.
+   This is the "neg_y" path named in the code comment.

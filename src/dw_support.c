@@ -323,7 +323,7 @@ void print_usage(int argc, char* argv[]) {
 	printf(" -e, --sub-int-enforce   Enforce integer solutions in the subproblems at\n");
 	printf("                         each iteration. If using -i you may want/need this\n");
 	printf("                         flag as well.\n");
-	printf(" --mip-gap <f>           Set the mip gap to f. Only used if -i used as well.\n", DEFAULT_MIP_GAP);
+	printf(" --mip-gap <f>           Set the mip gap to f. Only used if -i used as well.\n");
 	printf("                         Default %f.\n", DEFAULT_MIP_GAP);
 	printf(" -r, --round             After solving the LP with Dantzig-Wofle, round\n");
 	printf("                         all convexity variables to nearest int. This will\n");
