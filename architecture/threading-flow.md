@@ -100,7 +100,7 @@ stateDiagram-v2
         }
 
         Phase2 --> FinalSolve
-        FinalSolve --> OptRounding       : rounding_flag set (--rounding_flag)
+        FinalSolve --> OptRounding       : rounding_flag set (-r/--round)
         FinalSolve --> WriteOutputs
         OptRounding --> WriteOutputs
         WriteOutputs --> [*]
