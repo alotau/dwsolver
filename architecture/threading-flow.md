@@ -133,7 +133,7 @@ stateDiagram-v2
 
         note right of WaitNextIter
             Lock next_iteration_mutex
-            While current_iteration unchanged:
+            If current_iteration == local_iteration:
               pthread_cond_wait(next_iteration_cv, next_iteration_mutex)
             Unlock next_iteration_mutex
         end note
