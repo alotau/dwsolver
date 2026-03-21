@@ -34,7 +34,7 @@ The GLPK node MUST be placed inside a `subgraph External` block to visually dist
 | `dw_main` | `dw_support` | `init / CLI / output` |
 | `dw_main` | `dw_subprob` | `pthread_create` |
 | `dw_main` | `dw_phases` | `phase_1_iteration\nphase_2_iteration` |
-| `dw_main` | `dw_rounding` | `check_col_integrality\n[if rounding_flag]` |
+| `dw_main` | `dw_rounding` | `process_solution(...)\n[if rounding_flag]` |
 | `dw_main` | `GLPK` | `master LP ops` |
 | `dw_phases` | `dw_subprob` | `reads results` |
 | `dw_phases` | `dw_support` | `dw_printf` |
