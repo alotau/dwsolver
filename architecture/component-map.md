@@ -24,7 +24,7 @@ graph LR
     dw_main -->|"init / CLI / output"| dw_support
     dw_main -->|"pthread_create"| dw_subprob
     dw_main -->|"phase_1_iteration\nphase_2_iteration"| dw_phases
-    dw_main -.->|"check_col_integrality\nif rounding_flag"| dw_rounding
+    dw_main -.->|"process_solution\nif rounding_flag"| dw_rounding
     dw_main -->|"master LP ops"| GLPK
 
     dw_phases -->|"reads sub results"| dw_subprob
