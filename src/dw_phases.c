@@ -385,27 +385,28 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 			if( glp_get_col_prim(master_lp, col) < (1.0-TOLERANCE) && glp_get_col_prim(master_lp, col) > TOLERANCE) {
 				printf("!!!!!  %s was just added and its value is %3.5f\n", buffer, glp_get_col_prim(master_lp, col) );
 				//Get column.  Step through the indices and check aux var value associated with row.
-				int* ind = malloc(sizeof(int)*glp_get_num_rows(master_lp));
-
-				double* val = NULL;
-				int len = glp_get_mat_col(master_lp, col, ind, val);
+				int nrows = glp_get_num_rows(master_lp);
+				int* ind2 = malloc(sizeof(int)    * (nrows + 1));
+				double* val2 = malloc(sizeof(double) * (nrows + 1));
+				int len = glp_get_mat_col(master_lp, col, ind2, val2);
 				for( j = 1; j <= len; j++) {
-					if( glp_get_row_prim(master_lp, ind[j]) <= TOLERANCE )  {
-						int* ind2 = malloc(sizeof(int)*glp_get_num_cols(master_lp));
-						double* val2 = malloc(sizeof(double)*glp_get_num_cols(master_lp));
-						printf("      %s is at its bound (%2.1f).\n", glp_get_row_name(master_lp, ind[j]), glp_get_row_ub(master_lp, ind[j]));
-						int len2 = glp_get_mat_row(master_lp, ind[j], ind2, val2);
+					if( glp_get_row_prim(master_lp, ind2[j]) <= TOLERANCE )  {
+						int ncols = glp_get_num_cols(master_lp);
+						int* ind3 = malloc(sizeof(int)    * (ncols + 1));
+						double* val3 = malloc(sizeof(double) * (ncols + 1));
+						printf("      %s is at its bound (%2.1f).\n", glp_get_row_name(master_lp, ind2[j]), glp_get_row_ub(master_lp, ind2[j]));
+						int len2 = glp_get_mat_row(master_lp, ind2[j], ind3, val3);
 
 						int k;
 						for( k = 1; k <= len2; k++ ) {
-							if( glp_get_col_prim(master_lp, ind2[k]) > TOLERANCE ) {
-								printf("          %s = (%2.1f)*%f\n", glp_get_col_name(master_lp, ind2[k]), val2[k], glp_get_col_prim(master_lp, ind2[k]));
+							if( glp_get_col_prim(master_lp, ind3[k]) > TOLERANCE ) {
+								printf("          %s = (%2.1f)*%f\n", glp_get_col_name(master_lp, ind3[k]), val3[k], glp_get_col_prim(master_lp, ind3[k]));
 							}
 						}
-						free(ind2); free(val2);
+						free(ind3); free(val3);
 					}
 				}
-				free(ind);
+				free(ind2); free(val2);
 			}
 			rc++;
 
