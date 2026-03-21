@@ -534,7 +534,6 @@ void* rounding_thread(void* arg) {
 	int subprob;
 
 	double val;
-	const char* local_col_name = malloc(sizeof(char)*BUFF_SIZE);
 	char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
 	char* prev_flight = malloc(sizeof(char)*BUFF_SIZE);
 	char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
@@ -586,8 +585,8 @@ void* rounding_thread(void* arg) {
 				my_data->sub_data.globals->x[subprob][curr_iter][j] < (1.0-TOLERANCE) ) {
 			/* This var isn't one or zero and, thus, needs integerization. */
 
-			local_col_name = glp_get_col_name(my_data->sub_data.lp, j);
-			i = glp_find_col(original_master_lp, local_col_name );
+			const char *col_name = glp_get_col_name(my_data->sub_data.lp, j);
+			i = glp_find_col(original_master_lp, col_name);
 
 			pthread_mutex_lock(&glpk_mutex);
 			if( /*x[subprob][curr_iter][j] == 0.0*/ 0 ) pre_round_zeros++;
@@ -613,7 +612,7 @@ void* rounding_thread(void* arg) {
 
 
 
-			//printf("%s: col %d in sub is %d in master.\n", local_col_name, j, i);
+			//printf("%s: col %d in sub is %d in master.\n", col_name, j, i);
 			my_data->sub_data.globals->final_x[i] = my_data->sub_data.globals->x[subprob][curr_iter][j];
 			/* Signal all subproblems that master is set up and ready. */
 			pthread_mutex_lock(&master_lp_ready_mutex);
@@ -635,8 +634,8 @@ void* rounding_thread(void* arg) {
 		else if( my_data->sub_data.globals->x[subprob][curr_iter][j] >=
 				(1.0-TOLERANCE) ) {
 			//	printf("Var x[%d][%d][%d] = %e \n ", subprob, curr_iter, j, x[subprob][curr_iter][j]);
-			local_col_name = glp_get_col_name(my_data->sub_data.lp, j);
-			i = glp_find_col(original_master_lp, local_col_name );
+			const char *col_name = glp_get_col_name(my_data->sub_data.lp, j);
+			i = glp_find_col(original_master_lp, col_name);
 			my_data->sub_data.globals->final_x[i] =
 				/*x[subprob][curr_iter][j]*/ 1.0;
 			my_data->sub_data.globals->relaxed_x[i] =
