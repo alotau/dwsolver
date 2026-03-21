@@ -21,8 +21,8 @@ Every state in this list MUST appear in the diagram. Label text may be condensed
 - `Phase2_WaitResults` — `sem_wait(&customers)` × N per Phase 2 iteration *(inside Phase 2 region)*
 - `Phase2_SolveMaster` — GLPK simplex on master LP *(inside Phase 2 region)*
 - `FinalSolve` — last master LP solve
-- `WriteOutputs` — writing `relaxed_solution`, `zero_vars`
-- `OptionalRounding` — `dw_rounding` (shown with `[if rounding_flag]` guard)
+- `WriteOutputs` — writing `relaxed_solution`, `zeros_rounded`, `integerized_zeros` *(basis/intermediate LPs only when `--write-bases` / `--write-int-probs` are set)*
+- `OptionalRounding` — `dw_rounding` (shown with `[if -r/--round]` guard)
 
 ### Subproblem thread states (applies to all N workers)
 - `InitialSolve` — GLPK simplex on subproblem LP (initial)
