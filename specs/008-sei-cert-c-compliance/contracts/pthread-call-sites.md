@@ -8,7 +8,11 @@
 
 ## Rule Summary
 
-POS54-C requires that every call to a POSIX library function that can fail must have its return value checked. For `pthread_*` and `sem_*` functions: returning 0 means success; returning non-zero is the error code (same as `errno` for equivalent calls). Failures at mutex lock, thread creation, or semaphore initialization should be treated as fatal in dwsolver — silent non-zero returns corrupt serialization invariants.
+POS54-C requires that every call to a POSIX library function that can fail must have its return value checked. Failures at mutex lock, thread creation, or semaphore operations should be treated as fatal in dwsolver — silent failures corrupt serialization invariants.
+
+**Important — two distinct error conventions**:
+- `pthread_*` functions return **0 on success, the error code directly on failure** (`strerror(rc)` gives the message). Use `DW_PTHREAD_CHECK(rc, name)`.
+- `sem_*` functions return **0 on success, -1 on failure** with the error code in `errno` (`strerror(errno)` gives the message). Use `DW_SEM_CHECK(ret, name)` — do NOT use `DW_PTHREAD_CHECK` for `sem_*` calls, as `strerror(-1)` produces a useless "Unknown error" message.
 
 ### Annotation exceptions (documented "always-succeeds" calls)
 
@@ -17,7 +21,7 @@ Per POSIX specification, the following are unconditionally safe to leave uncheck
 - `pthread_cond_broadcast` (POSIX: "shall not fail")
 - `pthread_attr_getstacksize` after `pthread_attr_init`
 
-All other calls require either `DW_PTHREAD_CHECK(return_value, "name")` or an explanatory comment.
+All other calls require either `DW_PTHREAD_CHECK(return_value, "name")` (for `pthread_*`) or `DW_SEM_CHECK(return_value, "name")` (for `sem_*`), or an explanatory comment.
 
 ---
 
@@ -39,7 +43,7 @@ All other calls require either `DW_PTHREAD_CHECK(return_value, "name")` or an ex
 | 203 | `pthread_mutex_init(&fputs_mutex, NULL)` | Unchecked | `DW_PTHREAD_CHECK` |
 | 204 | `pthread_cond_init(&next_iteration_cv, NULL)` | Unchecked | `DW_PTHREAD_CHECK` |
 | 205 | `pthread_attr_init(&attr)` | Unchecked | `DW_PTHREAD_CHECK` |
-| 209 | `sem_init(&customers, 0, 0)` | Unchecked | `DW_PTHREAD_CHECK` |
+| 209 | `sem_init(&customers, 0, 0)` | Unchecked | `DW_SEM_CHECK` (sem_* uses errno, not rc) |
 | 212 | `pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE)` | Unchecked | `DW_PTHREAD_CHECK` |
 | 215 | `pthread_attr_getstacksize(&attr, &stacksize)` | Unchecked | Annotate: always succeeds |
 | 217 | `rc = pthread_attr_setstacksize(&attr, stacksize)` | Assigned, NOT tested | Add `DW_PTHREAD_CHECK(rc, ...)` |
@@ -74,6 +78,8 @@ All other calls require either `DW_PTHREAD_CHECK(return_value, "name")` or an ex
 
 | Line | Call | Current Status | Required Action |
 |------|------|---------------|----------------|
+| 83 | `sem_wait(customers)` (named semaphore path) | **Missing from audit** | `DW_SEM_CHECK` (sem_* uses errno, not rc) |
+| 85 | `sem_wait(&customers)` (anonymous semaphore path) | **Missing from audit** | `DW_SEM_CHECK` (sem_* uses errno, not rc) |
 | 87 | `pthread_mutex_lock(&service_queue_mutex)` | Unchecked | `DW_PTHREAD_CHECK` |
 | 91 | `pthread_mutex_unlock(&service_queue_mutex)` | Unchecked | Annotate: always succeeds |
 | 97 | `pthread_mutex_lock(&sub_data_mutex[index])` | Unchecked | `DW_PTHREAD_CHECK` |
@@ -85,6 +91,8 @@ All other calls require either `DW_PTHREAD_CHECK(return_value, "name")` or an ex
 | 280 | `pthread_mutex_lock(&next_iteration_mutex)` | Unchecked | `DW_PTHREAD_CHECK` |
 | 282 | `pthread_cond_broadcast(&next_iteration_cv)` | Unchecked | Annotate: always succeeds |
 | 283 | `pthread_mutex_unlock(&next_iteration_mutex)` | Unchecked | Annotate: always succeeds |
+| 330 | `sem_wait(customers)` (named semaphore path) | **Missing from audit** | `DW_SEM_CHECK` (sem_* uses errno, not rc) |
+| 332 | `sem_wait(&customers)` (anonymous semaphore path) | **Missing from audit** | `DW_SEM_CHECK` (sem_* uses errno, not rc) |
 | 334 | `pthread_mutex_lock(&service_queue_mutex)` | Unchecked | `DW_PTHREAD_CHECK` |
 | 338 | `pthread_mutex_unlock(&service_queue_mutex)` | Unchecked | Annotate: always succeeds |
 | 343 | `pthread_mutex_lock(&sub_data_mutex[index])` | Unchecked | `DW_PTHREAD_CHECK` |
@@ -114,8 +122,8 @@ All other calls require either `DW_PTHREAD_CHECK(return_value, "name")` or an ex
 | 260 | `pthread_mutex_lock(&sub_data_mutex[id])` | Unchecked | `DW_PTHREAD_CHECK` |
 | 343 | `pthread_mutex_unlock(&sub_data_mutex[id])` | Unchecked | Annotate: always succeeds — **NOTE: this unlock moves to before line 303 after POS52-C fix** |
 | 368 | `pthread_mutex_lock(&service_queue_mutex)` | Unchecked | `DW_PTHREAD_CHECK` |
-| 374 | `sem_post(customers)` (named semaphore variant) | Unchecked | `DW_PTHREAD_CHECK` |
-| 376 | `sem_post(&customers)` (anonymous semaphore variant) | Unchecked | `DW_PTHREAD_CHECK` |
+| 374 | `sem_post(customers)` (named semaphore variant) | Unchecked | `DW_SEM_CHECK` (sem_* uses errno, not rc) |
+| 376 | `sem_post(&customers)` (anonymous semaphore variant) | Unchecked | `DW_SEM_CHECK` (sem_* uses errno, not rc) |
 | 378 | `pthread_mutex_unlock(&service_queue_mutex)` | Unchecked | Annotate: always succeeds |
 | 381 | `pthread_mutex_lock(&next_iteration_mutex)` | Unchecked | `DW_PTHREAD_CHECK` |
 | 383 | `pthread_cond_wait(&next_iteration_cv, ...)` | `while` guard ✅ (fix branch) | Return value: annotate |

@@ -49,15 +49,15 @@ A developer reviewing the master thread's Phase 1 and Phase 2 iteration loops ca
 
 ### User Story 3 — Lock acquisition order is documented and enforced (Priority: P2)
 
-A developer can consult a single authoritative lock-order table that defines the permitted acquisition sequence for all five synchronization primitives, and the source code conforms to that order with no inversions.
+A developer can consult a single authoritative lock-order table that defines the permitted acquisition sequence for all synchronization primitives in scope, and the source code conforms to that order with no inversions.
 
-**Why this priority**: CERT rule POS51-C. Lock-order inversions are the canonical cause of deadlock in multi-threaded C programs. With five primitives (`master_mutex`, `sub_data_mutex[i]`, `next_iteration_mutex`, `service_queue_mutex`, `master_lp_ready_mutex`), the potential inversion pairs require explicit documentation and verification.
+**Why this priority**: CERT rule POS51-C. Lock-order inversions are the canonical cause of deadlock in multi-threaded C programs. With eight synchronization primitives in scope — six actively-nested (`glpk_mutex`, `master_lp_ready_mutex`, `service_queue_mutex`, `sub_data_mutex[i]`, `next_iteration_mutex`, `master_mutex`) and two isolated ones never combined with others (`reduced_cost_mutex`, `fputs_mutex`) — the potential inversion pairs require explicit documentation and verification.
 
-**Independent Test**: The lock-order audit document lists all five primitives in their required acquisition order; a manual audit of every multi-lock acquisition in `src/dw_*.c` shows zero inversions; ThreadSanitizer (`-fsanitize=thread`) build reports no lock-order violations when the test suite runs.
+**Independent Test**: The lock-order audit document (`contracts/lock-order.md`) lists all synchronization primitives in their required acquisition order; a manual audit of every multi-lock acquisition in `src/dw_*.c` shows zero inversions; ThreadSanitizer (`-fsanitize=thread`) build reports no lock-order violations when the test suite runs.
 
 **Acceptance Scenarios**:
 
-1. **Given** the specs directory, **when** the lock-order audit document is read, **then** a total order over all five synchronization primitives is defined with rationale for each ordering decision derived from actual acquisition patterns in the source.
+1. **Given** the specs directory, **when** the lock-order audit document is read, **then** a total order over all synchronization primitives in scope is defined with rationale for each ordering decision derived from actual acquisition patterns in the source.
 2. **Given** the source code, **when** every code path that acquires more than one primitive is examined, **then** no path acquires locks in an order that violates the table.
 3. **Given** any inversion found and corrected, **when** the test suite is run with ThreadSanitizer enabled, **then** no data-race or lock-order warnings are emitted.
 
@@ -109,8 +109,8 @@ Loop counters, array indices, and size computations in `src/dw_*.c` use types ap
 ### Functional Requirements
 
 - **FR-001**: Every fallible `pthread_*` and `sem_*` call site in `src/dw_*.c` MUST either assign and test the return value, or be annotated with a comment explaining why the return is unconditionally safe to ignore (POS54-C).
-- **FR-002**: No call to `glp_simplex` or `glp_intopt` in `src/dw_*.c` MUST be made while any of the five synchronization primitives is held by the calling thread (POS52-C).
-- **FR-003**: A total lock acquisition order MUST be defined over all five synchronization primitives (`master_mutex`, `sub_data_mutex[i]`, `next_iteration_mutex`, `service_queue_mutex`, `master_lp_ready_mutex`) and recorded in `specs/008-sei-cert-c-compliance/lock-order.md` (POS51-C).
+- **FR-002**: No call to `glp_simplex` or `glp_intopt` in `src/dw_*.c` MUST be made while any synchronization primitive is held by the calling thread (POS52-C).
+- **FR-003**: A total lock acquisition order MUST be defined over all synchronization primitives in `src/dw_*.c` and recorded in `specs/008-sei-cert-c-compliance/contracts/lock-order.md` (POS51-C). The six actively-nested primitives (`glpk_mutex`, `master_lp_ready_mutex`, `service_queue_mutex`, `sub_data_mutex[i]`, `next_iteration_mutex`, `master_mutex`) and two isolated primitives (`reduced_cost_mutex`, `fputs_mutex`) must all appear in the table.
 - **FR-004**: Every code path in `src/dw_*.c` that acquires more than one synchronization primitive MUST acquire them in the order defined by FR-003, with zero inversions (POS51-C).
 - **FR-005**: Every `malloc` and `calloc` call in `src/dw_*.c` MUST have a null-check before the returned pointer is first dereferenced (MEM32-C).
 - **FR-006**: Every `fopen` call in `src/dw_*.c` MUST null-check its return value; every successfully opened file handle MUST have a corresponding `fclose` reachable on all execution paths within the enclosing scope (FIO01-C, FIO42-C).
@@ -122,7 +122,7 @@ Loop counters, array indices, and size computations in `src/dw_*.c` use types ap
 ### Key Entities
 
 - **pthread error-check wrapper**: A consistent macro or inline function used to check the return value of every fallible pthread primitive — wraps the call, tests for non-zero, and aborts with a diagnostic message. Analogous to the existing `dw_oom_abort` helper introduced in feature 002.
-- **Lock-order table**: A documented total order over the five synchronization primitives stored as `specs/008-sei-cert-c-compliance/lock-order.md`. This is an audit artifact, not source code.
+- **Lock-order table**: A documented total order over all synchronization primitives in scope, stored as `specs/008-sei-cert-c-compliance/contracts/lock-order.md`. This is an audit artifact, not source code.
 - **Static analysis baseline**: The output of a static analyzer run before any changes begin, used as a before/after comparison to demonstrate net reduction in findings.
 
 ---
@@ -133,7 +133,7 @@ Loop counters, array indices, and size computations in `src/dw_*.c` use types ap
 
 - **SC-001**: Zero unchecked `pthread_*` / `sem_*` return values remain in `src/dw_*.c` — verified by grep and code review.
 - **SC-002**: Zero `glp_simplex` or `glp_intopt` call sites in `src/dw_*.c` are made while any mutex is held — verified by the lock-state audit document.
-- **SC-003**: A complete lock-order table covers all five synchronization primitives and a manual audit of every multi-lock acquisition path in `src/dw_*.c` shows zero inversions — verified by the lock-order audit document.
+- **SC-003**: A complete lock-order table covers all synchronization primitives in `src/dw_*.c` and a manual audit of every multi-lock acquisition path shows zero inversions — verified by `specs/008-sei-cert-c-compliance/contracts/lock-order.md`.
 - **SC-004**: Zero `malloc`/`calloc` or `fopen` return values in `src/dw_*.c` go unchecked — verified by grep and code review.
 - **SC-005**: Compilation of `src/dw_*.c` with `-Wall -Wextra -Wsign-compare` produces zero signed/unsigned or integer-conversion warnings — verified by CI build log.
 - **SC-006**: The static analysis tool reports no findings in `src/dw_*.c` that were absent in the pre-implementation baseline — verified by diffing before/after reports.
@@ -146,5 +146,5 @@ Loop counters, array indices, and size computations in `src/dw_*.c` use types ap
 - ThreadSanitizer (`-fsanitize=thread`) is available in the CI environment for lock-order verification (GCC ≥ 4.8 or Clang ≥ 3.2, Linux only).
 - `cppcheck` or `clang --analyze` is available in the development environment; if neither is present, installation is a prerequisite task, not a blocker for this spec.
 - The GLPK simplex and intopt routines are not re-entrant; this is a known constraint that this feature does not change.
-- The five-primitive lock set is complete — no additional hidden locks exist in the codebase (verifiable by `grep pthread_mutex_init src/dw_*.c src/dw_*.h`).
+- The eight-primitive lock set (six actively-nested, two isolated) is complete — no additional hidden locks exist in the codebase (verifiable by `grep pthread_mutex_init src/dw_*.c src/dw_*.h`).
 - Fixing `INT30-C`/`INT31-C` issues at the GLPK API boundary uses explicit checked casts with range assertions rather than propagating `size_t` into the GLPK API.

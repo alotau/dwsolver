@@ -84,6 +84,20 @@ static inline void dw_pthread_check(int rc, const char *name) {
 #define DW_PTHREAD_CHECK(rc, name) dw_pthread_check((rc), (name))
 ```
 
+> **`sem_*` functions use a different error convention**: they return **-1** on failure and set `errno` (they do not return the error code directly). `DW_PTHREAD_CHECK` would call `strerror(-1)` and produce "Unknown error". Use `DW_SEM_CHECK` for all `sem_wait`, `sem_post`, and `sem_init` calls:
+
+```c
+/* POS54-C: Check return value of fallible sem_* primitives.
+ * sem_* functions return -1 on failure and set errno (not rc). */
+static inline void dw_sem_check(int ret, const char *name) {
+    if (ret != 0) {
+        fprintf(stderr, "sem error in %s: %s\n", name, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+}
+#define DW_SEM_CHECK(ret, name) dw_sem_check((ret), (name))
+```
+
 **Usage pattern**:
 ```c
 /* Before (no check): */

@@ -17,7 +17,7 @@
 
 **Purpose**: Add the `DW_PTHREAD_CHECK` error-check helper — the prerequisite macro for all P1 work. No other phase can begin until this is in place.
 
-- [ ] T001 Add `dw_pthread_check()` inline function and `DW_PTHREAD_CHECK` macro to `src/dw_support.h` (see data-model.md pattern; analogous to existing `dw_oom_abort`)
+- [ ] T001 Add `dw_pthread_check()` inline function and `DW_PTHREAD_CHECK` macro to `src/dw_support.h` (see data-model.md pattern; analogous to existing `dw_oom_abort`); also add `dw_sem_check()` and `DW_SEM_CHECK` variant that uses `strerror(errno)` instead of `strerror(rc)` — required because `sem_*` functions return -1 on failure and set `errno`, not the error code directly
 
 **Checkpoint**: `make` succeeds; macro usable from all `dw_*.c` files.
 
@@ -43,10 +43,10 @@
 
 **Independent Test**: `grep -n 'pthread_\|sem_' src/dw_*.c | grep -v '//' | grep -vE 'DW_PTHREAD_CHECK|always succeeds|pthread_t |pthread_attr_t|pthread_mutex_t|pthread_cond_t|pthread_mutexattr|sem_t'` returns zero unchecked call sites; `make` succeeds; `./tests/dw-tests.sh` passes.
 
-- [ ] T005 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_init`, `pthread_cond_init`, `pthread_attr_init`, `pthread_mutexattr_init`, `sem_init`, `pthread_attr_setdetachstate` calls in `src/dw_support.c` init_pthread_data() (lines ~190–212 per contracts/pthread-call-sites.md); test `rc = pthread_attr_setstacksize` result; annotate `pthread_attr_getstacksize` calls as always-succeeds
+- [ ] T005 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_init`, `pthread_cond_init`, `pthread_attr_init`, `pthread_mutexattr_init`, `pthread_attr_setdetachstate` calls in `src/dw_support.c` init_pthread_data() (lines ~190–212 per contracts/pthread-call-sites.md); apply `DW_SEM_CHECK` to `sem_init` (line ~209) — note `sem_*` uses errno, not rc; test `rc = pthread_attr_setstacksize` result; annotate `pthread_attr_getstacksize` calls as always-succeeds
 - [ ] T006 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` calls in `src/dw_main.c` (lines 221, 258, 458, 479, 541, 640, 644, 826); annotate all `pthread_mutex_unlock` and `pthread_cond_broadcast` calls as always-succeeds; verify `pthread_create` (line 204) and `pthread_join` (line 706) already checked
-- [ ] T007 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` calls in `src/dw_phases.c` (lines 87, 97, 117, 271, 280, 334, 343, 360, 511, 521, 530); annotate all `pthread_mutex_unlock` and `pthread_cond_broadcast` as always-succeeds
-- [ ] T008 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock`, `sem_post`, and `pthread_cond_wait` call sites in `src/dw_subprob.c` (lines 101, 127, 181, 260, 368, 374/376, 381, 389, 435 per contracts/pthread-call-sites.md); annotate all unlocks and broadcasts as always-succeeds
+- [ ] T007 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` calls in `src/dw_phases.c` (lines 87, 97, 117, 271, 280, 334, 343, 360, 511, 521, 530); apply `DW_SEM_CHECK` to `sem_wait` calls at lines 83, 85, 330, 332 (previously missing from audit — 4 sites total; `sem_*` uses errno, not rc); annotate all `pthread_mutex_unlock` and `pthread_cond_broadcast` as always-succeeds
+- [ ] T008 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` and `pthread_cond_wait` call sites in `src/dw_subprob.c` (lines 101, 127, 181, 260, 368, 381, 389, 435 per contracts/pthread-call-sites.md); apply `DW_SEM_CHECK` to `sem_post` calls at lines 374 and 376 (`sem_*` uses errno, not rc); annotate all unlocks and broadcasts as always-succeeds
 - [ ] T009 [P] [US1] Apply `DW_PTHREAD_CHECK` to unchecked `pthread_mutex_lock` calls in `src/dw_rounding.c` (lines 518, 549, 591); annotate corresponding unlocks as always-succeeds; verify `pthread_create` (lines 175, 181) and `pthread_join` (line 199) already checked
 - [ ] T010 [US1] Compile `src/dw_*.c` after all US1 edits (`make`) and fix any build errors introduced by the changes
 - [ ] T011 [US1] Run `./tests/dw-tests.sh` and confirm all examples reproduce expected optima; fix any regressions before proceeding
@@ -72,9 +72,9 @@
 
 ## Phase 5: User Story 3 — Lock acquisition order documented (Priority: P2)
 
-**Goal**: A total order over all five synchronization primitives is defined in `contracts/lock-order.md`; source code conforms with zero inversions; audit document produced. (FR-003, FR-004, POS51-C)
+**Goal**: A total order over all synchronization primitives in scope is defined in `contracts/lock-order.md`; source code conforms with zero inversions; audit document produced. (FR-003, FR-004, POS51-C)
 
-**Independent Test**: `contracts/lock-order.md` exists and lists all 5 primitives in required acquisition order with per-site verdicts; manual scan of every multi-lock path in `src/dw_*.c` shows zero inversion rows marked ❌.
+**Independent Test**: `contracts/lock-order.md` exists and lists all synchronization primitives (six actively-nested + two isolated) in required acquisition order with per-site verdicts; manual scan of every multi-lock path in `src/dw_*.c` shows zero inversion rows marked ❌.
 
 - [ ] T016 [US3] Review `contracts/lock-order.md` (already written in plan phase) against current source after US1 and US2 changes; update any line numbers that shifted due to edits in T005–T013; confirm all per-site verdicts remain ✅ PASS
 - [ ] T017 [US3] Add a brief lock-order comment block at the top of `src/dw_support.c` (near `init_pthread_data`) documenting the six-level acquisition order (see data-model.md Lock Acquisition Total Order table) so the order is discoverable in source, not just in specs
