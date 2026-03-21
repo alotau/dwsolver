@@ -23,7 +23,7 @@ description: "Task list for feature 007-architecture-diagrams implementation"
 
 **Purpose**: Create the `architecture/` directory at the project root (FR-001)
 
-- [ ] T001 Create `architecture/` directory at project root (satisfies FR-001)
+- [X] T001 Create `architecture/` directory at project root (satisfies FR-001)
 
 ---
 
@@ -33,8 +33,8 @@ description: "Task list for feature 007-architecture-diagrams implementation"
 
 **⚠️ CRITICAL**: Both files must be created before Phase 3 begins. Diagram entries will be added to `architecture/README.md` incrementally in each user story phase.
 
-- [ ] T002 [P] Create `architecture/README.md` with title, one-line intro, and three placeholder diagram entries (threading-flow, component-map, data-flow) per FR-008
-- [ ] T003 [P] Add "Architecture" section with link to `architecture/` to root `README.md` per FR-009 — place it after the existing badges/intro block
+- [X] T002 [P] Create `architecture/README.md` with title, one-line intro, and three placeholder diagram entries (threading-flow, component-map, data-flow) per FR-008
+- [X] T003 [P] Add "Architecture" section with link to `architecture/` to root `README.md` per FR-009 — place it after the existing badges/intro block
 
 **Checkpoint**: Foundation ready — user story phases can now proceed
 
@@ -48,9 +48,9 @@ description: "Task list for feature 007-architecture-diagrams implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T004 [P] [US1] Write Mermaid `stateDiagram-v2` block in `architecture/threading-flow.md` — include all 18 required states (12 master + 6 subproblem), the `state "Phase 1 (conditional)" as Phase1` region, the standalone Drain + PushPhase2Duals transition states, the `state "Phase 2 — column generation" as Phase2` region, and all 9 sync primitive labels (master_lp_ready_cv, customers semaphore, service_queue_mutex, next_iteration_cv, master_mutex, sub_data_mutex[i]) per `specs/007-architecture-diagrams/contracts/threading-flow-contract.md`
-- [ ] T005 [US1] Add all required prose sections below the diagram in `architecture/threading-flow.md`: (1) one-paragraph introduction, (2) "How to read this diagram" bullet walkthrough of one full DW iteration naming each sync primitive in fire order, (3) "Phase 1→2 transition" paragraph explaining the drain step and referencing the race it fixed, (4) "Single-subproblem variant (N=1)" note per `specs/007-architecture-diagrams/contracts/threading-flow-contract.md`
-- [ ] T006 [US1] Update `architecture/README.md` — replace the threading-flow placeholder entry with a complete one-sentence description linking to `threading-flow.md`
+- [X] T004 [P] [US1] Write Mermaid `stateDiagram-v2` block in `architecture/threading-flow.md` — include all 18 required states (12 master + 6 subproblem), the `state "Phase 1 (conditional)" as Phase1` region, the standalone Drain + PushPhase2Duals transition states, the `state "Phase 2 — column generation" as Phase2` region, and all 9 sync primitive labels (master_lp_ready_cv, customers semaphore, service_queue_mutex, next_iteration_cv, master_mutex, sub_data_mutex[i]) per `specs/007-architecture-diagrams/contracts/threading-flow-contract.md`
+- [X] T005 [US1] Add all required prose sections below the diagram in `architecture/threading-flow.md`: (1) one-paragraph introduction, (2) "How to read this diagram" bullet walkthrough of one full DW iteration naming each sync primitive in fire order, (3) "Phase 1→2 transition" paragraph explaining the drain step and referencing the race it fixed, (4) "Single-subproblem variant (N=1)" note per `specs/007-architecture-diagrams/contracts/threading-flow-contract.md`
+- [X] T006 [US1] Update `architecture/README.md` — replace the threading-flow placeholder entry with a complete one-sentence description linking to `threading-flow.md`
 
 **Checkpoint**: US1 complete — threading-flow.md is fully readable and passes all 5 contract acceptance tests
 
@@ -64,9 +64,9 @@ description: "Task list for feature 007-architecture-diagrams implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T007 [P] [US2] Write Mermaid `graph LR` block in `architecture/component-map.md` — include all 8 nodes (dw_main, dw_phases, dw_subprob, dw_support, dw_globals with distinct shape, dw_blas, dw_rounding, GLPK 4.44), `subgraph External` wrapping GLPK, `subgraph Modules` wrapping the 7 dwsolver nodes, all required labeled edges, and a shared-state annotation for dw_globals per `specs/007-architecture-diagrams/contracts/component-map-contract.md`
-- [ ] T008 [US2] Add all required prose sections below the diagram in `architecture/component-map.md`: (1) one-paragraph introduction, (2) "Module responsibilities" with 1–2 sentences per node, (3) "GLPK boundary" explanation of vendored location and why shown as single block, (4) "dw_rounding: optional post-processing" note per `specs/007-architecture-diagrams/contracts/component-map-contract.md`
-- [ ] T009 [US2] Update `architecture/README.md` — replace the component-map placeholder entry with a complete one-sentence description linking to `component-map.md`
+- [X] T007 [P] [US2] Write Mermaid `graph LR` block in `architecture/component-map.md` — include all 8 nodes (dw_main, dw_phases, dw_subprob, dw_support, dw_globals with distinct shape, dw_blas, dw_rounding, GLPK 4.44), `subgraph External` wrapping GLPK, `subgraph Modules` wrapping the 7 dwsolver nodes, all required labeled edges, and a shared-state annotation for dw_globals per `specs/007-architecture-diagrams/contracts/component-map-contract.md`
+- [X] T008 [US2] Add all required prose sections below the diagram in `architecture/component-map.md`: (1) one-paragraph introduction, (2) "Module responsibilities" with 1–2 sentences per node, (3) "GLPK boundary" explanation of vendored location and why shown as single block, (4) "dw_rounding: optional post-processing" note per `specs/007-architecture-diagrams/contracts/component-map-contract.md`
+- [X] T009 [US2] Update `architecture/README.md` — replace the component-map placeholder entry with a complete one-sentence description linking to `component-map.md`
 
 **Checkpoint**: US2 complete — component-map.md passes all 4 contract acceptance tests
 
@@ -80,9 +80,9 @@ description: "Task list for feature 007-architecture-diagrams implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T010 [P] [US3] Write Mermaid `flowchart TD` block in `architecture/data-flow.md` — include all 15 required nodes in 6 subgraphs (Input files, Startup, Phase 1 conditional, Phase 2, Finalization, Outputs), the `BUILD_MASTER -.->|no auxiliary variables| PH2` dashed bypass edge, `[if aux vars needed]` label on the Phase 1 edge, `[if rounding_flag]` label on the rounding path, and a guidefile format annotation on the GF node per `specs/007-architecture-diagrams/contracts/data-flow-contract.md`
-- [ ] T011 [US3] Add all required prose sections below the diagram in `architecture/data-flow.md`: (1) one-paragraph introduction, (2) "Guidefile format" section with verbatim line format and a two-subproblem example, (3) "Phase 1: when does it run?" short explanation, (4) "Output files" table mapping each output filename to its condition per `specs/007-architecture-diagrams/contracts/data-flow-contract.md`
-- [ ] T012 [US3] Update `architecture/README.md` — replace the data-flow placeholder entry with a complete one-sentence description linking to `data-flow.md`
+- [X] T010 [P] [US3] Write Mermaid `flowchart TD` block in `architecture/data-flow.md` — include all 15 required nodes in 6 subgraphs (Input files, Startup, Phase 1 conditional, Phase 2, Finalization, Outputs), the `BUILD_MASTER -.->|no auxiliary variables| PH2` dashed bypass edge, `[if aux vars needed]` label on the Phase 1 edge, `[if rounding_flag]` label on the rounding path, and a guidefile format annotation on the GF node per `specs/007-architecture-diagrams/contracts/data-flow-contract.md`
+- [X] T011 [US3] Add all required prose sections below the diagram in `architecture/data-flow.md`: (1) one-paragraph introduction, (2) "Guidefile format" section with verbatim line format and a two-subproblem example, (3) "Phase 1: when does it run?" short explanation, (4) "Output files" table mapping each output filename to its condition per `specs/007-architecture-diagrams/contracts/data-flow-contract.md`
+- [X] T012 [US3] Update `architecture/README.md` — replace the data-flow placeholder entry with a complete one-sentence description linking to `data-flow.md`
 
 **Checkpoint**: US3 complete — data-flow.md passes all 5 contract acceptance tests; architecture/README.md now has all three final entries
 
@@ -92,9 +92,9 @@ description: "Task list for feature 007-architecture-diagrams implementation"
 
 **Purpose**: Render verification, final index review, FR/SC cross-check
 
-- [ ] T013 Verify all three Mermaid diagrams render without errors — open each file in GitHub Markdown preview or paste each diagram block into mermaid.live; fix any syntax errors (SC-002)
-- [ ] T014 Final review of `architecture/README.md`: confirm all three diagram entries are present with accurate one-sentence descriptions and working relative links (FR-008, SC-003)
-- [ ] T015 Cross-check all requirements against delivered files: FR-001 (dir exists), FR-002 (threading states), FR-003 (Phase 1 region + Drain state), FR-004 (7 modules + GLPK), FR-005 (data flow), FR-006 (Mermaid syntax), FR-007 (prose in each file), FR-008 (architecture/README.md), FR-009 (root README link), SC-001–SC-004
+- [X] T013 Verify all three Mermaid diagrams render without errors — open each file in GitHub Markdown preview or paste each diagram block into mermaid.live; fix any syntax errors (SC-002)
+- [X] T014 Final review of `architecture/README.md`: confirm all three diagram entries are present with accurate one-sentence descriptions and working relative links (FR-008, SC-003)
+- [X] T015 Cross-check all requirements against delivered files: FR-001 (dir exists), FR-002 (threading states), FR-003 (Phase 1 region + Drain state), FR-004 (7 modules + GLPK), FR-005 (data flow), FR-006 (Mermaid syntax), FR-007 (prose in each file), FR-008 (architecture/README.md), FR-009 (root README link), SC-001–SC-004
 
 ---
 
