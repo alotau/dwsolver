@@ -1,0 +1,23 @@
+Single-subproblem example
+=========================
+
+Problem
+-------
+Minimize  -x1 - 2*x2
+Subject to
+  x1 <= 3         (subproblem constraint)
+  x2 <= 4         (subproblem constraint)
+  2*x1 + 3*x2 = 10  (coupling constraint, master)
+  x1, x2 >= 0
+
+Known optimal
+-------------
+x1 = 0, x2 = 10/3 ≈ 3.333333
+Objective = -2 * (10/3) = -6.667 (relaxed)
+
+Code path exercised
+-------------------
+num_clients = 1: the semaphore-based service queue in phase_2_iteration()
+processes exactly one subproblem per master iteration.  This exercises the
+single-client branch of the service-queue loop and the associated critical
+section around sub_data[0].

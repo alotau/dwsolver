@@ -1,0 +1,14 @@
+Minimize
+ objective: - 1 x1 - 2 x2
+
+Subject To
+ Con1: 2 x1 + 3 x2 = 10
+ c1: x1 <= 3
+ c2: x2 <= 4
+ c3: x1 >= 0
+ c4: x2 >= 0
+
+Bounds
+ 0 <= DUMMY <= 1
+
+end

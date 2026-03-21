@@ -19,3 +19,9 @@ autom4te.cache/
 examples/four_sea/pre_master.cpxlp
 tmp/
 **/out_obj.txt
+**/out.txt
+tests/test_blas
+tests/test-suite.log
+tests/test_blas.log
+tests/test_blas.trs
+test-driver

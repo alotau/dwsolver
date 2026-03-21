@@ -1,0 +1,27 @@
+One-iteration Phase II convergence example
+==========================================
+
+Problem
+-------
+Minimize  -x1 - y1
+Subject to
+  x1 <= 5         (sub1 constraint)
+  y1 <= 3         (sub2 constraint)
+  x1 + y1 = 6     (coupling constraint, GLP_FX)
+  x1, y1 >= 0
+
+Known optimal
+-------------
+x1 = 3, y1 = 3
+Objective = -(3 + 3) = -6
+
+Code path exercised
+-------------------
+Because the coupling constraint is an equality and the objective equals
+-(x1+y1) = constant on the feasible set, the restricted master is already
+at its DW-relaxation optimum after Phase I.  Phase II finds no improving
+columns on the first full iteration and converges immediately.
+
+This exercises the fast-convergence branch in phase_2_iteration() where
+the "I think we've converged" path is reached after a single Phase II
+master solve with zero or degenerate column additions.

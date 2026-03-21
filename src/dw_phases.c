@@ -260,9 +260,11 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 		}
 	}
 	/* Save the dual cost vector for the subprobs' use in next iteration.*/
+	pthread_mutex_lock(&master_mutex);
 	for( i = 1; i <= D->rows; i++ ) {
 		md->row_duals[i] = glp_get_row_dual(master_lp, i);
 	}
+	pthread_mutex_unlock(&master_mutex);
 
 	/* This is the 'target' for the subproblem to 'beat' on next iteration.
 	 * This target is the dual value of the convexity constraint associated
