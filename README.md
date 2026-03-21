@@ -61,6 +61,10 @@ docker run --rm -v "$PWD/examples/book_dantzig:/data" dwsolver book_dantzig.lp
 The container's working directory is `/data`.  Any `.lp` input files and output
 files live there; mount the directory that holds your problem files.
 
+## Architecture
+
+The [`architecture/`](./architecture/) directory contains Mermaid diagrams covering the threading model, module dependencies, and input/output data flow. These render natively in GitHub without any plugins.
+
 ## Examples and Tests
 There is a an [examples](./examples/) directory with several problems plucked from popular textbooks and some websites. There is also a toy version of the problem that initiated the writing of this code related to air traffic management. Each example has a README and should run successfully with a properly built dwsolver executable. There is also a new [tests](./tests/) directory that contains a [test script](./tests/dw-tests.sh) that runs most of the examples.  A couple of the examples have non-deterministic solutions (but deterministic optimum values), and I didn't take the time to write tests that check for the correct optimum for those problems. Again, happy for any PR that runs those examples, parses the output files to pluck out the optimum, and shows it is the expected value.
 
