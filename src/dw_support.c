@@ -245,7 +245,11 @@ void init_pthread_data(faux_globals* fg) {
 	stacksize = sizeof(double)*STACKMEM;
 	/* Round up to system page boundary (required by POSIX pthread_attr_setstacksize). */
 	{
+#if defined(_SC_PAGESIZE)
 		long pg = sysconf(_SC_PAGESIZE);
+#else
+		long pg = 4096; /* Windows/MinGW: x86-64 page size is always 4096 */
+#endif
 		if (pg > 1) {
 			size_t align = (size_t)pg;
 			stacksize = (stacksize + align - 1) & ~(align - 1);
