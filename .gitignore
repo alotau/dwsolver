@@ -1,6 +1,10 @@
 
 *.Po
+*.Plo
 *.o
+*.lo
+*.la
+.libs/
 stamp-h1
 **/done.cpxlp
 **/out_terminal
@@ -21,9 +25,13 @@ tmp/
 **/out_obj.txt
 **/out.txt
 tests/test_blas
+tests/test_lib_api
 tests/test-suite.log
 tests/test_blas.log
 tests/test_blas.trs
+tests/test_lib_api.log
+tests/test_lib_api.trs
+dwsolver.pc
 /test-driver
 *.plist
 *~

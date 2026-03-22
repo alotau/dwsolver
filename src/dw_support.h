@@ -48,6 +48,7 @@ int process_cmdline(int argc, char* argv[], faux_globals*);
 void free_globals(faux_globals* fg, master_data* md);
 //int phase_1_iteration(subprob_struct* sub_data, int, char**, double*, int*);
 //int phase_2_iteration(subprob_struct* sub_data);
+extern int dw_verbosity;
 void dw_printf(int,char*,...);
 void test_matrix_math(void);
 void get_solution(subprob_struct* sub_data);

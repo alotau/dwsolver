@@ -89,8 +89,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-TESTS = test_blas$(EXEEXT)
-check_PROGRAMS = test_blas$(EXEEXT)
+TESTS = test_blas$(EXEEXT) test_lib_api$(EXEEXT)
+check_PROGRAMS = test_blas$(EXEEXT) test_lib_api$(EXEEXT)
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -114,6 +114,9 @@ am__v_lt_1 =
 test_blas_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_blas_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+am_test_lib_api_OBJECTS = test_lib_api-test_lib_api.$(OBJEXT)
+test_lib_api_OBJECTS = $(am_test_lib_api_OBJECTS)
+test_lib_api_DEPENDENCIES = $(top_builddir)/src/libdwsolver.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -129,7 +132,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/test_blas-test_blas.Po
+am__depfiles_remade = ./$(DEPDIR)/test_blas-test_blas.Po \
+	./$(DEPDIR)/test_lib_api-test_lib_api.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -149,8 +153,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(test_blas_SOURCES)
-DIST_SOURCES = $(test_blas_SOURCES)
+SOURCES = $(test_blas_SOURCES) $(test_lib_api_SOURCES)
+DIST_SOURCES = $(test_blas_SOURCES) $(test_lib_api_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -511,6 +515,9 @@ top_srcdir = @top_srcdir@
 test_blas_SOURCES = test_blas.c
 test_blas_CFLAGS = -I$(top_srcdir)/src
 test_blas_LDADD = $(top_builddir)/src/dw_blas.o
+test_lib_api_SOURCES = test_lib_api.c
+test_lib_api_CPPFLAGS = -I$(top_srcdir)/src -DEXAMPLE_DIR='"$(top_srcdir)/examples"' -DDWSOLVER_STATIC
+test_lib_api_LDADD = $(top_builddir)/src/libdwsolver.la
 all: all-am
 
 .SUFFIXES:
@@ -553,6 +560,10 @@ test_blas$(EXEEXT): $(test_blas_OBJECTS) $(test_blas_DEPENDENCIES) $(EXTRA_test_
 	@rm -f test_blas$(EXEEXT)
 	$(AM_V_CCLD)$(test_blas_LINK) $(test_blas_OBJECTS) $(test_blas_LDADD) $(LIBS)
 
+test_lib_api$(EXEEXT): $(test_lib_api_OBJECTS) $(test_lib_api_DEPENDENCIES) $(EXTRA_test_lib_api_DEPENDENCIES) 
+	@rm -f test_lib_api$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_lib_api_OBJECTS) $(test_lib_api_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -560,6 +571,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_blas-test_blas.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_lib_api-test_lib_api.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -601,6 +613,20 @@ test_blas-test_blas.obj: test_blas.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_blas.c' object='test_blas-test_blas.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_blas_CFLAGS) $(CFLAGS) -c -o test_blas-test_blas.obj `if test -f 'test_blas.c'; then $(CYGPATH_W) 'test_blas.c'; else $(CYGPATH_W) '$(srcdir)/test_blas.c'; fi`
+
+test_lib_api-test_lib_api.o: test_lib_api.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_lib_api_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT test_lib_api-test_lib_api.o -MD -MP -MF $(DEPDIR)/test_lib_api-test_lib_api.Tpo -c -o test_lib_api-test_lib_api.o `test -f 'test_lib_api.c' || echo '$(srcdir)/'`test_lib_api.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_lib_api-test_lib_api.Tpo $(DEPDIR)/test_lib_api-test_lib_api.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_lib_api.c' object='test_lib_api-test_lib_api.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_lib_api_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o test_lib_api-test_lib_api.o `test -f 'test_lib_api.c' || echo '$(srcdir)/'`test_lib_api.c
+
+test_lib_api-test_lib_api.obj: test_lib_api.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_lib_api_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT test_lib_api-test_lib_api.obj -MD -MP -MF $(DEPDIR)/test_lib_api-test_lib_api.Tpo -c -o test_lib_api-test_lib_api.obj `if test -f 'test_lib_api.c'; then $(CYGPATH_W) 'test_lib_api.c'; else $(CYGPATH_W) '$(srcdir)/test_lib_api.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_lib_api-test_lib_api.Tpo $(DEPDIR)/test_lib_api-test_lib_api.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_lib_api.c' object='test_lib_api-test_lib_api.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_lib_api_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o test_lib_api-test_lib_api.obj `if test -f 'test_lib_api.c'; then $(CYGPATH_W) 'test_lib_api.c'; else $(CYGPATH_W) '$(srcdir)/test_lib_api.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -833,6 +859,13 @@ test_blas.log: test_blas$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test_lib_api.log: test_lib_api$(EXEEXT)
+	@p='test_lib_api$(EXEEXT)'; \
+	b='test_lib_api'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -926,6 +959,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
 
 distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test_blas-test_blas.Po
+	-rm -f ./$(DEPDIR)/test_lib_api-test_lib_api.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -972,6 +1006,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test_blas-test_blas.Po
+	-rm -f ./$(DEPDIR)/test_lib_api-test_lib_api.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
