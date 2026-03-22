@@ -25,6 +25,7 @@ a system-installed GLPK library instead.
 
 - Q: Should updating the CI workflow and Dockerfile to install system GLPK be in scope for this feature? → A: Yes — in scope; both must be updated in the same change
 - Q: How should the ABI compatibility constraint (caller must link the same GLPK build as libdwsolver) be handled? → A: Document-only — state in README and pkg-config; no static linking required
+- Q: What numeric tolerance should be used when comparing refactored-binary objective values against the baseline? → A: 1e-6 relative difference
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -65,7 +66,7 @@ compare pass/fail counts against the pre-refactoring baseline.
 **Acceptance Scenarios**:
 
 1. **Given** the refactored binary, **When** `tests/dw-tests.sh` is run, **Then** all tests that passed before the change still pass.
-2. **Given** the refactored binary is run on each example in `examples/`, **When** producing output, **Then** the optimal objective value matches the value produced by the old embedded-GLPK binary to within normal floating-point tolerance.
+2. **Given** the refactored binary is run on each example in `examples/`, **When** producing output, **Then** the optimal objective value matches the value produced by the old embedded-GLPK binary to within a relative difference of 1e-6.
 
 ---
 
@@ -142,7 +143,7 @@ After the change, `src/` contains only dwsolver's own source files.  No GLPK
 
 - **SC-001**: The repository `src/` directory shrinks by at least 95 source files (all `glp*.c`, `glp*.h`, `amd/`, `colamd/` gone); `git ls-files src/ | wc -l` decreases by at least 95.
 - **SC-002**: The project builds successfully against an unmodified system GLPK ≥ 4.65 package with zero linker errors on macOS and Linux.
-- **SC-003**: All tests that pass in the pre-refactoring baseline continue to pass after the refactoring, as measured by `tests/dw-tests.sh` pass/fail counts.
+- **SC-003**: All tests that pass in the pre-refactoring baseline continue to pass after the refactoring, as measured by `tests/dw-tests.sh` pass/fail counts; for any test that compares objective values numerically, the refactored binary must agree with the baseline to within a relative difference of 1e-6.
 - **SC-004**: Zero `lpx_*` symbols remain in any dwsolver source file, verifiable by `grep -r 'lpx_' src/dw_*.c` returning no output.
 - **SC-005**: A developer who has never built the project can follow the updated `README.md` to install GLPK, build dwsolver, and run the tests successfully without needing any guidance beyond the documented steps.
 - **SC-006**: The GitHub Actions CI pipeline passes (green) after the change is merged, confirming that the automated runner can install GLPK and build and test the project without the embedded sources.
