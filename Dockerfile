@@ -22,7 +22,9 @@ RUN touch aclocal.m4 configure config.h.in build-aux/ltmain.sh \
     && find /usr/share/automake-* -name config.guess | head -1 | xargs -I{} cp {} build-aux/config.guess \
     && find /usr/share/automake-* -name config.sub   | head -1 | xargs -I{} cp {} build-aux/config.sub
 
-RUN ./configure && make
+# --disable-shared produces a real linked binary at src/dwsolver rather than a
+# libtool wrapper script, so COPY in the runner stage works correctly.
+RUN ./configure --disable-shared && make
 
 # ---------------------------------------------------------------------------
 # Stage 2 – runtime (binary only)

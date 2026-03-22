@@ -140,9 +140,10 @@ libdwsolver_la_LDFLAGS  = -version-info 0:0:0
 # -----------------------------------------------------------------------
 bin_PROGRAMS = dwsolver
 
-dwsolver_SOURCES = dw_main.c
-dwsolver_CFLAGS  = $(AM_CFLAGS)
-dwsolver_LDADD   = libdwsolver.la
+dwsolver_SOURCES  = dw_main.c
+dwsolver_CPPFLAGS = $(AM_CPPFLAGS) -DDWSOLVER_STATIC
+dwsolver_CFLAGS   = $(AM_CFLAGS)
+dwsolver_LDADD    = libdwsolver.la
 
 # -----------------------------------------------------------------------
 # Installed public header

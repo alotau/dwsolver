@@ -54,9 +54,12 @@ extern "C" {
  * Visibility macro (self-contained copy for consumer builds that do not
  * include the internal dw.h header).
  * ------------------------------------------------------------------------- */
+#ifndef DWSOLVER_API
 #if defined(_WIN32) || defined(__CYGWIN__)
 #  ifdef DWSOLVER_BUILDING_LIB
 #    define DWSOLVER_API __declspec(dllexport)
+#  elif defined(DWSOLVER_STATIC)
+#    define DWSOLVER_API
 #  else
 #    define DWSOLVER_API __declspec(dllimport)
 #  endif
@@ -65,6 +68,7 @@ extern "C" {
 #else
 #  define DWSOLVER_API
 #endif
+#endif /* DWSOLVER_API */
 
 /* -------------------------------------------------------------------------
  * Verbosity level constants (mirror the internal OUTPUT_* values).

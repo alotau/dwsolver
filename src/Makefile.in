@@ -651,6 +651,7 @@ libdwsolver_la_CPPFLAGS = $(AM_CPPFLAGS) -DDWSOLVER_BUILDING_LIB
 libdwsolver_la_CFLAGS = $(AM_CFLAGS) -fvisibility=hidden
 libdwsolver_la_LDFLAGS = -version-info 0:0:0
 dwsolver_SOURCES = dw_main.c
+dwsolver_CPPFLAGS = $(AM_CPPFLAGS) -DDWSOLVER_STATIC
 dwsolver_CFLAGS = $(AM_CFLAGS)
 dwsolver_LDADD = libdwsolver.la
 
@@ -1748,18 +1749,18 @@ libdwsolver_la-dw_solver.lo: dw_solver.c
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdwsolver_la_CPPFLAGS) $(CPPFLAGS) $(libdwsolver_la_CFLAGS) $(CFLAGS) -c -o libdwsolver_la-dw_solver.lo `test -f 'dw_solver.c' || echo '$(srcdir)/'`dw_solver.c
 
 dwsolver-dw_main.o: dw_main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -MT dwsolver-dw_main.o -MD -MP -MF $(DEPDIR)/dwsolver-dw_main.Tpo -c -o dwsolver-dw_main.o `test -f 'dw_main.c' || echo '$(srcdir)/'`dw_main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dwsolver_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -MT dwsolver-dw_main.o -MD -MP -MF $(DEPDIR)/dwsolver-dw_main.Tpo -c -o dwsolver-dw_main.o `test -f 'dw_main.c' || echo '$(srcdir)/'`dw_main.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dwsolver-dw_main.Tpo $(DEPDIR)/dwsolver-dw_main.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dw_main.c' object='dwsolver-dw_main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -c -o dwsolver-dw_main.o `test -f 'dw_main.c' || echo '$(srcdir)/'`dw_main.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dwsolver_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -c -o dwsolver-dw_main.o `test -f 'dw_main.c' || echo '$(srcdir)/'`dw_main.c
 
 dwsolver-dw_main.obj: dw_main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -MT dwsolver-dw_main.obj -MD -MP -MF $(DEPDIR)/dwsolver-dw_main.Tpo -c -o dwsolver-dw_main.obj `if test -f 'dw_main.c'; then $(CYGPATH_W) 'dw_main.c'; else $(CYGPATH_W) '$(srcdir)/dw_main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dwsolver_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -MT dwsolver-dw_main.obj -MD -MP -MF $(DEPDIR)/dwsolver-dw_main.Tpo -c -o dwsolver-dw_main.obj `if test -f 'dw_main.c'; then $(CYGPATH_W) 'dw_main.c'; else $(CYGPATH_W) '$(srcdir)/dw_main.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/dwsolver-dw_main.Tpo $(DEPDIR)/dwsolver-dw_main.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dw_main.c' object='dwsolver-dw_main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -c -o dwsolver-dw_main.obj `if test -f 'dw_main.c'; then $(CYGPATH_W) 'dw_main.c'; else $(CYGPATH_W) '$(srcdir)/dw_main.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dwsolver_CPPFLAGS) $(CPPFLAGS) $(dwsolver_CFLAGS) $(CFLAGS) -c -o dwsolver-dw_main.obj `if test -f 'dw_main.c'; then $(CYGPATH_W) 'dw_main.c'; else $(CYGPATH_W) '$(srcdir)/dw_main.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

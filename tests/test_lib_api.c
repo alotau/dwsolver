@@ -18,8 +18,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <unistd.h>
-#include <fcntl.h>
+
+/* Platform portability for file-descriptor redirect in tests. */
+#ifdef _WIN32
+#  include <io.h>
+#  include <fcntl.h>
+#  define dup         _dup
+#  define dup2        _dup2
+#  define open        _open
+#  define close       _close
+#  define O_WRONLY    _O_WRONLY
+#  define DEV_NULL    "NUL"
+#else
+#  include <unistd.h>
+#  include <fcntl.h>
+#  define DEV_NULL    "/dev/null"
+#endif
 
 #include "dw_solver.h"
 
@@ -156,7 +170,7 @@ static void test_6_silent_verbosity(void) {
     /* Redirect stdout and stderr to /dev/null. */
     saved_stdout = dup(STDOUT_FILENO);
     saved_stderr = dup(STDERR_FILENO);
-    devnull = open("/dev/null", O_WRONLY);
+    devnull = open(DEV_NULL, O_WRONLY);
     dup2(devnull, STDOUT_FILENO);
     dup2(devnull, STDERR_FILENO);
     close(devnull);
@@ -212,7 +226,7 @@ static void test_8_null_opts(void) {
      * Suppress output so the test log stays clean. */
     saved_stdout = dup(STDOUT_FILENO);
     saved_stderr = dup(STDERR_FILENO);
-    devnull = open("/dev/null", O_WRONLY);
+    devnull = open(DEV_NULL, O_WRONLY);
     dup2(devnull, STDOUT_FILENO);
     dup2(devnull, STDERR_FILENO);
     close(devnull);
