@@ -26,3 +26,4 @@ tests/test_blas.log
 tests/test_blas.trs
 test-driver
 *.plist
+*~
