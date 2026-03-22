@@ -24,6 +24,7 @@ a system-installed GLPK library instead.
 ### Session 2026-03-22
 
 - Q: Should updating the CI workflow and Dockerfile to install system GLPK be in scope for this feature? → A: Yes — in scope; both must be updated in the same change
+- Q: How should the ABI compatibility constraint (caller must link the same GLPK build as libdwsolver) be handled? → A: Document-only — state in README and pkg-config; no static linking required
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -123,6 +124,7 @@ After the change, `src/` contains only dwsolver's own source files.  No GLPK
 - **FR-006**: The `third-party/glpk/` directory and all files within it MUST be retained in the repository for provenance and attribution purposes.
 - **FR-007**: The project's `README.md` MUST document GLPK as an external dependency, including the minimum version, and provide instructions for installing it on all supported platforms.
 - **FR-008**: The `dwsolver.pc` pkg-config file MUST list GLPK as a `Requires` dependency so that consumers of `libdwsolver` know they must also link against GLPK.
+- **FR-008a**: The `README.md` MUST include a note that callers of `libdwsolver` must link against the same GLPK shared library that dwsolver was built against; mixing GLPK builds produces undefined behaviour. No static-linking enforcement is required.
 - **FR-009**: The GitHub Actions CI workflow(s) MUST be updated to install GLPK ≥ 4.65 as a build-dependency step (e.g., `apt-get install libglpk-dev` on Ubuntu runners) before invoking `./configure && make`.
 - **FR-010**: The project `Dockerfile` MUST be updated to install GLPK ≥ 4.65 inside the container image (e.g., via the distribution package manager) so that container builds continue to succeed after the embedded sources are removed.
 
