@@ -74,9 +74,9 @@
 
 **Independent Test**: `git ls-files src/ | grep -E 'glp|/amd/|/colamd/'` returns no output.
 
-- [ ] T014 [P] [US4] Run `git ls-files src/ | grep -E 'glp|amd|colamd'` and confirm it returns no output (SC-001: all 141 embedded files gone)
-- [ ] T015 [P] [US4] Run `git ls-files src/ | wc -l` and confirm the count is ≤ 18 (pre-change was 159; 159 − 141 = 18), satisfying SC-001's "shrinks by at least 95 source files"
-- [ ] T016 [P] [US4] Confirm `third-party/glpk/` is intact: run `git ls-files third-party/glpk/` and verify `glpk-4.44.ThreadReady.patch` and related attribution files are still present (FR-006)
+- [X] T014 [P] [US4] Run `git ls-files src/ | grep -E 'glp|amd|colamd'` and confirm it returns no output (SC-001: all 141 embedded files gone)
+- [X] T015 [P] [US4] Run `git ls-files src/ | wc -l` and confirm the count is ≤ 18 (pre-change was 159; 159 − 141 = 18), satisfying SC-001's "shrinks by at least 95 source files"
+- [X] T016 [P] [US4] Confirm `third-party/glpk/` is intact: run `git ls-files third-party/glpk/` and verify `glpk-4.44.ThreadReady.patch` and related attribution files are still present (FR-006)
 
 **Checkpoint**: US4 complete — source tree is provably clean. Commit: `chore(011): confirm clean source tree; third-party provenance intact`
 
@@ -86,13 +86,13 @@
 
 **Purpose**: Update CI workflows, Dockerfile, and README to reflect the new external dependency.
 
-- [ ] T017 [P] Update `.github/workflows/ci-linux.yml`: add a `- name: Install dependencies` step with `sudo apt-get update && sudo apt-get install -y libglpk-dev` before the `Build` step in **all three** jobs (`linux`, `linux-asan-ubsan`, `linux-tsan`) — see contracts/build-system.md §5a
-- [ ] T018 [P] Update `.github/workflows/ci-macos.yml`: add a `- name: Install dependencies` step with `brew install glpk` before the `Build` step — see contracts/build-system.md §5b
-- [ ] T019 [P] Update `Dockerfile`: add `libglpk-dev` to the builder stage's `apt-get install` line; add `RUN apt-get update && apt-get install -y --no-install-recommends libglpk40 && rm -rf /var/lib/apt/lists/*` in the runner stage — see contracts/build-system.md §4
-- [ ] T020 [P] Update `README.md`: add a **Dependencies** section listing GLPK ≥ 4.65 as required, with install commands for macOS (`brew install glpk`), Ubuntu/Debian (`sudo apt-get install libglpk-dev`), and Fedora/RHEL (`sudo dnf install glpk-devel`); add the ABI note that callers must link against the same GLPK build (FR-007, FR-008a) — see quickstart.md §1 for reference wording
-- [ ] T021 Run `grep -r 'lpx_' src/dw_*.c` — must return no output (final SC-004 verification)
-- [ ] T022 Run `docker build -t dwsolver-test .` and confirm it succeeds (SC-007) — depends on T019
-- [ ] T023 Push the branch and confirm all GitHub Actions CI jobs pass green (SC-006) — depends on T017, T018
+- [X] T017 [P] Update `.github/workflows/ci-linux.yml`: add a `- name: Install dependencies` step with `sudo apt-get update && sudo apt-get install -y libglpk-dev` before the `Build` step in **all three** jobs (`linux`, `linux-asan-ubsan`, `linux-tsan`) — see contracts/build-system.md §5a
+- [X] T018 [P] Update `.github/workflows/ci-macos.yml`: add a `- name: Install dependencies` step with `brew install glpk` before the `Build` step — see contracts/build-system.md §5b
+- [X] T019 [P] Update `Dockerfile`: add `libglpk-dev` to the builder stage's `apt-get install` line; add `RUN apt-get update && apt-get install -y --no-install-recommends libglpk40 && rm -rf /var/lib/apt/lists/*` in the runner stage — see contracts/build-system.md §4
+- [X] T020 [P] Update `README.md`: add a **Dependencies** section listing GLPK ≥ 4.65 as required, with install commands for macOS (`brew install glpk`), Ubuntu/Debian (`sudo apt-get install libglpk-dev`), and Fedora/RHEL (`sudo dnf install glpk-devel`); add the ABI note that callers must link against the same GLPK build (FR-007, FR-008a) — see quickstart.md §1 for reference wording
+- [X] T021 Run `grep -r 'lpx_' src/dw_*.c` — must return no output (final SC-004 verification)
+- [X] T022 Run `docker build -t dwsolver-test .` and confirm it succeeds (SC-007) — depends on T019
+- [X] T023 Push the branch and confirm all GitHub Actions CI jobs pass green (SC-006) — depends on T017, T018
 
 **Checkpoint**: All polish tasks complete. Commit: `chore(011): update CI, Dockerfile, README for system GLPK dependency`
 

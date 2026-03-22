@@ -368,8 +368,6 @@ void* subproblem_thread(void* arg) {
 		/*fflush(stdout); Not a very thread safe function. */
 		pthread_mutex_unlock(&sub_data_mutex[id]); /* always succeeds: unlocking owned mutex */
 		if( signal_availability(my_data) ) break;
-		//snprintf(local_buffer, BUFF_SIZE, "sub_%d_%d.cpxlp", id, j);
-		//lpx_write_cpxlp(my_data->lp, local_buffer);
 
 	}
 

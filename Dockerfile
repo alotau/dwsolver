@@ -8,6 +8,8 @@ FROM ubuntu:24.04 AS builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         automake \
+        pkg-config \
+        libglpk-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
@@ -30,6 +32,9 @@ RUN ./configure --disable-shared && make
 # Stage 2 – runtime (binary only)
 # ---------------------------------------------------------------------------
 FROM ubuntu:24.04 AS runner
+
+RUN apt-get update && apt-get install -y --no-install-recommends libglpk40 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /data
 COPY --from=builder /build/src/dwsolver /usr/local/bin/dwsolver

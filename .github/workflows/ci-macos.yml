@@ -16,6 +16,9 @@ jobs:
       - name: Suppress automake regeneration
         run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
 
+      - name: Install dependencies
+        run: brew install glpk
+
       - name: Build
         run: ./configure --enable-named-semaphores && make
 

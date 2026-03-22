@@ -16,6 +16,7 @@ config.log
 config.status
 libtool
 src/dwsolver
+src/dwsolver_*
 **/Makefile
 *.0
 autom4te.cache/

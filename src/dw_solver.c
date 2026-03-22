@@ -799,7 +799,6 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		glp_init_iocp(int_parm);
 		int_parm->mip_gap = globals->mip_gap;
 		glp_intopt(master_lp, int_parm);
-		//lpx_intopt(master_lp);
 		dw_printf(IMPORTANCE_AVG, "Integer optimal solution: %3.1f\n",
 				glp_mip_obj_val(master_lp));
 		dw_printf(IMPORTANCE_AVG,
