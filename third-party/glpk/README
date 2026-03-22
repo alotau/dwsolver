@@ -1,0 +1,17 @@
+GLPK 4.44 Attribution and Patch Files
+======================================
+
+This directory contains the GLPK (GNU Linear Programming Kit) version 4.44
+attribution and patch files that were bundled with the original dwsolver source
+distribution.
+
+GLPK_AUTHORS   - GLPK authors
+GLPK_INSTALL   - GLPK installation instructions
+GLPK_NEWS      - GLPK changelog/news
+GLPK_README    - GLPK readme
+GLPK_THANKS    - GLPK acknowledgements
+glpk-4.44.ThreadReady.patch - Thread-safety patch applied to the embedded GLPK sources
+
+The embedded GLPK C sources live in src/ alongside the dwsolver source files.
+GLPK is licensed under the GNU General Public License; see COPYING at the
+repository root.
