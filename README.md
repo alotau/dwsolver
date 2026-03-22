@@ -61,6 +61,23 @@ docker run --rm -v "$PWD/examples/book_dantzig:/data" dwsolver book_dantzig.lp
 The container's working directory is `/data`.  Any `.lp` input files and output
 files live there; mount the directory that holds your problem files.
 
+## SEI CERT C Compliance
+
+The solver's C source code has been audited and remediated against the [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard), focusing on the concurrency and POSIX rules most relevant to a multi-threaded solver:
+
+| Rule | Description | Status |
+|------|-------------|--------|
+| POS54-C | Detect and handle POSIX errors | ✅ All `pthread_*` and `sem_*` call sites checked via `DW_PTHREAD_CHECK` / `DW_SEM_CHECK` |
+| MEM35-C | Allocate sufficient memory | ✅ `malloc` operator-precedence bugs corrected |
+| CON31-C / CON43-C | Thread and lock safety | ✅ Mutex acquisition order documented and enforced; no lock inversions |
+| EXP12-C | Do not ignore operands in expressions | ✅ `errno` snapshotted before `strerror()` / `fprintf()` calls |
+| MSC24-C | Do not use deprecated functions | ✅ `sem_open` return value validated against `SEM_FAILED` |
+
+**Artifacts**:
+- [Acceptance report](specs/008-sei-cert-c-compliance/acceptance-report.md) — all 10 functional requirements with evidence
+- [Compliance spec](specs/008-sei-cert-c-compliance/spec.md) — full rule set and rationale
+- [Static analysis baseline](specs/008-sei-cert-c-compliance/baseline-warnings.txt) — zero new warnings from remediation
+
 ## Architecture
 
 The [`architecture/`](./architecture/) directory contains Mermaid diagrams covering the threading model, module dependencies, and input/output data flow. These render natively in GitHub without any plugins.
