@@ -106,7 +106,7 @@ typedef struct {
     int    enforce_sub_integrality; /* Enforce integer subproblem solutions each iter. Default: 0 */
     int    print_timing_data;       /* Print runtime timing info. Default: 0 */
     int    print_final_master;      /* Write final master LP to done.cpxlp. Default: 0 */
-    int    print_relaxed_sol;       /* Write relaxed solution to file. Default: 0 */
+    int    print_relaxed_sol;       /* Write relaxed solution to file. Default: 1 */
     int    perturb;                 /* Perturb RHS (experimental). Default: 0 */
     double shift;                   /* Objective constant shift. Default: 0.0 */
 } dw_options_t;

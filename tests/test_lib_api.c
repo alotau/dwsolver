@@ -68,7 +68,7 @@ static void test_1_defaults(void) {
     ASSERT("T1 enforce_sub_integrality=0", opts.enforce_sub_integrality == 0);
     ASSERT("T1 print_timing_data=0",       opts.print_timing_data       == 0);
     ASSERT("T1 print_final_master=0",      opts.print_final_master      == 0);
-    ASSERT("T1 print_relaxed_sol=0",       opts.print_relaxed_sol       == 0);
+    ASSERT("T1 print_relaxed_sol=1",       opts.print_relaxed_sol       == 1);
     ASSERT("T1 perturb=0",                 opts.perturb                 == 0);
     ASSERT("T1 shift=0.0",                 fabs(opts.shift)             < 1e-10);
 }

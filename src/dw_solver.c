@@ -67,7 +67,7 @@ void dw_options_init(dw_options_t *opts) {
 	opts->enforce_sub_integrality = 0;
 	opts->print_timing_data       = 0;
 	opts->print_final_master      = 0;
-	opts->print_relaxed_sol       = 0;
+	opts->print_relaxed_sol       = 1;
 	opts->perturb                 = 0;
 	opts->shift                   = 0.0;
 }
