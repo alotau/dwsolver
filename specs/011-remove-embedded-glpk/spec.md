@@ -26,6 +26,7 @@ a system-installed GLPK library instead.
 - Q: Should updating the CI workflow and Dockerfile to install system GLPK be in scope for this feature? → A: Yes — in scope; both must be updated in the same change
 - Q: How should the ABI compatibility constraint (caller must link the same GLPK build as libdwsolver) be handled? → A: Document-only — state in README and pkg-config; no static linking required
 - Q: What numeric tolerance should be used when comparing refactored-binary objective values against the baseline? → A: 1e-6 relative difference
+- Q: Should dwsolver's configure propagate GLPK's transitive link dependencies (e.g., GMP) automatically or leave it to the user? → A: Automatic — use `pkg-config --libs glpk` so transitive deps are discovered without user intervention
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -117,8 +118,9 @@ After the change, `src/` contains only dwsolver's own source files.  No GLPK
 
 ### Functional Requirements
 
-- **FR-001**: The build system MUST detect the presence of a system GLPK installation and fail with a user-readable error if it is absent or too old.
+- **FR-001**: The build system MUST detect the presence of a system GLPK installation using `pkg-config` and fail with a user-readable error if it is absent or too old.
 - **FR-002**: The build system MUST require GLPK version 4.65 or later (the first long-term supported release that guarantees TLS-based environment storage on all target platforms).
+- **FR-002a**: The build system MUST obtain GLPK's compiler flags and full linker flags (including transitive dependencies such as GMP and zlib) via `pkg-config --cflags glpk` and `pkg-config --libs glpk`, so that builds against GMP-enabled or zlib-enabled GLPK packages succeed without requiring manual `--with-gmp` or `--with-zlib` flags.
 - **FR-003**: The `src/` directory MUST NOT contain any GLPK source files (`glp*.c`, `glp*.h`) or their bundled dependencies (`amd/`, `colamd/`) after the change is applied.
 - **FR-004**: All three deprecated `lpx_*` call sites MUST be replaced with their modern `glp_*` equivalents: `lpx_read_cpxlp` → `glp_create_prob` + `glp_read_lp`; `lpx_write_cpxlp` → `glp_write_lp`; `lpx_get_int_parm(lp, LPX_K_ITCNT)` → `glp_get_it_cnt(lp)`.
 - **FR-005**: The existing `glpk_mutex` guards around GLPK file-I/O calls MUST be retained unchanged, as they protect sequential file-parsing state that remains non-reentrant even in modern GLPK.
