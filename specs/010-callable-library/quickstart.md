@@ -29,7 +29,7 @@ This installs:
 - `/usr/local/bin/dwsolver` — the CLI (unchanged behavior)
 - `/usr/local/lib/libdwsolver.a` — static library
 - `/usr/local/lib/libdwsolver.so` (Linux) or `libdwsolver.dylib` (macOS) — shared library
-- `/usr/local/include/dwsolver.h` — public API header
+- `/usr/local/include/dw_solver.h` — public API header
 - `/usr/local/lib/pkgconfig/dwsolver.pc` — pkg-config metadata
 
 ---
@@ -39,7 +39,7 @@ This installs:
 ```c
 /* solve_example.c */
 #include <stdio.h>
-#include "dwsolver.h"
+#include "dw_solver.h"
 
 int main(void) {
     dw_options_t opts;

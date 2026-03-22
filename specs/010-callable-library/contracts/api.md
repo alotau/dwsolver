@@ -1,7 +1,7 @@
 # API Contract: libdwsolver C Public Interface
 
 **Version**: 0.0.0 (initial)  
-**Header**: `dwsolver.h` (installed to `$(includedir)/dwsolver.h`)  
+**Header**: `dw_solver.h` (installed to `$(includedir)/dw_solver.h`)  
 **Library**: `libdwsolver` (`.a` + `.so`/`.dylib`)  
 **Feature**: 010-callable-library  
 **Date**: 2026-03-22
@@ -21,7 +21,7 @@ exported from the shared library. All other symbols are hidden.
 #endif /* DWSOLVER_H_ */
 ```
 
-Consumers include only `<dwsolver.h>`. No other project headers need be included.
+Consumers include only `<dw_solver.h>`. No other project headers need be included.
 
 ---
 

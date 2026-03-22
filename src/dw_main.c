@@ -75,7 +75,7 @@ static void print_usage(int argc, char *argv[]) {
 	printf(" --skip-monolithic-read  Guide file has no monolithic entry.\n");
 	printf(" --write-bases           Write bases each iteration.\n");
 	printf(" --write-int-probs       Write intermediate LP files.\n");
-	printf(" --write-final-master    Write final master LP (default on).\n");
+	printf(" --write-final-master    Write final master LP (default off).\n");
 	printf(" --no-write-final-master Do not write final master LP.\n");
 	printf(" --print-timing          Print runtime information.\n");
 	printf(" --no-timing             Suppress timing output.\n");
@@ -107,6 +107,11 @@ static int parse_cli(int argc, char *argv[],
 
 	for( i = 1; i < argc; i++ ) {
 		if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0 ) {
+			if( i + 1 >= argc ) {
+				fprintf(stderr, "Option %s requires a guide file name.\n", argv[i]);
+				print_usage(argc, argv);
+				return 1;
+			}
 			i++;
 			gf = fopen(argv[i], "r");
 			if( !gf ) {
@@ -144,21 +149,38 @@ static int parse_cli(int argc, char *argv[],
 		         strcmp(argv[i], "--sub-int-enforce") == 0 ) opts->enforce_sub_integrality = 1;
 		else if( strcmp(argv[i], "--mip_gap") == 0 ||
 		         strcmp(argv[i], "--mip-gap") == 0 ) {
+			if( i + 1 >= argc ) {
+				fprintf(stderr, "Option %s requires a value.\n", argv[i]);
+				print_usage(argc, argv);
+				return 1;
+			}
 			double v = atof(argv[++i]);
 			if( v > 0.0 ) opts->mip_gap = v;
 			else fprintf(stderr, "%s is not a valid mip_gap; using default.\n", argv[i]);
 		}
 		else if( strcmp(argv[i], "-r") == 0 ||
 		         strcmp(argv[i], "--round") == 0 )         opts->rounding_flag = 1;
-		else if( strcmp(argv[i], "--write-bases") == 0 )   ; /* write_bases not in opts; ignored */
-		else if( strcmp(argv[i], "--write-int-probs") == 0 ) ; /* write_intermediate_opt_files; ignored */
+		else if( strcmp(argv[i], "--write-bases") == 0 )
+			fprintf(stderr, "Warning: --write-bases is not supported by this build; option ignored.\n");
+		else if( strcmp(argv[i], "--write-int-probs") == 0 )
+			fprintf(stderr, "Warning: --write-int-probs is not supported by this build; option ignored.\n");
 		else if( strcmp(argv[i], "--skip-monolithic-read") == 0 ) skip_mono = 1;
 		else if( strcmp(argv[i], "--phase1_max") == 0 ) {
+			if( i + 1 >= argc ) {
+				fprintf(stderr, "Option %s requires a value.\n", argv[i]);
+				print_usage(argc, argv);
+				return 1;
+			}
 			int v = atoi(argv[++i]);
 			if( v > 0 ) opts->max_phase1_iterations = v;
 			else fprintf(stderr, "%s is not a valid iteration count; using default.\n", argv[i]);
 		}
 		else if( strcmp(argv[i], "--phase2_max") == 0 ) {
+			if( i + 1 >= argc ) {
+				fprintf(stderr, "Option %s requires a value.\n", argv[i]);
+				print_usage(argc, argv);
+				return 1;
+			}
 			int v = atoi(argv[++i]);
 			if( v > 0 ) opts->max_phase2_iterations = v;
 			else fprintf(stderr, "%s is not a valid iteration count; using default.\n", argv[i]);

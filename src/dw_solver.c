@@ -129,15 +129,12 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	/* Initialize global pthread data structures. */
 	init_pthread_data(globals);
 
-	/* Open the output file for the optimization routines */
-	strcpy(local_buffer, "out_terminal");
-	if( (opt_outfile = fopen(local_buffer, "w")) == NULL) {
-		fprintf(stderr, "PROBLEM OPENING TERMINAL OUTFILE. BAILING.\n");
-		exit(1);
-	}
-
-	/* Force terminal output for optimization routines to file instead */
-	glp_term_hook(hook, opt_outfile);
+	/* Redirect GLPK terminal output to a temporary file so we don't pollute
+	 * stdout in library mode.  If tmpfile() fails we simply skip the redirect
+	 * rather than aborting the host process. */
+	opt_outfile = tmpfile();
+	if (opt_outfile != NULL)
+		glp_term_hook(hook, opt_outfile);
 
 /*****************
  *
@@ -186,6 +183,14 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	original_master_lp = lpx_read_cpxlp(globals->master_name);
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
+
+	if (original_master_lp == NULL) {
+		fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+		        globals->master_name);
+		glp_term_hook(NULL, NULL);
+		if (opt_outfile != NULL) fclose(opt_outfile);
+		return DW_STATUS_ERR_FILE;
+	}
 
 	/* Prepare the parameters for the simplex method. */
 	glp_init_smcp(simplex_control_params);
@@ -421,9 +426,10 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	/* Set the shift, if any. */
 	glp_set_obj_coef(master_lp, 0, globals->shift);
 
-	/* Print current problem, just slack/auxiliary variables.  For debugging.*/
-
-	if( glp_get_num_cols(master_lp) > 0 ) {
+	/* Print current problem, just slack/auxiliary variables.  For debugging.
+	 * Gated behind write_intermediate_opt_files to avoid unconditional I/O
+	 * side-effects in library mode. */
+	if( globals->write_intermediate_opt_files && glp_get_num_cols(master_lp) > 0 ) {
 		DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 		lpx_write_cpxlp(master_lp, "pre_master.cpxlp");
 		pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
@@ -852,6 +858,10 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	free(simplex_control_params);
 	free(local_buffer);
 
+	/* Reset the GLPK hook and close the temporary redirect file. */
+	glp_term_hook(NULL, NULL);
+	if (opt_outfile != NULL) fclose(opt_outfile);
+
 	dw_printf(IMPORTANCE_AVG,
 			"Master made it to the end. Exiting gracefully, dignity intact.\n");
 	return DW_STATUS_OK;
@@ -879,6 +889,19 @@ int dw_solve(const char        *master_file,
 			result->x               = NULL;
 		}
 		return DW_STATUS_ERR_BAD_ARGS;
+	}
+
+	/* Quick pre-flight: verify master file is readable before launching threads. */
+	{
+		FILE *fp = fopen(master_file, "r");
+		if (!fp) {
+			result->status          = DW_STATUS_ERR_FILE;
+			result->objective_value = 0.0;
+			result->num_vars        = 0;
+			result->x               = NULL;
+			return DW_STATUS_ERR_FILE;
+		}
+		fclose(fp);
 	}
 
 	/* Use provided options or library defaults. */
@@ -918,9 +941,20 @@ int dw_solve(const char        *master_file,
 	globals->subproblem_names = malloc(sizeof(char *) * (size_t)num_subproblems);
 	dw_oom_abort(globals->subproblem_names, "globals->subproblem_names");
 	for( i = 0; i < num_subproblems; i++ ) {
-		globals->subproblem_names[i] = malloc(strlen(subproblem_files[i]) + 1);
+		const char *src = subproblem_files[i];
+		if( src == NULL ) {
+			int j;
+			for( j = 0; j < i; j++ ) free(globals->subproblem_names[j]);
+			free(globals->subproblem_names);
+			free(globals->master_name);
+			free(globals->monolithic_name);
+			free(globals);
+			result->status = DW_STATUS_ERR_BAD_ARGS;
+			return DW_STATUS_ERR_BAD_ARGS;
+		}
+		globals->subproblem_names[i] = malloc(strlen(src) + 1);
 		dw_oom_abort(globals->subproblem_names[i], "globals->subproblem_names[i]");
-		strcpy(globals->subproblem_names[i], subproblem_files[i]);
+		strcpy(globals->subproblem_names[i], src);
 	}
 
 	/* monolithic_name is not used in library mode; set it to an empty path. */
