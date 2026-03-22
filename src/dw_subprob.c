@@ -59,7 +59,7 @@
  */
 void* subproblem_thread(void* arg) {
 	int i, my_col, master_rows, master_cols, j, ret;
-	int num_clients, verbosity;
+	int num_clients;
 	int temp, len, max_iterations;
 	int id;
 	double* my_solution;
@@ -90,7 +90,6 @@ void* subproblem_thread(void* arg) {
 	/* Make some local copies of of things that won't change globally. */
 	id = my_data->my_id;
 	num_clients = my_data->globals->num_clients;
-	verbosity = my_data->globals->verbosity;
 
 	my_data->simplex_control_params = simplex_control_params;
 

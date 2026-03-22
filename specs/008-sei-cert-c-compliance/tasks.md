@@ -119,9 +119,9 @@
 
 **Purpose**: Final verification that all CERT requirements are satisfied end-to-end.
 
-- [ ] T028 [P] Re-run `cppcheck --enable=all src/dw_*.c` and confirm no new findings compared to `baseline-cppcheck.txt` (FR-008)
-- [ ] T029 [P] Run ThreadSanitizer build and test suite per quickstart.md verification checklist: `./configure CFLAGS="-fsanitize=thread -g -O1" LDFLAGS="-fsanitize=thread" && make clean && make && ./tests/dw-tests.sh`; confirm zero data-race warnings
-- [ ] T030 Run final acceptance grep checks from spec.md and quickstart.md: unchecked pthread grep, GLPK lock-state grep, sign-compare compile, full test suite — record results in `specs/008-sei-cert-c-compliance/acceptance-report.md`
+- [X] T028 [P] Re-run `cppcheck --enable=all src/dw_*.c` and confirm no new findings compared to `baseline-cppcheck.txt` (FR-008)
+- [X] T029 [P] Run ThreadSanitizer build and test suite per quickstart.md verification checklist: `./configure CFLAGS="-fsanitize=thread -g -O1" LDFLAGS="-fsanitize=thread" && make clean && make && ./tests/dw-tests.sh`; confirm zero data-race warnings
+- [X] T030 Run final acceptance grep checks from spec.md and quickstart.md: unchecked pthread grep, GLPK lock-state grep, sign-compare compile, full test suite — record results in `specs/008-sei-cert-c-compliance/acceptance-report.md`
 
 **Checkpoint**: All FR-001 through FR-010 satisfied; TSan clean; acceptance report written.
 
