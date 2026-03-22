@@ -19,6 +19,12 @@ per-thread TLS (`__thread` or POSIX `pthread_key_t`), making the workaround
 unnecessary.  The project can therefore drop the embedded copy and link against
 a system-installed GLPK library instead.
 
+## Clarifications
+
+### Session 2026-03-22
+
+- Q: Should updating the CI workflow and Dockerfile to install system GLPK be in scope for this feature? → A: Yes — in scope; both must be updated in the same change
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Build against system GLPK (Priority: P1)
@@ -117,6 +123,8 @@ After the change, `src/` contains only dwsolver's own source files.  No GLPK
 - **FR-006**: The `third-party/glpk/` directory and all files within it MUST be retained in the repository for provenance and attribution purposes.
 - **FR-007**: The project's `README.md` MUST document GLPK as an external dependency, including the minimum version, and provide instructions for installing it on all supported platforms.
 - **FR-008**: The `dwsolver.pc` pkg-config file MUST list GLPK as a `Requires` dependency so that consumers of `libdwsolver` know they must also link against GLPK.
+- **FR-009**: The GitHub Actions CI workflow(s) MUST be updated to install GLPK ≥ 4.65 as a build-dependency step (e.g., `apt-get install libglpk-dev` on Ubuntu runners) before invoking `./configure && make`.
+- **FR-010**: The project `Dockerfile` MUST be updated to install GLPK ≥ 4.65 inside the container image (e.g., via the distribution package manager) so that container builds continue to succeed after the embedded sources are removed.
 
 ### Key Entities
 
@@ -135,6 +143,8 @@ After the change, `src/` contains only dwsolver's own source files.  No GLPK
 - **SC-003**: All tests that pass in the pre-refactoring baseline continue to pass after the refactoring, as measured by `tests/dw-tests.sh` pass/fail counts.
 - **SC-004**: Zero `lpx_*` symbols remain in any dwsolver source file, verifiable by `grep -r 'lpx_' src/dw_*.c` returning no output.
 - **SC-005**: A developer who has never built the project can follow the updated `README.md` to install GLPK, build dwsolver, and run the tests successfully without needing any guidance beyond the documented steps.
+- **SC-006**: The GitHub Actions CI pipeline passes (green) after the change is merged, confirming that the automated runner can install GLPK and build and test the project without the embedded sources.
+- **SC-007**: `docker build .` succeeds on an unmodified checkout after the change, confirming the Dockerfile installs GLPK and produces a working image.
 
 ## Assumptions
 
