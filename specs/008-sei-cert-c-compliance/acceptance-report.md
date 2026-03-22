@@ -1,7 +1,7 @@
 # Acceptance Report — Feature 008: SEI CERT C Compliance
 
 **Branch**: `008-sei-cert-c-compliance`  
-**Date**: 2025-03-21  
+**Date**: 2026-03-21  
 **Commit**: post-Phase-7
 
 ---
@@ -28,13 +28,14 @@ call site is either wrapped in `DW_PTHREAD_CHECK` / `DW_SEM_CHECK` or annotated
 - All lock and sem sites in `src/dw_phases.c` wrapped (T007).
 - All lock, cond-wait, and sem sites in `src/dw_subprob.c` wrapped (T008).
 - All lock sites in `src/dw_rounding.c` wrapped (T009).
-- Remaining un-wrapped calls are `pthread_cond_wait` sites annotated with
-  `/* always succeeds: spurious wakeups handled by while loop */` and
-  `pthread_create` / `pthread_unlock` sites with inline `if (rc) { ... }` checks.
+- Remaining un-wrapped calls are `pthread_cond_wait` sites now wrapped in
+  `DW_PTHREAD_CHECK` (error returns such as `EINVAL`/`EPERM` cause fast-fail),
+  and `pthread_create` / `pthread_unlock` sites with inline `if (rc) { ... }` checks.
 
-**Residual (acceptable)**: Two `pthread_cond_wait` calls in `dw_subprob.c` are
-annotated rather than macro-wrapped because `pthread_cond_wait` always returns 0
-on non-spurious wakeup; spurious wakeups are handled by the `while` guard (FR-003).
+**Residual (acceptable)**: None — both `pthread_cond_wait` call sites in `dw_subprob.c`
+are now wrapped with `DW_PTHREAD_CHECK`. The `while` loop guard handles spurious
+wakeups (FR-003); any non-zero return from `pthread_cond_wait` is treated as a
+fatal error and terminates the process.
 
 **Verdict**: ✅ PASS
 
@@ -105,15 +106,22 @@ Both changed from `if` to `while` in T012.
   stating the full acquisition order:
 
 ```
-/* LOCK ACQUISITION ORDER (POS51-C) — must always be acquired in this order:
- *  1. master_lp_ready_mutex (subproblem signals master LP ready)
- *  2. sub_data_mutex[i]     (per-subproblem data protection)
- *  3. next_iteration_mutex  (master signals next iteration)
- *  4. output_mutex          (serialized console output)
- *  5. rounding_mutex        (rounding thread data)
- *  6. col_name_mutex        (column name cache)
+/* POS51-C LOCK ACQUISITION ORDER — must be followed at ALL call sites:
+ *
+ *   Level 1 (innermost): glpk_mutex          — single GLPK file I/O calls only
+ *   Level 2:             master_lp_ready_mutex — startup barrier + cond var
+ *   Level 3:             service_queue_mutex   — brief service-queue head update
+ *   Level 4:             sub_data_mutex[i]     — per-subproblem data (array)
+ *   Level 5:             next_iteration_mutex  — iteration counter + cond var
+ *   Level 6 (outermost): master_mutex          — row_duals[] dual vector
+ *   Isolated:            reduced_cost_mutex, fputs_mutex — never nested
+ *
+ * When acquiring multiple locks, ALWAYS acquire in ascending level order.
  */
 ```
+
+The comment in `src/dw_support.c` is the authoritative in-source record;
+future audits should treat it as the source of truth.
 
 **Verdict**: ✅ PASS
 

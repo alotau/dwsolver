@@ -229,6 +229,11 @@ void init_pthread_data(faux_globals* fg) {
 	DW_PTHREAD_CHECK(pthread_attr_init(&attr), "pthread_attr_init");
 #ifdef USE_NAMED_SEMAPHORES
 	customers = sem_open(CUST_NAMED_SEMAPHORE, O_CREAT, S_IRWXU, 0);
+	if (customers == SEM_FAILED) { /* POS54-C: sem_open returns SEM_FAILED on error */
+		int err = errno;
+		fprintf(stderr, "dwsolver: sem_open(%s) failed: %s\n", CUST_NAMED_SEMAPHORE, strerror(err));
+		exit(EXIT_FAILURE);
+	}
 #else
 	DW_SEM_CHECK(sem_init(&customers, 0, 0), "sem_init(&customers)");
 #endif

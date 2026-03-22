@@ -279,9 +279,9 @@ void check_broken_constraints(double* xx) {
 	int i;
 	int j;
 	int num_over_capacity = 0;
-	int*    ind = malloc(sizeof(int)*D->cols+1);
+	int*    ind = malloc(sizeof(int) * (D->cols + 1));
 	dw_oom_abort(ind, "ind");
-	double* val = malloc(sizeof(double)*D->cols+1);
+	double* val = malloc(sizeof(double) * (D->cols + 1));
 	dw_oom_abort(val, "val");
 	val[0] = 0.0;
 	ind[0] = 0;

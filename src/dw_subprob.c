@@ -134,7 +134,7 @@ void* subproblem_thread(void* arg) {
 	while (!signals->master_lp_ready) {
 
 		//dw_printf(IMPORTANCE_DIAG, "Thread %d: Yep.  Waiting...\n", id);
-		pthread_cond_wait(&master_lp_ready_cv, &master_lp_ready_mutex); /* return value: spurious wakeups handled by while guard */
+		DW_PTHREAD_CHECK(pthread_cond_wait(&master_lp_ready_cv, &master_lp_ready_mutex), "pthread_cond_wait(&master_lp_ready_cv)"); /* spurious wakeups handled by while guard */
 		//dw_printf(IMPORTANCE_DIAG,
 		//	"Thread %d: Master_lp_ready condition signal received.\n", id);
 	}
@@ -402,7 +402,7 @@ int signal_availability(subprob_struct* my_data) {
 	/* Wait for signal here... */
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 	while (signals->current_iteration == my_data->local_iteration) {
-		pthread_cond_wait(&next_iteration_cv, &next_iteration_mutex); /* always succeeds: spurious wakeups handled by while loop */
+		DW_PTHREAD_CHECK(pthread_cond_wait(&next_iteration_cv, &next_iteration_mutex), "pthread_cond_wait(&next_iteration_cv)"); /* spurious wakeups handled by while loop */
 	}
 	pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 

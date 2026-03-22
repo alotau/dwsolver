@@ -192,7 +192,8 @@ static inline void dw_pthread_check(int rc, const char *name) {
  * do NOT use DW_PTHREAD_CHECK for sem_* calls (strerror(-1) is not useful). */
 static inline void dw_sem_check(int ret, const char *name) {
     if (ret != 0) {
-        fprintf(stderr, "dwsolver: sem error in %s: %s\n", name, strerror(errno));
+        int err = errno; /* snapshot before strerror/fprintf can overwrite it */
+        fprintf(stderr, "dwsolver: sem error in %s: %s\n", name, strerror(err));
         exit(EXIT_FAILURE);
     }
 }
