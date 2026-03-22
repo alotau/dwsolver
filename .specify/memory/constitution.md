@@ -1,9 +1,11 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: (unversioned template) → 1.0.0
-Added sections: Core Principles (I–V), Technology Stack, Git Workflow, Governance
-Removed sections: N/A (initial constitution)
+Version change: 1.0.0 → 1.0.1
+Changed: Technology Stack — LP Backend updated from embedded GLPK 4.44 to system GLPK ≥ 4.65;
+         removed "No external runtime dependencies" (now has one: GLPK ≥ 4.65)
+Added sections: N/A
+Removed sections: N/A
 Templates reviewed:
   ✅ .specify/templates/plan-template.md   — generic Constitution Check gate; no changes needed
   ✅ .specify/templates/spec-template.md   — fully generic; no changes needed
@@ -67,14 +69,17 @@ function boundaries.
 - **Language**: C (targeting C99 for portability across platforms and compilers)
 - **Parallelism**: POSIX Threads (`pthreads`); on Windows via a pthreads-win32
   compatibility layer
-- **LP Backend**: Embedded GLPK 4.44 (thread-patched variant included in `src/`)
+- **LP Backend**: System GLPK ≥ 4.65 (external shared library, detected via
+  `pkg-config`; `libglpk-dev` on Debian/Ubuntu, `glpk-devel` on Fedora/RHEL,
+  `brew install glpk` on macOS)
 - **Build System**: GNU Autotools (`configure`, `Makefile.am`); CMake may be
   introduced later for Windows support
 - **Testing**: Shell-based example runner (`tests/dw-tests.sh`); examples live
   in `examples/` organized by source textbook or reference
 - **Compiler Requirements**: GCC or Clang on POSIX platforms; MSVC or
   MinGW-w64 on Windows
-- **No external runtime dependencies** beyond a C standard library and pthreads
+- **External runtime dependencies**: GLPK ≥ 4.65 shared library; C standard
+  library and pthreads
 
 ## Git Workflow
 
@@ -109,4 +114,4 @@ All feature specifications and implementation plans MUST include a
 "Constitution Check" gate that explicitly verifies compliance with the five
 Core Principles before implementation begins.
 
-**Version**: 1.0.0 | **Ratified**: 2026-03-19 | **Last Amended**: 2026-03-19
+**Version**: 1.0.1 | **Ratified**: 2026-03-19 | **Last Amended**: 2026-03-22
