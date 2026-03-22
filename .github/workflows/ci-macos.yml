@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Suppress automake regeneration
-        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in
+        run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
 
       - name: Build
         run: ./configure --enable-named-semaphores && make

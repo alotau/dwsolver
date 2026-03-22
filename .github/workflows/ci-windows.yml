@@ -31,9 +31,9 @@ jobs:
 
       - name: Suppress automake regeneration and refresh config scripts
         run: |
-          touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in
-          cp "$(find /usr -name config.guess | head -1)" config.guess
-          cp "$(find /usr -name config.sub   | head -1)" config.sub
+          touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
+          cp "$(find /usr -name config.guess | head -1)" build-aux/config.guess
+          cp "$(find /usr -name config.sub   | head -1)" build-aux/config.sub
 
       - name: Build
         run: ./configure && make

@@ -6,6 +6,7 @@ dnl AC_CONFIG_SRCDIR([include/glpk.h])
 
 AC_CONFIG_MACRO_DIR([m4])
 
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_HEADERS([config.h])

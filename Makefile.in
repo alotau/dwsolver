@@ -159,9 +159,16 @@ am__define_uniq_tagged_files = \
     if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
   done | $(am__uniquify_input)`
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README.md compile config.guess \
-	config.sub depcomp install-sh ltmain.sh missing
+am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
+	$(top_srcdir)/build-aux/compile \
+	$(top_srcdir)/build-aux/config.guess \
+	$(top_srcdir)/build-aux/config.sub \
+	$(top_srcdir)/build-aux/install-sh \
+	$(top_srcdir)/build-aux/ltmain.sh \
+	$(top_srcdir)/build-aux/missing AUTHORS COPYING ChangeLog \
+	INSTALL NEWS README.md build-aux/compile \
+	build-aux/config.guess build-aux/config.sub \
+	build-aux/install-sh build-aux/ltmain.sh build-aux/missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -331,8 +338,11 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src tests
-EXTRA_DIST = examples glpk-4.44.ThreadReady.patch GLPK_INSTALL GLPK_AUTHORS \
-				GLPK_README GLPK_NEWS GLPK_THANKS ADDITIONAL_LICENSE_TERMS \
+EXTRA_DIST = examples third-party/glpk/glpk-4.44.ThreadReady.patch \
+				third-party/glpk/GLPK_INSTALL third-party/glpk/GLPK_AUTHORS \
+				third-party/glpk/GLPK_README third-party/glpk/GLPK_NEWS \
+				third-party/glpk/GLPK_THANKS third-party/glpk/README \
+				ADDITIONAL_LICENSE_TERMS \
 				ChangeLog
 
 all: config.h

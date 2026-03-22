@@ -4,7 +4,10 @@ ACLOCAL_AMFLAGS=-I m4
 
 SUBDIRS = src tests
 
-EXTRA_DIST = examples glpk-4.44.ThreadReady.patch GLPK_INSTALL GLPK_AUTHORS \
-				GLPK_README GLPK_NEWS GLPK_THANKS ADDITIONAL_LICENSE_TERMS \
+EXTRA_DIST = examples third-party/glpk/glpk-4.44.ThreadReady.patch \
+				third-party/glpk/GLPK_INSTALL third-party/glpk/GLPK_AUTHORS \
+				third-party/glpk/GLPK_README third-party/glpk/GLPK_NEWS \
+				third-party/glpk/GLPK_THANKS third-party/glpk/README \
+				ADDITIONAL_LICENSE_TERMS \
 				ChangeLog
 ## eof ##
