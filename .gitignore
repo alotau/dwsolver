@@ -24,6 +24,6 @@ tests/test_blas
 tests/test-suite.log
 tests/test_blas.log
 tests/test_blas.trs
-test-driver
+/test-driver
 *.plist
 *~
