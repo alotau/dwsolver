@@ -557,7 +557,11 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  		fg->subproblem_names[i] = malloc(sizeof(char)*BUFF_SIZE);
  		dw_oom_abort(fg->subproblem_names[i], "fg->subproblem_names[i]");
  		fgets(fg->subproblem_names[i], BUFF_SIZE, input_file);
- 		fg->subproblem_names[i][strlen(fg->subproblem_names[i])-1] = '\0';
+		{
+			size_t len = strlen(fg->subproblem_names[i]);
+			while (len > 0 && (fg->subproblem_names[i][len-1] == '\n' || fg->subproblem_names[i][len-1] == '\r'))
+				fg->subproblem_names[i][--len] = '\0';
+		}
  		if( (subproblem_files[i] = fopen(fg->subproblem_names[i], "r")) == NULL ) {
  			dw_printf(IMPORTANCE_VITAL, "Problem opening file: %s\n", fg->subproblem_names[i]);
  			return 1;
@@ -574,7 +578,11 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
 
  	/* Get master file name. */
  	fgets(fg->master_name, BUFF_SIZE, input_file);
- 	fg->master_name[strlen(fg->master_name)-1] = '\0';
+	{
+		size_t len = strlen(fg->master_name);
+		while (len > 0 && (fg->master_name[len-1] == '\n' || fg->master_name[len-1] == '\r'))
+			fg->master_name[--len] = '\0';
+	}
  	if( (master_file = fopen(fg->master_name, "r")) == NULL ) {
  		dw_printf(IMPORTANCE_VITAL, "Problem opening master file: %s\n", fg->master_name);
  		return 1;
@@ -592,7 +600,11 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  	 */
  	if( fg->get_monolithic_file ) {
  		fgets(fg->monolithic_name, BUFF_SIZE, input_file);
- 		fg->monolithic_name[strlen(fg->monolithic_name)-1] = '\0';
+		{
+			size_t len = strlen(fg->monolithic_name);
+			while (len > 0 && (fg->monolithic_name[len-1] == '\n' || fg->monolithic_name[len-1] == '\r'))
+				fg->monolithic_name[--len] = '\0';
+		}
  		/*
  		if( (monolithic_file = fopen(fg->monolithic_name, "r")) == NULL ) {
  			printf("Problem opening master file: %s\n", fg->monolithic_name);

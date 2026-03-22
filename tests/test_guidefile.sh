@@ -101,6 +101,17 @@ _rc=$?
 assert_exit "missing_file no crash" no_crash "$_rc"
 assert_exit "missing_file non-zero exit" nonzero "$_rc"
 
+# CRLF edge case: guidefile with Windows-style \r\n line endings
+echo "Test: CRLF guidefile (Windows-style line endings)"
+_out=$(dwsolver --no-write-final-master --quiet -g fixtures/crlf_single_sub.guidefile 2>&1)
+_rc=$?
+assert_exit "crlf guidefile no crash" no_crash "$_rc"
+assert_exit "crlf guidefile succeeds" zero "$_rc"
+if echo "$_out" | grep -q "USAGE:\|Problem opening"; then
+    echo "  FAIL: crlf guidefile failed to open files (\\r not stripped)"
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+fi
+
 echo ""
 echo "=== Results: $PASS_COUNT passed, $FAIL_COUNT failed ==="
 if [ "$FAIL_COUNT" -ne 0 ]; then
