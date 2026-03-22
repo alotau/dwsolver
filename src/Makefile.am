@@ -2,9 +2,10 @@
 
 #INCLUDES = -I$(srcdir)/../include
 
-bin_PROGRAMS = dwsolver
-
-dwsolver_SOURCES = \
+# -----------------------------------------------------------------------
+# All GLPK embedded source files (shared between library and binary).
+# -----------------------------------------------------------------------
+GLPK_SOURCES = \
 glpapi01.c \
 glpapi02.c \
 glpapi03.c \
@@ -113,16 +114,40 @@ amd/amd_post_tree.c \
 amd/amd_postorder.c \
 amd/amd_preprocess.c \
 amd/amd_valid.c \
-colamd/colamd.c \
+colamd/colamd.c
+
+# DW core files (everything except the CLI entry point and the new solver API).
+DW_CORE_SOURCES = \
 dw_blas.c \
 dw_support.c \
 dw_phases.c \
 dw_subprob.c \
 dw_rounding.c \
-dw_globals.c \
-dw_main.c 
+dw_globals.c
 
-dwsolver_CFLAGS = $(AM_CFLAGS)
+# -----------------------------------------------------------------------
+# Shared library: libdwsolver
+# -----------------------------------------------------------------------
+lib_LTLIBRARIES = libdwsolver.la
+
+libdwsolver_la_SOURCES  = $(GLPK_SOURCES) $(DW_CORE_SOURCES) dw_solver.c
+libdwsolver_la_CPPFLAGS = $(AM_CPPFLAGS) -DDWSOLVER_BUILDING_LIB
+libdwsolver_la_CFLAGS   = $(AM_CFLAGS) -fvisibility=hidden
+libdwsolver_la_LDFLAGS  = -version-info 0:0:0
+
+# -----------------------------------------------------------------------
+# CLI binary: dwsolver
+# -----------------------------------------------------------------------
+bin_PROGRAMS = dwsolver
+
+dwsolver_SOURCES = dw_main.c
+dwsolver_CFLAGS  = $(AM_CFLAGS)
+dwsolver_LDADD   = libdwsolver.la
+
+# -----------------------------------------------------------------------
+# Installed public header
+# -----------------------------------------------------------------------
+nobase_include_HEADERS = dw_solver.h
 
 EXTRA_DIST = amd/amd.h amd/amd_internal.h colamd/colamd.h \
 dw_blas.h      glpapi.h  glpfhv.h  glplib.h  glpnet.h  glpspm.h \

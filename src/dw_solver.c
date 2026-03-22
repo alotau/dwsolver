@@ -1,0 +1,973 @@
+/* *****************************************************************************
+ *
+ *   DWSOLVER - a general, parallel implementation of the Dantzig-Wolfe
+ *               Decomposition algorithm.
+ *
+ *   Copyright 2010 United States Government National Aeronautics and Space
+ *   Administration (NASA).  No copyright is claimed in the United States under
+ *   Title 17, U.S. Code. All Other Rights Reserved.
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   In accordance with the GNU General Public License Version 3, 29 June 2007
+ *   (GPL V3) Section 7. Additional Terms, Additional Permissions are added as
+ *   exceptions to the terms of the GPL V3 for this program.  These additional
+ *   terms should have been received with this program in a file entitled
+ *   "ADDITIONAL_LICENSE_TERMS".  If a copy was not provided, you may request
+ *   one from the contact author listed below.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *   Contact: Joseph Rios <Joseph.L.Rios@nasa.gov>
+ *
+ **************************************************************************** */
+
+/*
+ * dw_solver.c
+ *
+ * Implements the public callable library API (dw_solver.h) and contains the
+ * extracted solver core that was previously in dw_main.c's main() function.
+ */
+
+#include "dw_solver.h"
+#include "dw.h"
+#include "dw_subprob.h"
+#include "dw_support.h"
+#include "dw_rounding.h"
+#include "dw_phases.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <config.h>
+#include <glpk.h>
+
+/* Forward declaration for the GLPK terminal-redirect hook. */
+static int hook(void* info, const char* s);
+
+/* -------------------------------------------------------------------------
+ * T003: dw_options_init — set all 12 fields to documented defaults
+ * ------------------------------------------------------------------------- */
+void dw_options_init(dw_options_t *opts) {
+	opts->verbosity               = OUTPUT_NORMAL;       /* 5 */
+	opts->mip_gap                 = DEFAULT_MIP_GAP;     /* 0.01 */
+	opts->max_phase1_iterations   = MAX_PHASE1_ITERATIONS; /* 100 */
+	opts->max_phase2_iterations   = MAX_PHASE2_ITERATIONS; /* 3000 */
+	opts->rounding_flag           = 0;
+	opts->integerize_flag         = 0;
+	opts->enforce_sub_integrality = 0;
+	opts->print_timing_data       = 0;
+	opts->print_final_master      = 0;
+	opts->print_relaxed_sol       = 0;
+	opts->perturb                 = 0;
+	opts->shift                   = 0.0;
+}
+
+/* -------------------------------------------------------------------------
+ * T004: dw_solver_run — extracted solver core (private)
+ *
+ * Accepts a fully-populated faux_globals struct (file names + options must
+ * already be set via init_globals() + option mapping before this call).
+ *
+ * If result is non-NULL the function populates it with the objective value
+ * and a heap-allocated copy of the master LP primal solution before the
+ * GLPK state is freed.  The caller retains ownership of result->x and must
+ * release it with dw_result_free().
+ *
+ * Note: this function does NOT call free(globals) — the caller owns the
+ * globals allocation and must free it after dw_solver_run() returns.
+ * ------------------------------------------------------------------------- */
+static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
+
+	int rc, i, j, num_rows, count, len, num_clients;
+	int need_phase_one = 0;
+	int row_type;
+	int num_phase1_vars;
+	int* ind;
+	int* col_deletion_indicies = NULL;
+
+	double* val;
+	double  variable_value;
+	double  perturbation;
+
+	char* local_buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(local_buffer, "local_buffer");
+	char** phase1_vars;
+
+	void *status;
+	FILE* opt_outfile;
+	pthread_t* threads;
+	subprob_struct* sub_data;
+
+	master_data*  md      = malloc(sizeof(master_data));
+	dw_oom_abort(md, "md");
+
+	/* For clocking the program run time. */
+	time_t  t0 = time(NULL);
+	clock_t c0 = clock();
+
+	num_clients   = globals->num_clients; /* Doesn't change. Make local copy.*/
+	globals->x    = malloc(sizeof(double**)*num_clients);
+	dw_oom_abort(globals->x, "globals->x");
+	threads       = malloc(sizeof(pthread_t)*num_clients);
+	dw_oom_abort(threads, "threads");
+	sub_data      = malloc(sizeof(subprob_struct)*num_clients);
+	dw_oom_abort(sub_data, "sub_data");
+
+	/* Initialize synchronization variables.  */
+	init_signals(globals);
+
+	/* Initialize global pthread data structures. */
+	init_pthread_data(globals);
+
+	/* Open the output file for the optimization routines */
+	strcpy(local_buffer, "out_terminal");
+	if( (opt_outfile = fopen(local_buffer, "w")) == NULL) {
+		fprintf(stderr, "PROBLEM OPENING TERMINAL OUTFILE. BAILING.\n");
+		exit(1);
+	}
+
+	/* Force terminal output for optimization routines to file instead */
+	glp_term_hook(hook, opt_outfile);
+
+/*****************
+ *
+ * LAUNCH SUBPROBLEM THREADS
+ *
+ *****************/
+
+	/* Create/launch the subproblem threads. */
+	for( i = 0; i < num_clients; i++) {
+		//pthread_mutex_init(&sub_data_mutex[i], NULL); /* done in init_pthread_data() */
+		sub_data[i].infile_name = (char*) malloc(sizeof(char)*strlen(globals->subproblem_names[i])+1);
+		//printf("%d: Name = %s has len = %d\n", i, globals->subproblem_names[i], strlen(globals->subproblem_names[i]));
+		strcpy(sub_data[i].infile_name, globals->subproblem_names[i]);
+
+		/* Initialize subproblem data. */
+		sub_data[i].my_id            = i;
+		sub_data[i].command          = COMMAND_WAIT;
+		sub_data[i].local_iteration  = 0;
+		sub_data[i].r                = DW_INFINITY;
+		sub_data[i].obj              = DW_INFINITY;
+		sub_data[i].phase_one        = 0;
+		sub_data[i].globals          = globals;
+		sub_data[i].md               = md;
+
+		globals->x[i]           = malloc(sizeof(double*)*MAX_PHASE2_ITERATIONS);
+		dw_oom_abort(globals->x[i], "globals->x[i]");
+
+		/* Actually create the thread now. */
+		rc = pthread_create(&threads[i],
+				&attr,
+				subproblem_thread,
+				(void *)&sub_data[i]);
+		if (rc) {
+			dw_printf(IMPORTANCE_VITAL,
+					"ERROR; return code from pthread_create() is %d\n", rc);
+			exit(-1);
+		}
+	}
+
+/*****************
+ *
+ * SET UP MASTER
+ *
+ *****************/
+	/* Open the file containing the original master problem. */
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
+	original_master_lp = lpx_read_cpxlp(globals->master_name);
+	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
+
+	/* Prepare the parameters for the simplex method. */
+	glp_init_smcp(simplex_control_params);
+	simplex_control_params->msg_lev  = GLP_MSG_ON;
+	/* Presolving doesn't make sense because many constraints aren't even a
+	 * part of the master problem.  Many important vars could be presolved
+	 * away. */
+	simplex_control_params->presolve = GLP_OFF;
+
+	/* For integer optimization. */
+	glp_init_iocp(parm);
+
+	num_rows    = glp_get_num_rows(original_master_lp);
+
+	fflush(stdout);
+	/* These arrays will be re-used over and over in GLPK calls. */
+	val   = (double*) malloc(sizeof(double)*
+			(glp_get_num_cols(original_master_lp) + 1));
+	ind   = (int*)    malloc(sizeof(int)*
+			(glp_get_num_cols(original_master_lp) + 1));
+
+	/* The 'D' is the part of the constraint matrix for the master that has
+	 * to do with the original problem's constraints.  All threads access
+	 * this data.  Get it ready.
+	 */
+	prepare_D(num_rows, ind, val);
+
+	/* Prepare the master data structure used by all threads. */
+	prepare_md(md);
+
+	/* Make it easier to find rows and columns by name. */
+	glp_create_index(original_master_lp);
+
+	/* Signal all subproblems that master is set up and ready. */
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&master_lp_ready_mutex), "pthread_mutex_lock(&master_lp_ready_mutex)");
+	signals->master_lp_ready = 1;
+	pthread_cond_broadcast(&master_lp_ready_cv); /* always succeeds */
+	pthread_mutex_unlock(&master_lp_ready_mutex); /* always succeeds: unlocking owned mutex */
+
+	/* Create the _real_ master problem while subprobs do their initial solve.*/
+	master_lp = glp_create_prob();
+	glp_set_prob_name(master_lp, "master");
+	glp_set_obj_dir(master_lp, GLP_MIN);
+
+/*****************
+ *
+ * ADD ROWS TO MASTER
+ *
+ *****************/
+
+	/* We have 1 row for each constraint in original master + 1 row for each
+	 * subproblem in the form of convexity constraints. */
+	glp_add_rows(master_lp, D->rows + num_clients);
+
+	/* Give each convexity row a name and and fix its bounds at 1.0. */
+	for( i = (D->rows + 1); i <= (D->rows + num_clients); i++ ) {
+		snprintf(local_buffer, BUFF_SIZE, "sub%d_convexity", i - D->rows);
+		glp_set_row_name(master_lp, i, local_buffer);
+
+		// Fixing row bounds to zero as a first step toward handling bounding
+		// rays returned by the subproblems.  Currently dwsolver doesn't
+		// handle unbounded subproblems, but if it did, there is a chance
+		// there would be no feasible corner points provided by a subproblem
+		// and only bounding rays.  If that's the case, the convexity row
+		// for the subproblem would have no variables.  If the bound was "1"
+		// (as it should be to indicate convexity), then this constraint
+		// would be unsatisfiable.  As soon as a 'lambda' gets added for a
+		// subproblem, this bound should be set properly to '1'.
+		glp_set_row_bnds(master_lp, i, GLP_FX, 1.0, 1.0);
+	}
+
+	/* Set the rows relating to original problem.  Give a name based on the
+	 * original problem and fix their bounds at b value from original prob. */
+	for( i = 1; i <= D->rows; i++ ) {
+		glp_set_row_name(master_lp, i, glp_get_row_name(original_master_lp, i));
+		glp_set_row_bnds(master_lp, i,
+				glp_get_row_type(original_master_lp, i),
+				glp_get_row_lb(original_master_lp, i),
+				glp_get_row_ub(original_master_lp, i));
+	}
+
+	/* We will now add a 'y'/'s' column for each original row. */
+	count  = glp_add_cols(master_lp, D->rows);
+	dw_printf(IMPORTANCE_DIAG,"Added %d cols to master_lp\n", D->rows);
+
+	/* Each y or s column has a length of 1 if added to formulation. */
+	len = 1;
+
+	/* Create enough space to accommodate an auxiliary variable for each row. */
+	/* Would be more efficient to determine the amount of memory dynamically. */
+	phase1_vars = malloc(sizeof(char*)*D->rows);
+	dw_oom_abort(phase1_vars, "phase1_vars");
+
+	/* Keep track of how many auxiliary variables are added. */
+	num_phase1_vars = 0;
+
+	/* Step through each original row and convert it to standard form:
+	 *   Ax = b
+	 * Note: 'count' should be valued at 0 at this point.
+	 */
+	dw_printf(IMPORTANCE_DIAG,"There are %d rows.\n", D->rows);
+	for( i = count; i < (D->rows + count); i++ ) {
+		/* In this for-loop, any variable that is added will only be part of
+		 * the row indicated by the index, i, since it is an
+		 * auxiliary/slack/surplus variable.
+		 */
+		ind[1] = i;
+
+		/* Based on row type, add appropriate variable(s). */
+		row_type = glp_get_row_type(master_lp, i);
+
+		/* If this is a fixed row, we need an auxiliary variable and, therefore,
+		 * will be required to run a phase I procedure.
+		 */
+		if( row_type == GLP_FX ) {
+			phase1_vars[num_phase1_vars] = malloc(sizeof(char)*BUFF_SIZE);
+			dw_oom_abort(phase1_vars[num_phase1_vars], "phase1_vars[num_phase1_vars]");
+			rc = snprintf(phase1_vars[num_phase1_vars], BUFF_SIZE-1, "y_%d", i);
+			if( rc >= BUFF_SIZE - 1) /* Bail if buffer overflow. */
+				buffer_overflow( "y_(row_number)", BUFF_SIZE-1);
+			/* Sign of auxiliary variable dependent on bound value. */
+			val[1] = glp_get_row_ub(master_lp, i) < 0.0 ? -1.0 : 1.0;
+			/* Make it part of objective.  To be driven to zero. */
+			glp_set_obj_coef(master_lp, i, 1.0);
+			glp_set_col_name(master_lp, i, phase1_vars[num_phase1_vars]);
+			glp_set_col_bnds(master_lp, i, GLP_LO, 0.0, 0.0);
+			glp_set_mat_col (master_lp, i, len, ind, val);
+			need_phase_one = 1;
+			num_phase1_vars++;
+		}
+		/* Upper-bounded row requires a surplus variable. */
+		else if( row_type == GLP_UP ){
+			/* Convert to standard form by making row fixed ('=', not '<='). */
+			glp_set_row_bnds(master_lp, i, GLP_FX,
+					glp_get_row_ub(master_lp, i), 0.0);
+
+			/* Create a surplus variable for this row. */
+			rc = snprintf(local_buffer, BUFF_SIZE-1, "su_%d", i);
+			if( rc >= BUFF_SIZE - 1)
+				buffer_overflow( "su_(row_number)", BUFF_SIZE-1);
+			val[1] = 1.0;
+			glp_set_col_name(master_lp, i, local_buffer);
+			glp_set_col_bnds(master_lp, i, GLP_LO, 0.0, 0.0);
+			glp_set_mat_col (master_lp, i, len, ind, val);
+			glp_set_obj_coef(master_lp, i, 0.0);
+
+			/* Since this row is upper-bounded, a negative bound implies we
+			 * need a Phase I procedure to find our initial basis.  Here we
+			 * add an artificial variable to be driven out.
+			 */
+			//if( glp_get_row_ub(master_lp, i) < 0 ) {
+				int new_col = glp_add_cols(master_lp, 1);
+				phase1_vars[num_phase1_vars] = malloc(sizeof(char)*BUFF_SIZE);
+				dw_oom_abort(phase1_vars[num_phase1_vars], "phase1_vars[num_phase1_vars]");
+				rc = snprintf(phase1_vars[num_phase1_vars],
+						BUFF_SIZE-1, "y_%d", i);
+				if( rc >= BUFF_SIZE - 1) /* Bail if buffer overflow. */
+					buffer_overflow( "y_(row_number)", BUFF_SIZE-1);
+				val[1] = -1.0;
+				glp_set_obj_coef(master_lp, new_col, 1.0);
+				glp_set_col_name(master_lp, new_col,
+						phase1_vars[num_phase1_vars]);
+				glp_set_col_bnds(master_lp, new_col, GLP_LO, 0.0, 0.0);
+				glp_set_mat_col (master_lp, new_col, len, ind, val);
+
+				need_phase_one = 1;
+				num_phase1_vars++;
+			//}
+		}
+		/* Lower-bounded row requires a slack variable.
+		 * This branch untested/unfinished.  Needs to mirror the previous
+		 * branch.  Maybe missing appropriate sign somewhere.  Need examples
+		 * to test.
+		 */
+		else if( row_type == GLP_LO ) { /* Add slack variable. */
+
+			/* Convert to standard form by making row fixed ('=', not '>='). */
+			glp_set_row_bnds(master_lp, i, GLP_FX,
+					glp_get_row_lb(master_lp, i), 0.0);
+
+			/* Create a slack variable for this row. */
+			rc = snprintf(local_buffer, BUFF_SIZE-1, "sl_%d", i);
+			if( rc >= BUFF_SIZE - 1)
+				buffer_overflow( "sl_(row_number)", BUFF_SIZE-1);
+			val[1] = -1.0; /* This is where the sign is in question. */
+			glp_set_col_name(master_lp, i, local_buffer);
+			glp_set_col_bnds(master_lp, i, GLP_LO, 0.0, 0.0);
+			glp_set_mat_col (master_lp, i, len, ind, val);
+			glp_set_obj_coef(master_lp, i, 0.0);
+
+			/* Since this row is lower-bounded, a positive bound implies we
+			 * need a Phase I procedure to find our initial basis.  Here we
+			 * add an artificial variable to be driven out.
+			 */
+			//if( glp_get_row_lb(master_lp, i) > 0 ) {
+				int new_col = glp_add_cols(master_lp, 1);
+				phase1_vars[num_phase1_vars] = malloc(sizeof(char)*BUFF_SIZE);
+				dw_oom_abort(phase1_vars[num_phase1_vars], "phase1_vars[num_phase1_vars]");
+				rc = snprintf(phase1_vars[num_phase1_vars],
+						BUFF_SIZE-1, "y_%d", i);
+				if( rc >= BUFF_SIZE - 1) /* Bail if buffer overflow. */
+					buffer_overflow( "y_(row_number)", BUFF_SIZE-1);
+				val[1] = 1.0;
+				glp_set_obj_coef(master_lp, new_col, 1.0);
+				glp_set_col_name(master_lp, new_col,
+						phase1_vars[num_phase1_vars]);
+				glp_set_col_bnds(master_lp, new_col, GLP_LO, 0.0, 0.0);
+				glp_set_mat_col (master_lp, new_col, len, ind, val);
+
+				need_phase_one = 1;
+				num_phase1_vars++;
+			//}
+		}
+		else {
+			dw_printf(IMPORTANCE_VITAL,
+					"Row isn't fixed or upper/lower bounded?  That is bad.\n");
+			dw_printf(IMPORTANCE_VITAL,
+					"I'd expect some sort of crash or nonsense solution.\n");
+		}
+
+		if( globals->perturb ) { /* Perturb the bound to avoid degeneracy. */
+			perturbation = 0.00000001 * i;
+			glp_set_row_bnds(master_lp, i, GLP_FX,
+				glp_get_row_ub(master_lp, i) + perturbation, 0.0);
+		}
+	}
+/*****************
+ *
+ * DONE ADDING ROWS TO MASTER
+ *
+ *****************/
+
+	/* Set the shift, if any. */
+	glp_set_obj_coef(master_lp, 0, globals->shift);
+
+	/* Print current problem, just slack/auxiliary variables.  For debugging.*/
+
+	if( glp_get_num_cols(master_lp) > 0 ) {
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
+		lpx_write_cpxlp(master_lp, "pre_master.cpxlp");
+		pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
+	}
+
+	dw_printf(IMPORTANCE_AVG,
+		"The master currently has %d rows and %d columns.\n",
+		glp_get_num_rows(master_lp), glp_get_num_cols(master_lp));
+
+/*****************
+ *
+ * BEGIN PHASE ONE (IF NECESSARY)
+ *
+ *****************/
+	/* If we added auxiliary variables, attempt to drive them out. */
+	if( need_phase_one ) {
+		/* Set the shift. */
+		glp_set_obj_coef(master_lp, 0, 0);
+
+		/* Let clients know that we're in Phase I. */
+		for( j = 0; j < num_clients; j++ ) {
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[j]), "pthread_mutex_lock(sub_data_mutex[j])");
+			sub_data[j].phase_one = 1;
+			pthread_mutex_unlock(&sub_data_mutex[j]); /* always succeeds: unlocking owned mutex */
+		}
+		dw_printf(IMPORTANCE_AVG,
+				"### Commencing Phase I for reduced master problem...\n");
+
+		/* These data structures will keep track of the objective terms that
+		 * the subproblems provide.  Recall that the auxiliary master problem
+		 * we are currently solving only has auxiliary variables in the
+		 * objective.  When we drive all of them out, the columns that have
+		 * been introduced need their appropriate objective terms.
+		 */
+		char**  obj_names =
+			malloc(sizeof(char*)*num_clients*globals->max_phase1_iterations);
+		double* obj_coefs =
+			malloc(sizeof(double)*num_clients*globals->max_phase1_iterations);
+		int*    obj_count =
+			malloc(sizeof(int));
+		*obj_count = 0;
+
+		if( globals->write_intermediate_opt_files ) {
+			snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp");
+			lpx_write_cpxlp(master_lp, local_buffer);
+		}
+
+		/* Actually perform the Dantzig-Wolfe algorithm now. */
+		for( j = 0; j < globals->max_phase1_iterations; j++ ) {
+			dw_printf(IMPORTANCE_AVG,
+					"\n###  Iteration %d of phase I ###\n", j+1);
+			dw_printf(IMPORTANCE_DIAG, "master_lp has %d cols.\n",
+				glp_get_num_cols(master_lp));
+
+
+			rc = phase_1_iteration(sub_data, globals, (j ? 0 : 1),
+					obj_names, obj_coefs, obj_count, md);
+
+			if( globals->write_intermediate_opt_files ) {
+				snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", j+1);
+				lpx_write_cpxlp(master_lp, local_buffer);
+			}
+
+			if( -TOLERANCE < glp_get_obj_val(master_lp) &&
+					glp_get_obj_val(master_lp) < TOLERANCE ) {
+				dw_printf(IMPORTANCE_AVG,
+						"\n@@@@@@@ Minimized auxiliary problem. @@@@@@@\n");
+				break;
+			}
+
+			if( rc == 0 ) {
+				dw_printf(IMPORTANCE_VITAL,"No new columns added and did not reach zero.\n");
+				dw_printf(IMPORTANCE_VITAL,"Problem is infeasible.\n");
+				dw_printf(IMPORTANCE_VITAL,"Breaking from phase one.\n");
+				break;
+			}
+		}
+
+		dw_printf(IMPORTANCE_AVG,
+				"### Preparing for Phase II for reduced master problem...\n");
+
+		/* Let subproblems know we are out of phase one. */
+		for( j = 0; j < num_clients; j++ ) {
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[j]), "pthread_mutex_lock(sub_data_mutex[j])");
+			sub_data[j].phase_one = 0;
+			pthread_mutex_unlock(&sub_data_mutex[j]); /* always succeeds: unlocking owned mutex */
+		}
+
+		/* Delete the y columns. */
+		col_deletion_indicies = malloc(sizeof(int)*(D->rows + 1));
+		dw_oom_abort(col_deletion_indicies, "col_deletion_indicies");
+		for( i = 0; i < num_phase1_vars; i++ ) {
+			col_deletion_indicies[i+1] =
+				glp_find_col(master_lp, phase1_vars[i]);
+			free(phase1_vars[i]);
+		}
+		glp_del_cols(master_lp, num_phase1_vars, col_deletion_indicies);
+		free( col_deletion_indicies ) ;
+
+		/* Restore objective coeff's of the current variables in system. */
+		if( globals->verbosity >= OUTPUT_NORMAL )
+			printf("Trying to restore %d objective coeff's...\n", *obj_count);
+		for( i = 0; i < *obj_count; i++ ) {
+			if( glp_find_col(master_lp, obj_names[i]) <= 0 ) {
+				printf("Didn't find a column I expected to find.\n");
+				printf("Things are probably broken.\n");
+			}
+			glp_set_obj_coef(master_lp, glp_find_col(master_lp, obj_names[i]),
+					obj_coefs[i]);
+			free(obj_names[i]);
+		}
+
+		/* Rebuild the basis after removing columns. This is necessary in the
+		 * presence of degeneracy, but safe to do regardless.
+		 */
+		glp_adv_basis(master_lp, 0);
+		rc = glp_simplex(master_lp, simplex_control_params);
+		dw_printf(IMPORTANCE_AVG,
+				"Recomputed basis and solved.  Simplex returned %d\n", rc);
+
+		/* Reset the appropriate shift. */
+		dw_printf(IMPORTANCE_DIAG, "THE SHIFT IS %3.2f\n", globals->shift);
+		glp_set_obj_coef(master_lp, 0, globals->shift);
+
+		/* Phase 1→Phase 2 transition sync.
+		 *
+		 * The last phase_1_iteration() call broadcasts a wake signal before
+		 * returning.  Both subproblem threads immediately run one more loop
+		 * iteration using Phase 1's zero objective and Phase 1 dual values.
+		 * If those results reach phase_2_iteration() unchanged, the r-obj
+		 * check uses the Phase 1 convexity-constraint dual (r_phase1), which
+		 * can be ≤ 0 at Phase 1 convergence.  That causes rc=0 on the very
+		 * first Phase 2 call, terminating the algorithm at a suboptimal point.
+		 *
+		 * Fix: drain all N in-flight transition results without using them,
+		 * then push fresh Phase 2 dual values from the just-solved master LP
+		 * and re-broadcast.  All subproblems are blocked in signal_availability
+		 * after the drain, so they will pick up the Phase 2 duals and
+		 * phase_one=0 before running their first real Phase 2 iteration.
+		 */
+		for( i = 0; i < num_clients; i++ ) {
+#ifdef USE_NAMED_SEMAPHORES
+			sem_wait(customers);
+#else
+			sem_wait(&customers);
+#endif
+			pthread_mutex_lock(&service_queue_mutex);
+			globals->head_service_queue =
+				(globals->head_service_queue + 1) % num_clients;
+			pthread_mutex_unlock(&service_queue_mutex);
+		}
+		/* Push Phase 2 row_duals and r values from the freshly-solved master. */
+		pthread_mutex_lock(&master_mutex);
+		for( i = 1; i <= D->rows; i++ )
+			md->row_duals[i] = glp_get_row_dual(master_lp, i);
+		pthread_mutex_unlock(&master_mutex);
+		for( i = 0; i < num_clients; i++ ) {
+			pthread_mutex_lock(&sub_data_mutex[i]);
+			sub_data[i].r = glp_get_row_dual(master_lp, D->rows + 1 + i);
+			pthread_mutex_unlock(&sub_data_mutex[i]);
+		}
+		/* Mark the transition slot NULL for every subproblem so that
+		 * free_sub_data() does not try to free an uninitialised pointer.
+		 * globals->x[i] is malloc'd (not calloc'd), so the slot that
+		 * corresponds to this extra current_iteration increment would
+		 * otherwise contain garbage. */
+		for( i = 0; i < num_clients; i++ )
+			globals->x[i][signals->current_iteration] = NULL;
+
+		/* Re-broadcast: subproblems wake and run their first true Phase 2
+		 * iteration with correct objective (phase_one=0) and Phase 2 duals. */
+		pthread_mutex_lock(&next_iteration_mutex);
+		signals->current_iteration++;
+		pthread_cond_broadcast(&next_iteration_cv);
+		pthread_mutex_unlock(&next_iteration_mutex);
+
+		/* Clean up. */
+		free(obj_count);
+		free(obj_coefs);
+		free(phase1_vars);
+		free(obj_names);
+		dw_printf(IMPORTANCE_AVG,"Phase II will start now.\n");
+	}
+	else {
+		dw_printf(IMPORTANCE_AVG,
+				"No auxiliary variables introduced.  Straight to Phase II.\n");
+		free(phase1_vars);
+	}
+/*****************
+ *
+ * END PHASE I
+ *
+ *****************/
+
+	dw_printf(IMPORTANCE_DIAG,"There will be a maximum of %d DW iterations.\n",
+			MAX_PHASE2_ITERATIONS);
+
+/*****************
+ *
+ * BEGIN PHASE II
+ *
+ *****************/
+	/* Actually perform Dantzig-Wolfe algorithm now. */
+	for( j = 0; j < globals->max_phase2_iterations; j++ ) {
+
+		dw_printf(IMPORTANCE_AVG,"\n###  Iteration %d of phase II ###\n",
+				j);
+		dw_printf(IMPORTANCE_DIAG,"master_lp has %d cols.\n",
+				glp_get_num_cols(master_lp));
+
+		if( globals->write_intermediate_opt_files ) {
+			snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", j);
+			lpx_write_cpxlp(master_lp, local_buffer);
+		}
+
+		rc = phase_2_iteration(sub_data, globals, md);
+
+		/* These lines may be useful to someone solving a relaxed integer
+		 * instance.  Or maybe not.
+		 */
+		//check_degeneracy();
+		//if( check_col_integrality() )
+		//	printf("Non-integral variables!\n");
+		//else printf("All primal values are integral.\n");
+
+		if( rc == 0 ) {
+			dw_printf(IMPORTANCE_AVG,"Didn't add any columns?  Let's break.\n");
+			for(i = 0; i < num_clients; i++) {
+				/* Unfortunately, this command doesn't reach the subproblems
+				 * until they've completed their current iteration. On
+				 * later iterations, this may not be so bad, but if there is
+				 * no guarantee on how long an iteration may take. This can
+				 * be easily(?) refactored to send the correct code
+				 * dependent upon the value of rc in phase_2_iteration().
+				 */
+				DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[i]), "pthread_mutex_lock(sub_data_mutex[i])");
+				sub_data[i].command = COMMAND_STOP;
+				pthread_mutex_unlock(&sub_data_mutex[i]); /* always succeeds: unlocking owned mutex */
+			}
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
+			signals->current_iteration++;
+			pthread_cond_broadcast(&next_iteration_cv); /* always succeeds */
+			pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
+			break;
+		}
+		else {
+			dw_printf(IMPORTANCE_DIAG,"### Master added %d columns.\n", rc);
+		}
+	}
+/*****************
+ *
+ * END PHASE II
+ *
+ *****************/
+
+	if( globals->perturb ) {
+		for( i = count; i < (D->rows + count); i++ ) {
+			perturbation = 0.00000001 * i;
+			glp_set_row_bnds(master_lp, i, GLP_FX,
+				glp_get_row_ub(master_lp, i) - perturbation, 0.0);
+		}
+		glp_simplex(master_lp, simplex_control_params);
+		if( check_col_integrality() ) {
+
+			dw_printf(IMPORTANCE_AVG,
+					"There are basic variables with non-integer values.\n");
+			//printf("But I'm not doing anything about it.\n");
+			//		printf("I want to see if there is an equivalent integer solution.  Solving...\n");
+			//		simplex_rc = glp_intopt(master_lp, parm);
+			//		printf("Integer optimization returned %d.\n", simplex_rc);
+			//		printf("Integer optimal value is %3.2f.\n", glp_mip_obj_val(master_lp));
+		}
+		else dw_printf(IMPORTANCE_AVG,"The basic variables are all integer.\n");
+
+		dw_printf(IMPORTANCE_AVG,"#########################################\n");
+		dw_printf(IMPORTANCE_AVG,"####  Master objective value = %e \n",
+				glp_get_obj_val(master_lp));
+		dw_printf(IMPORTANCE_AVG,"#########################################\n");
+
+	}
+
+	/* Print timing before trying integer optimization. */
+	dw_printf(IMPORTANCE_AVG,"Done with solving the relaxation...\n");
+	if( globals->print_timing_data ) {
+		print_timing(t0, c0 );
+		t0 = time(NULL);
+		c0 = clock();
+	}
+
+	/* Print out the final version of the master problem. Solving this on its
+	 * own later will provide the optimal value.
+	 */
+	if( globals->print_final_master ) {
+		dw_printf(IMPORTANCE_AVG,"%-40s ","Printing final master to done.cpxlp...");
+		glp_write_lp(master_lp, NULL, "done.cpxlp");
+		dw_printf(IMPORTANCE_AVG,"DONE!\n");
+	}
+
+	/* Wait for subthreads to join. */
+	dw_printf(IMPORTANCE_AVG, "%-40s ", "Waiting for subthreads...");
+	for(i=0; i<num_clients; i++) {
+		rc = pthread_join(threads[i], &status);
+		if (rc) {
+			dw_printf(IMPORTANCE_VITAL,
+					"ERROR; thread %d return code from pthread_join() is %d\n",
+					i, rc);
+			dw_printf(IMPORTANCE_VITAL,
+					"Going to continue waiting for all joins,");
+			dw_printf(IMPORTANCE_VITAL,
+					" but behavior now unpredictable.\n");
+			//exit(-1);
+		}
+			dw_printf(IMPORTANCE_DIAG,
+				"### Completed join with thread %d status = %ld\n",i,
+				(long)status);
+	}
+	dw_printf(IMPORTANCE_AVG,"DONE!\n");
+
+	/* Get the optimal values for each variable from original problem. */
+	//get_solution(sub_data);
+
+	/* Print out the final values of the convexity variables.  To make this
+	 * more useful, you may want to modify this to dump to a file. */
+	if( globals->verbosity >= OUTPUT_ALL )
+		for( i = num_rows; i <= glp_get_num_cols(master_lp); i++ ) {
+			printf("  %s: \t%3.2f\t(%3.2f)\n", glp_get_col_name(master_lp, i),
+					glp_get_col_prim(master_lp, i),
+					glp_mip_col_val(master_lp, i));
+		}
+
+	/* Print relaxed solution to file... */
+	if( globals->print_relaxed_sol ) {
+		dw_printf(IMPORTANCE_AVG, "%-40s ","Printing relaxed solution to file...");
+		process_solution(sub_data, RELAXED_SOLN_FILE, DW_MODE_PRINT_RELAXED);
+		dw_printf(IMPORTANCE_AVG, "DONE!\n");
+	}
+
+/*****************
+ *
+ * MAKE RELAXED SOLUTION INTEGRAL?
+ *
+ *****************/
+	/* Try rounding... */
+	if( globals->rounding_flag ) {
+		dw_printf(IMPORTANCE_AVG, "%-40s ", "Calculating rounded solution...");
+		process_solution(sub_data, ROUNDED_ZEROS_FILE, DW_MODE_ROUND_SOL);
+		if( globals->print_timing_data ) {
+			print_timing(t0, c0 );
+			t0 = time(NULL);
+			c0 = clock();
+		}
+		dw_printf(IMPORTANCE_AVG, "DONE!\n");
+	}
+
+	/* Try 'choosing one column per subproblem'... */
+	if( globals->integerize_flag ) {
+		/* Get an integer solution. */
+		dw_printf(IMPORTANCE_AVG, "Going to integerize by enforcing binary constraint on lambdas.\n");
+		dw_printf(IMPORTANCE_AVG, "Note that this isn't guaranteed to work well or at all.\n");
+		glp_iocp* int_parm = malloc(sizeof(glp_iocp));
+		dw_oom_abort(int_parm, "int_parm");
+		glp_init_iocp(int_parm);
+		int_parm->mip_gap = globals->mip_gap;
+		glp_intopt(master_lp, int_parm);
+		//lpx_intopt(master_lp);
+		dw_printf(IMPORTANCE_AVG, "Integer optimal solution: %3.1f\n",
+				glp_mip_obj_val(master_lp));
+		dw_printf(IMPORTANCE_AVG,
+				"Replacing LP relaxed solution with integer solution...\n");
+		for( i = 1; i <= glp_get_num_cols(master_lp); i++ ) {
+			variable_value = glp_mip_col_val(master_lp, i);
+			glp_set_col_bnds(master_lp, i, GLP_FX, variable_value, 0.0);
+		}
+		dw_printf(IMPORTANCE_AVG, "Setting basis...\n");
+		glp_simplex(master_lp, simplex_control_params);
+
+		FILE* integerization_zero_file;
+		if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+			printf("Problem opening file: %s\n", INTEGERIZED_ZEROS_FILE);
+			/* Note: free_globals will still be called below */
+		} else {
+			process_solution(sub_data, INTEGERIZED_ZEROS_FILE, DW_MODE_PRINT_RELAXED);
+		}
+
+		/* Collect runtime information and print it out. */
+		dw_printf(IMPORTANCE_AVG,
+				"Done with solving the integer optimization...\n");
+		if( globals->print_timing_data ) {
+			print_timing(t0, c0 );
+			t0 = time(NULL);
+			c0 = clock();
+		}
+	}
+
+/*****************
+ *
+ * EXTRACT RESULT (before GLPK state is freed)
+ *
+ *****************/
+	if( result != NULL ) {
+		int k;
+		result->objective_value = glp_get_obj_val(master_lp);
+		result->num_vars        = glp_get_num_cols(master_lp);
+		result->x               = malloc(sizeof(double) * (size_t)result->num_vars);
+		if( result->x != NULL ) {
+			for( k = 1; k <= result->num_vars; k++ )
+				result->x[k-1] = glp_get_col_prim(master_lp, k);
+		} else {
+			result->num_vars = 0;
+		}
+		result->status = DW_STATUS_OK;
+	}
+
+/*****************
+ *
+ * CLEAN UP
+ *
+ *****************/
+	/* Clean up after ourselves. */
+	free_sub_data(sub_data, globals);
+	free_globals(globals, md);
+	/* Note: free(globals) is the caller's responsibility. */
+	free(ind);
+	free(val);
+	free(threads);
+	free(simplex_control_params);
+	free(local_buffer);
+
+	dw_printf(IMPORTANCE_AVG,
+			"Master made it to the end. Exiting gracefully, dignity intact.\n");
+	return DW_STATUS_OK;
+}
+
+/* -------------------------------------------------------------------------
+ * T005: dw_solve — public API entry point
+ * ------------------------------------------------------------------------- */
+int dw_solve(const char        *master_file,
+             const char *const *subproblem_files,
+             int                num_subproblems,
+             const dw_options_t *opts,
+             dw_result_t        *result)
+{
+	int i;
+	dw_options_t local_opts;
+	faux_globals *globals;
+
+	/* Validate required arguments. */
+	if( !master_file || !subproblem_files || !result || num_subproblems < 1 ) {
+		if( result ) {
+			result->status          = DW_STATUS_ERR_BAD_ARGS;
+			result->objective_value = 0.0;
+			result->num_vars        = 0;
+			result->x               = NULL;
+		}
+		return DW_STATUS_ERR_BAD_ARGS;
+	}
+
+	/* Use provided options or library defaults. */
+	if( !opts ) {
+		dw_options_init(&local_opts);
+		opts = &local_opts;
+	}
+
+	/* Allocate and initialise globals. */
+	globals = malloc(sizeof(faux_globals));
+	dw_oom_abort(globals, "globals");
+	init_globals(globals);
+
+	/* Map dw_options_t fields -> faux_globals. */
+	globals->verbosity               = opts->verbosity;
+	globals->mip_gap                 = opts->mip_gap;
+	globals->max_phase1_iterations   = opts->max_phase1_iterations;
+	globals->max_phase2_iterations   = opts->max_phase2_iterations;
+	globals->rounding_flag           = opts->rounding_flag;
+	globals->integerize_flag         = opts->integerize_flag;
+	globals->enforce_sub_integrality = opts->enforce_sub_integrality;
+	globals->print_timing_data       = opts->print_timing_data;
+	globals->print_final_master      = opts->print_final_master;
+	globals->print_relaxed_sol       = opts->print_relaxed_sol;
+	globals->perturb                 = opts->perturb;
+	globals->shift                   = opts->shift;
+
+	/* Propagate verbosity to the global dw_printf gate. */
+	dw_verbosity = opts->verbosity;
+
+	/* Set up file paths. */
+	globals->num_clients = num_subproblems;
+	globals->master_name = malloc(strlen(master_file) + 1);
+	dw_oom_abort(globals->master_name, "globals->master_name");
+	strcpy(globals->master_name, master_file);
+
+	globals->subproblem_names = malloc(sizeof(char *) * (size_t)num_subproblems);
+	dw_oom_abort(globals->subproblem_names, "globals->subproblem_names");
+	for( i = 0; i < num_subproblems; i++ ) {
+		globals->subproblem_names[i] = malloc(strlen(subproblem_files[i]) + 1);
+		dw_oom_abort(globals->subproblem_names[i], "globals->subproblem_names[i]");
+		strcpy(globals->subproblem_names[i], subproblem_files[i]);
+	}
+
+	/* monolithic_name is not used in library mode; set it to an empty path. */
+	globals->get_monolithic_file = 0;
+	globals->monolithic_name     = malloc(1);
+	dw_oom_abort(globals->monolithic_name, "globals->monolithic_name");
+	globals->monolithic_name[0]  = '\0';
+
+	/* Zero out result before the solve (ensures clean state on error). */
+	result->status          = DW_STATUS_ERR_INTERNAL;
+	result->objective_value = 0.0;
+	result->num_vars        = 0;
+	result->x               = NULL;
+
+	/* Run the solver core. */
+	dw_solver_run(globals, result);
+
+	free(globals);
+	return result->status;
+}
+
+/* -------------------------------------------------------------------------
+ * T006: dw_result_free — release heap memory owned by *result
+ * ------------------------------------------------------------------------- */
+void dw_result_free(dw_result_t *result) {
+	if( result == NULL ) return;
+	free(result->x);
+	result->x               = NULL;
+	result->num_vars        = 0;
+	result->objective_value = 0.0;
+	result->status          = 0;
+}
+
+/* -------------------------------------------------------------------------
+ * T007: dw_version — return a static version string
+ * ------------------------------------------------------------------------- */
+const char *dw_version(void) {
+	return "dwsolver " VERSION;
+}
+
+/* -------------------------------------------------------------------------
+ * hook — GLPK terminal-redirect callback (moved from dw_main.c)
+ * ------------------------------------------------------------------------- */
+static int hook(void* info, const char* s) {
+	FILE* outfile = info;
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&fputs_mutex), "pthread_mutex_lock(&fputs_mutex)");
+	fputs(s, outfile);
+	pthread_mutex_unlock(&fputs_mutex); /* always succeeds: unlocking owned mutex */
+	return 1;
+}
