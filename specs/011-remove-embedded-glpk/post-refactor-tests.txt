@@ -1,0 +1,48 @@
+Test: Bertsimas textbook example
+Reading problem data from 'single_sub.cplex'...
+6 rows, 3 columns, 6 non-zeros
+12 lines were read
+  PASS: Got expected solution.
+
+Test: Lasdon textbook example
+Reading problem data from 'sub1.cplex'...
+2 rows, 2 columns, 4 non-zeros
+8 lines were read
+Reading problem data from 'sub2.cplex'...
+3 rows, 2 columns, 4 non-zeros
+9 lines were read
+  PASS: Got expected solution.
+
+Test: Mitchell web example
+Reading problem data from 'subprob.cplex'...
+4 rows, 3 columns, 4 non-zeros
+9 lines were read
+  PASS: Got expected solution.
+
+Test: Trick web example
+  PASS: Got expected objective value.
+
+Test: Four seas example
+  PASS: Got expected objective value.
+
+Test: Dantzig textbook example
+  PASS: Got expected objective value.
+
+Test: single_sub (num_clients=1 semaphore path)
+Reading problem data from 'sub1.cplex'...
+4 rows, 2 columns, 4 non-zeros
+10 lines were read
+  PASS: Got expected solution.
+
+Test: one_iter (fast Phase II convergence path)
+  PASS: Got expected objective value.
+
+Test: neg_y (GLP_LO coupling / y-accumulator sign path)
+Reading problem data from 'sub1.cplex'...
+1 row, 1 column, 1 non-zero
+7 lines were read
+Reading problem data from 'sub2.cplex'...
+1 row, 1 column, 1 non-zero
+7 lines were read
+  PASS: Got expected solution.
+

@@ -158,6 +158,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		sub_data[i].phase_one        = 0;
 		sub_data[i].globals          = globals;
 		sub_data[i].md               = md;
+		sub_data[i].col_names        = NULL;
 
 		globals->x[i]           = malloc(sizeof(double*)*MAX_PHASE2_ITERATIONS);
 		dw_oom_abort(globals->x[i], "globals->x[i]");

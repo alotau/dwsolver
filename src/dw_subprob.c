@@ -373,6 +373,20 @@ void* subproblem_thread(void* arg) {
 
 	}
 
+	/* Cache column names before this thread's GLPK TLS environment is freed
+	 * at pthread_exit.  Post-join solution-printing threads access
+	 * my_data->col_names[j] instead of calling glp_get_col_name(lp, j). */
+	{
+		int cn;
+		my_data->col_names = calloc(
+			(size_t)(my_data->num_cols_plus + 1), sizeof(char *));
+		dw_oom_abort(my_data->col_names, "col_names");
+		for (cn = 1; cn < my_data->num_cols_plus; cn++) {
+			const char *name = glp_get_col_name(my_data->lp, cn);
+			my_data->col_names[cn] = name ? strdup(name) : NULL;
+		}
+	}
+
 	/* Clean up after myself.  my_data will be freed by master. */
 	free(y);
 	free(d_vector);

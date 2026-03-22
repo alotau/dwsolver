@@ -30,9 +30,9 @@
 
 **⚠️ CRITICAL**: US1 cannot compile against system GLPK until this phase is complete (modern GLPK 4.65 ships no `lpx_*` declarations).
 
-- [ ] T003 [P] [US3] In `src/dw_solver.c`: replace `lpx_read_cpxlp(globals->master_name)` at ~line 184 with `glp_create_prob()` + `glp_read_lp(…, NULL, globals->master_name)` with NULL-check-and-delete-on-failure; and replace all four `lpx_write_cpxlp(master_lp, …)` calls at ~lines 434, 477, 493, 645 with `glp_write_lp(master_lp, NULL, …)` — see data-model.md §B3 for exact before/after
-- [ ] T004 [P] [US3] In `src/dw_subprob.c`: replace `lp = lpx_read_cpxlp(my_data->infile_name)` at ~line 103 with `lp = glp_create_prob()` + `glp_read_lp(lp, NULL, my_data->infile_name)` with NULL-check-and-delete-on-failure — see data-model.md §B4
-- [ ] T005 [P] [US3] In `src/dw_phases.c`: replace both occurrences of the `lpx_get_int_parm(master_lp, LPX_K_ITCNT)` pair at ~lines 228–229 and ~lines 460–461 with `glp_get_it_cnt(master_lp)` — see data-model.md §B5
+- [X] T003 [P] [US3] In `src/dw_solver.c`: replace `lpx_read_cpxlp(globals->master_name)` at ~line 184 with `glp_create_prob()` + `glp_read_lp(…, NULL, globals->master_name)` with NULL-check-and-delete-on-failure; and replace all four `lpx_write_cpxlp(master_lp, …)` calls at ~lines 434, 477, 493, 645 with `glp_write_lp(master_lp, NULL, …)` — see data-model.md §B3 for exact before/after
+- [X] T004 [P] [US3] In `src/dw_subprob.c`: replace `lp = lpx_read_cpxlp(my_data->infile_name)` at ~line 103 with `lp = glp_create_prob()` + `glp_read_lp(lp, NULL, my_data->infile_name)` with NULL-check-and-delete-on-failure — see data-model.md §B4
+- [X] T005 [P] [US3] In `src/dw_phases.c`: replace both occurrences of the `lpx_get_int_parm(master_lp, LPX_K_ITCNT)` pair at ~lines 228–229 and ~lines 460–461 with `glp_get_it_cnt(master_lp)` — see data-model.md §B5
 
 **Checkpoint**: After T003–T005, run `grep -r 'lpx_' src/dw_*.c` — must return no output (SC-004). Commit: `refactor(011): replace deprecated lpx_* API with glp_* equivalents`
 
@@ -44,12 +44,12 @@
 
 **Independent Test**: A fresh build with no files in `src/glp*`, `src/amd/`, or `src/colamd/` succeeds when GLPK ≥ 4.65 is present, and `configure` fails with a clear error when GLPK is absent.
 
-- [ ] T006 [P] [US1] Update `configure.ac`: add `PKG_CHECK_MODULES([GLPK], [glpk >= 4.65], [], [AC_MSG_ERROR([…])])` after the `AC_CHECK_LIB([pthread], …)` line; remove the five `AC_ARG_WITH`/`AC_ARG_ENABLE` blocks for gmp, zlib, dl, odbc, and mysql; remove their corresponding `if test …` application blocks — see contracts/build-system.md §1 for the complete before/after specification
-- [ ] T007 [P] [US1] Update `src/Makefile.am`: delete the entire `GLPK_SOURCES` variable block (lines 7–113); remove `$(GLPK_SOURCES)` from `libdwsolver_la_SOURCES`; append `$(GLPK_CFLAGS)` to `libdwsolver_la_CPPFLAGS`; add `libdwsolver_la_LIBADD = $(GLPK_LIBS)` after the CPPFLAGS line; replace the `EXTRA_DIST` entry with only the six remaining `dw_*.h` headers — see contracts/build-system.md §2
-- [ ] T008 [P] [US1] Update `dwsolver.pc.in`: add the line `Requires.private: glpk` between the `Version:` field and the `Cflags:` field — see contracts/build-system.md §3
-- [ ] T009 [US1] Delete all 141 embedded GLPK source files: run `git rm src/glp*.c src/glp*.h src/amd/amd_*.c src/amd/amd.h src/amd/amd_internal.h src/colamd/colamd.c src/colamd/colamd.h` to stage all deletions (depends on T007 completing first so Makefile.am no longer references them)
-- [ ] T010 [US1] Run `autoreconf -fi && ./configure && make -j$(nproc || sysctl -n hw.ncpu)` in the project root; confirm build succeeds with zero errors and produces `src/dwsolver` and `src/.libs/libdwsolver.so` (or `.dylib` on macOS) — depends on T006, T007, T008, T009
-- [ ] T011 [US1] Verify acceptance scenario 2: temporarily unset `PKG_CONFIG_PATH` (or rename `glpk.pc`) and confirm `./configure` exits with a non-zero status and prints the GLPK-missing error message from `PKG_CHECK_MODULES`; then restore the environment (depends on T010)
+- [X] T006 [P] [US1] Update `configure.ac`: add `PKG_CHECK_MODULES([GLPK], [glpk >= 4.65], [], [AC_MSG_ERROR([…])])` after the `AC_CHECK_LIB([pthread], …)` line; remove the five `AC_ARG_WITH`/`AC_ARG_ENABLE` blocks for gmp, zlib, dl, odbc, and mysql; remove their corresponding `if test …` application blocks — see contracts/build-system.md §1 for the complete before/after specification
+- [X] T007 [P] [US1] Update `src/Makefile.am`: delete the entire `GLPK_SOURCES` variable block (lines 7–113); remove `$(GLPK_SOURCES)` from `libdwsolver_la_SOURCES`; append `$(GLPK_CFLAGS)` to `libdwsolver_la_CPPFLAGS`; add `libdwsolver_la_LIBADD = $(GLPK_LIBS)` after the CPPFLAGS line; replace the `EXTRA_DIST` entry with only the six remaining `dw_*.h` headers — see contracts/build-system.md §2
+- [X] T008 [P] [US1] Update `dwsolver.pc.in`: add the line `Requires.private: glpk` between the `Version:` field and the `Cflags:` field — see contracts/build-system.md §3
+- [X] T009 [US1] Delete all 141 embedded GLPK source files: run `git rm src/glp*.c src/glp*.h src/amd/amd_*.c src/amd/amd.h src/amd/amd_internal.h src/colamd/colamd.c src/colamd/colamd.h` to stage all deletions (depends on T007 completing first so Makefile.am no longer references them)
+- [X] T010 [US1] Run `autoreconf -fi && ./configure && make -j$(nproc || sysctl -n hw.ncpu)` in the project root; confirm build succeeds with zero errors and produces `src/dwsolver` and `src/.libs/libdwsolver.so` (or `.dylib` on macOS) — depends on T006, T007, T008, T009
+- [X] T011 [US1] Verify acceptance scenario 2: temporarily unset `PKG_CONFIG_PATH` (or rename `glpk.pc`) and confirm `./configure` exits with a non-zero status and prints the GLPK-missing error message from `PKG_CHECK_MODULES`; then restore the environment (depends on T010)
 
 **Checkpoint**: At this point, User Story 1 is fully functional — a working binary exists, built against system GLPK, with no embedded sources. Commit: `feat(011): remove embedded GLPK; build against system glpk >= 4.65`
 
@@ -61,8 +61,8 @@
 
 **Independent Test**: Run `tests/dw-tests.sh`; compare pass/fail counts against `specs/011-remove-embedded-glpk/baseline-tests.txt` (captured in T001); objective values must agree to ≤ 1e-6 relative difference.
 
-- [ ] T012 [US2] Run `PATH="$PWD/src:$PATH" ./tests/dw-tests.sh 2>&1 | tee specs/011-remove-embedded-glpk/post-refactor-tests.txt` and compare pass/fail counts to the baseline captured in T001 — all tests that passed before must still pass (SC-003)
-- [ ] T013 [US2] For any test that numerically compares objective values, confirm the refactored binary's output agrees with the baseline output to within a 1e-6 relative difference; if any value diverges beyond that tolerance, investigate and resolve before proceeding
+- [X] T012 [US2] Run `PATH="$PWD/src:$PATH" ./tests/dw-tests.sh 2>&1 | tee specs/011-remove-embedded-glpk/post-refactor-tests.txt` and compare pass/fail counts to the baseline captured in T001 — all tests that passed before must still pass (SC-003)
+- [X] T013 [US2] For any test that numerically compares objective values, confirm the refactored binary's output agrees with the baseline output to within a 1e-6 relative difference; if any value diverges beyond that tolerance, investigate and resolve before proceeding
 
 **Checkpoint**: US2 is complete when all baseline-passing tests pass with the refactored binary. Commit: `test(011): capture post-refactor test results; all tests pass`
 

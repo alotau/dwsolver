@@ -356,7 +356,7 @@ void print_zeros_simple(int_thread_data* my_data) {
 	//printf("%d: Printing zeros...\n", my_data->id);
 	for( j = 1; j < my_data->sub_data.num_cols_plus; j++ ) {
 		parse_zero_var(my_data->sub_data.globals->x[subprob][curr_iter][j],
-				j, my_data->sub_data.lp, my_data->zero_file);
+				j, my_data->sub_data.col_names, my_data->zero_file);
 //		if( my_data->sub_data.globals->x[subprob][curr_iter][j] < TOLERANCE) {
 //			var_name = glp_get_col_name(my_data->sub_data.lp, j);
 //			strcpy(local_col_name, var_name);
@@ -417,7 +417,7 @@ void print_zeros(int_thread_data* my_data) {
 	for( j = 1; j < my_data->sub_data.num_cols_plus; j++ ) {
 		if( my_data->sub_data.globals->x[subprob][curr_iter][j] < TOLERANCE) {
 			num_zeros++;
-			var_name = glp_get_col_name(my_data->sub_data.lp, j);
+			var_name = my_data->sub_data.col_names[j];
 			if( var_name == NULL ) printf("Returned null (subprob %d, col %d), continuing...\n", subprob, j);
 			strcpy(local_col_name, var_name);
 			if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
@@ -435,7 +435,7 @@ void print_zeros(int_thread_data* my_data) {
 				curr_delay = 1;
 				/* Set prev_delay appropriately by looking at previous variable. */
 				if( j != 1 ) { /* Not first variable in subproblem? Check previous variable. */
-					var_name = glp_get_col_name(my_data->sub_data.lp, j-1);
+				var_name = my_data->sub_data.col_names[j-1];
 					strcpy(local_col_name, var_name);
 					if( strtok(local_col_name, "(") == NULL ) printf("NULL 2");
 					strcpy( temp_flight, strtok(NULL, ",") );
@@ -539,7 +539,7 @@ void* solution_printing_thread(void* arg) {
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	for( j = 1; j < (my_data->sub_data).num_cols_plus; j++ ) {
 		fprintf(my_data->zero_file, "%s\t%f\n",
-				glp_get_col_name(my_data->sub_data.lp, j),
+					my_data->sub_data.col_names[j],
 				my_data->sub_data.globals->x[subprob][curr_iter][j]);
 	}
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
@@ -610,7 +610,7 @@ void* rounding_thread(void* arg) {
 				my_data->sub_data.globals->x[subprob][curr_iter][j] < (1.0-TOLERANCE) ) {
 			/* This var isn't one or zero and, thus, needs integerization. */
 
-			const char *col_name = glp_get_col_name(my_data->sub_data.lp, j);
+			const char *col_name = my_data->sub_data.col_names[j];
 			i = glp_find_col(original_master_lp, col_name);
 
 			DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
@@ -658,7 +658,7 @@ void* rounding_thread(void* arg) {
 		else if( my_data->sub_data.globals->x[subprob][curr_iter][j] >=
 				(1.0-TOLERANCE) ) {
 			//	printf("Var x[%d][%d][%d] = %e \n ", subprob, curr_iter, j, x[subprob][curr_iter][j]);
-			const char *col_name = glp_get_col_name(my_data->sub_data.lp, j);
+			const char *col_name = my_data->sub_data.col_names[j];
 			i = glp_find_col(original_master_lp, col_name);
 			my_data->sub_data.globals->final_x[i] =
 				/*x[subprob][curr_iter][j]*/ 1.0;

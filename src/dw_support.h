@@ -66,6 +66,6 @@ void init_signals(faux_globals*);
 void prepare_D(int, int*, double*);
 void prepare_md(master_data* md);
 void buffer_overflow(char* str, int len);
-int parse_zero_var(double value, int index, glp_prob* lp, FILE* zero_file);
+int parse_zero_var(double value, int index, char** col_names, FILE* zero_file);
 
 #endif /* SUPPORT_FUNCTIONS_H_ */
