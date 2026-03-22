@@ -409,6 +409,13 @@ void print_usage(int argc, char* argv[]) {
 	printf("\n");
 }
 
+/* Strip trailing \r and \n from a line read by fgets(). */
+static void chomp_crlf(char *s) {
+	size_t len = strlen(s);
+	while (len > 0 && (s[len-1] == '\n' || s[len-1] == '\r'))
+		s[--len] = '\0';
+}
+
 /* Simple processing of command line. Probably many more options would be
  * useful. */
 int process_cmdline(int argc, char* argv[], faux_globals* fg) {
@@ -556,8 +563,11 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  	for( i = 0; i < fg->num_clients; i++ ) {
  		fg->subproblem_names[i] = malloc(sizeof(char)*BUFF_SIZE);
  		dw_oom_abort(fg->subproblem_names[i], "fg->subproblem_names[i]");
- 		fgets(fg->subproblem_names[i], BUFF_SIZE, input_file);
- 		fg->subproblem_names[i][strlen(fg->subproblem_names[i])-1] = '\0';
+ 		if (fgets(fg->subproblem_names[i], BUFF_SIZE, input_file) == NULL) {
+			dw_printf(IMPORTANCE_VITAL, "Exiting: guidefile truncated reading subproblem %d\n", i);
+			return 1;
+		}
+		chomp_crlf(fg->subproblem_names[i]);
  		if( (subproblem_files[i] = fopen(fg->subproblem_names[i], "r")) == NULL ) {
  			dw_printf(IMPORTANCE_VITAL, "Problem opening file: %s\n", fg->subproblem_names[i]);
  			return 1;
@@ -573,8 +583,11 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  	}
 
  	/* Get master file name. */
- 	fgets(fg->master_name, BUFF_SIZE, input_file);
- 	fg->master_name[strlen(fg->master_name)-1] = '\0';
+	if (fgets(fg->master_name, BUFF_SIZE, input_file) == NULL) {
+		dw_printf(IMPORTANCE_VITAL, "Exiting: guidefile truncated reading master name\n");
+		return 1;
+	}
+	chomp_crlf(fg->master_name);
  	if( (master_file = fopen(fg->master_name, "r")) == NULL ) {
  		dw_printf(IMPORTANCE_VITAL, "Problem opening master file: %s\n", fg->master_name);
  		return 1;
@@ -591,8 +604,11 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  	 * altogether and fix my old guidefiles...
  	 */
  	if( fg->get_monolithic_file ) {
- 		fgets(fg->monolithic_name, BUFF_SIZE, input_file);
- 		fg->monolithic_name[strlen(fg->monolithic_name)-1] = '\0';
+ 		if (fgets(fg->monolithic_name, BUFF_SIZE, input_file) == NULL) {
+			dw_printf(IMPORTANCE_VITAL, "Exiting: guidefile truncated reading monolithic name\n");
+			return 1;
+		}
+		chomp_crlf(fg->monolithic_name);
  		/*
  		if( (monolithic_file = fopen(fg->monolithic_name, "r")) == NULL ) {
  			printf("Problem opening master file: %s\n", fg->monolithic_name);
