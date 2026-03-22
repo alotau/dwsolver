@@ -86,6 +86,64 @@ The [`build-aux/`](./build-aux/) directory contains Autoconf/Automake auxiliary 
 
 The [`third-party/glpk/`](./third-party/glpk/) directory contains GLPK 4.44 attribution and patch files bundled with the original dwsolver source distribution. The GLPK C sources themselves live in `src/`.
 
+## Callable Library (libdwsolver)
+
+In addition to the `dwsolver` CLI, the build also produces **`libdwsolver`** — a
+C library that lets you call the solver directly from your own code.
+
+### What gets installed
+
+```
+/usr/local/bin/dwsolver          # CLI (unchanged)
+/usr/local/lib/libdwsolver.a     # static library
+/usr/local/include/dw_solver.h   # public API header
+/usr/local/lib/pkgconfig/dwsolver.pc  # pkg-config metadata
+```
+
+### Quick example
+
+```c
+#include <stdio.h>
+#include "dw_solver.h"
+
+int main(void) {
+    const char *subs[] = { "sub1.lp", "sub2.lp" };
+    dw_options_t opts;
+    dw_result_t  result = {0};
+
+    dw_options_init(&opts);          /* set all options to defaults */
+
+    int rc = dw_solve("master.lp", subs, 2, &opts, &result);
+    if (rc == DW_STATUS_OK)
+        printf("Objective: %g\n", result.objective_value);
+
+    dw_result_free(&result);
+    return rc;
+}
+```
+
+Compile with pkg-config:
+
+```sh
+gcc -o myapp myapp.c $(pkg-config --cflags --libs dwsolver)
+```
+
+### Public API
+
+| Symbol | Description |
+|--------|-------------|
+| `dw_options_init(opts)` | Populate `dw_options_t` with documented defaults |
+| `dw_solve(master, subs, n, opts, result)` | Run the solver; returns a `dw_status_t` code |
+| `dw_result_free(result)` | Release heap memory owned by a `dw_result_t` |
+| `dw_version()` | Return a static version string |
+
+Status codes: `DW_STATUS_OK`, `DW_STATUS_ERR_BAD_ARGS`, `DW_STATUS_ERR_FILE`,
+`DW_STATUS_ERR_INFEASIBLE`, `DW_STATUS_ERR_PHASE1_LIMIT`,
+`DW_STATUS_ERR_PHASE2_LIMIT`, `DW_STATUS_ERR_UNBOUNDED`, `DW_STATUS_ERR_INTERNAL`.
+
+See [`specs/010-callable-library/quickstart.md`](specs/010-callable-library/quickstart.md) for a fuller walkthrough
+and [`specs/010-callable-library/contracts/api.md`](specs/010-callable-library/contracts/api.md) for the full API contract.
+
 ## Examples and Tests
 There is a an [examples](./examples/) directory with several problems plucked from popular textbooks and some websites. There is also a toy version of the problem that initiated the writing of this code related to air traffic management. Each example has a README and should run successfully with a properly built dwsolver executable. There is also a new [tests](./tests/) directory that contains a [test script](./tests/dw-tests.sh) that runs most of the examples.  A couple of the examples have non-deterministic solutions (but deterministic optimum values), and I didn't take the time to write tests that check for the correct optimum for those problems. Again, happy for any PR that runs those examples, parses the output files to pluck out the optimum, and shows it is the expected value.
 
