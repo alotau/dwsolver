@@ -17,7 +17,7 @@ jobs:
         # The pre-generated autotools files were created with automake-1.17 on
         # macOS. Touch them so make does not try to re-run aclocal-1.17, which
         # is not available on Ubuntu.
-        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in
+        run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
 
       - name: Build
         run: ./configure && make
@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Suppress automake regeneration
-        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
+        run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
 
       - name: Build
         run: ./configure CFLAGS="-fsanitize=address,undefined -g -O1" && make
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Suppress automake regeneration
-        run: touch aclocal.m4 configure config.h.in ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
+        run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
 
       - name: Build
         run: ./configure CFLAGS="-fsanitize=thread -g -O1" && make

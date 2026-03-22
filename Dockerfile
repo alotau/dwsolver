@@ -17,10 +17,10 @@ COPY . .
 # (automake-1.17 required by configure is not available on Ubuntu 24.04).
 # Also refresh config.guess/config.sub from the installed automake so the
 # build works on aarch64 (Apple Silicon) as well as x86_64.
-RUN touch aclocal.m4 configure config.h.in ltmain.sh \
+RUN touch aclocal.m4 configure config.h.in build-aux/ltmain.sh \
          Makefile.in src/Makefile.in \
-    && find /usr/share/automake-* -name config.guess | head -1 | xargs -I{} cp {} config.guess \
-    && find /usr/share/automake-* -name config.sub   | head -1 | xargs -I{} cp {} config.sub
+    && find /usr/share/automake-* -name config.guess | head -1 | xargs -I{} cp {} build-aux/config.guess \
+    && find /usr/share/automake-* -name config.sub   | head -1 | xargs -I{} cp {} build-aux/config.sub
 
 RUN ./configure && make
 
