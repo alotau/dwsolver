@@ -371,9 +371,9 @@ void* subproblem_thread(void* arg) {
 
 	}
 
-	/* Cache column names before this thread's GLPK TLS environment is freed
-	 * at pthread_exit.  Post-join solution-printing threads access
-	 * my_data->col_names[j] instead of calling glp_get_col_name(lp, j). */
+	/* Cache column names before we free the GLPK prob below.  Post-join
+	 * solution-printing threads access my_data->col_names[j] instead of
+	 * calling glp_get_col_name(lp, j). */
 	{
 		int cn;
 		my_data->col_names = calloc(
@@ -384,6 +384,14 @@ void* subproblem_thread(void* arg) {
 			my_data->col_names[cn] = name ? strdup(name) : NULL;
 		}
 	}
+
+	/* Explicitly free the GLPK problem and environment while still in this
+	 * thread.  This keeps ownership clear and prevents LeakSanitizer from
+	 * reporting a leak (the TLS pthread_key destructor is not visible to
+	 * sanitizers as a valid free path). */
+	glp_delete_prob(my_data->lp);
+	my_data->lp = NULL;
+	glp_free_env();
 
 	/* Clean up after myself.  my_data will be freed by master. */
 	free(y);

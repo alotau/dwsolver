@@ -654,6 +654,12 @@ int parse_zero_var(double value, int index, char** col_names, FILE* zero_file) {
 
 	if( value < TOLERANCE) {
 		var_name = (col_names && col_names[index]) ? col_names[index] : NULL;
+		if (var_name == NULL) {
+			dw_printf(IMPORTANCE_DIAG,
+				"parse_zero_var: missing column name for index %d; skipping.\n",
+				index);
+			return 0;
+		}
 		local_col_name = malloc(sizeof(char)*BUFF_SIZE);
 		dw_oom_abort(local_col_name, "local_col_name");
 		sector_name = malloc(sizeof(char)*BUFF_SIZE);

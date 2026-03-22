@@ -31,8 +31,11 @@ time and at runtime.  Install it from your OS package manager before running
 > **ABI note for libdwsolver callers**: programs that link against
 > `libdwsolver` must also link — directly or transitively — against the **same
 > build** of GLPK that dwsolver was compiled against.  Mismatched GLPK shared
-> libraries produce undefined behaviour at runtime.  pkg-config propagates this
-> automatically: `$(pkg-config --libs dwsolver)` already includes `-lglpk`.
+> libraries produce undefined behaviour at runtime.  When dynamically linking,
+> `libdwsolver` records its GLPK dependency via `DT_NEEDED`, so you normally do
+> not need to list `-lglpk` explicitly.  For static linking, use
+> `pkg-config --libs --static dwsolver` to obtain all required libraries
+> including GLPK.
 
 ## Building
 

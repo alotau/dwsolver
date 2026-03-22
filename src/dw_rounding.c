@@ -418,7 +418,10 @@ void print_zeros(int_thread_data* my_data) {
 		if( my_data->sub_data.globals->x[subprob][curr_iter][j] < TOLERANCE) {
 			num_zeros++;
 			var_name = my_data->sub_data.col_names[j];
-			if( var_name == NULL ) printf("Returned null (subprob %d, col %d), continuing...\n", subprob, j);
+			if( var_name == NULL ) {
+				dw_printf(IMPORTANCE_DIAG, "Returned null (subprob %d, col %d), continuing...\n", subprob, j);
+				continue;
+			}
 			strcpy(local_col_name, var_name);
 			if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
 			strcpy( curr_flight, strtok(NULL, ",") );
@@ -436,10 +439,14 @@ void print_zeros(int_thread_data* my_data) {
 				/* Set prev_delay appropriately by looking at previous variable. */
 				if( j != 1 ) { /* Not first variable in subproblem? Check previous variable. */
 				var_name = my_data->sub_data.col_names[j-1];
+				if( var_name == NULL ) {
+					dw_printf(IMPORTANCE_DIAG, "NULL col name at j-1=%d, skipping prev-flight check\n", j-1);
+				} else {
 					strcpy(local_col_name, var_name);
 					if( strtok(local_col_name, "(") == NULL ) printf("NULL 2");
 					strcpy( temp_flight, strtok(NULL, ",") );
 					strcpy( prev_sector, strtok(NULL, ",") );
+				} /* var_name != NULL */
 				}
 				else { /* First variable in subproblem.  No previous variable. */
 					//printf("here.\n");
@@ -539,7 +546,7 @@ void* solution_printing_thread(void* arg) {
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	for( j = 1; j < (my_data->sub_data).num_cols_plus; j++ ) {
 		fprintf(my_data->zero_file, "%s\t%f\n",
-					my_data->sub_data.col_names[j],
+				my_data->sub_data.col_names[j] ? my_data->sub_data.col_names[j] : "(unnamed)",
 				my_data->sub_data.globals->x[subprob][curr_iter][j]);
 	}
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
