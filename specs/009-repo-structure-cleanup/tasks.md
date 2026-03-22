@@ -10,8 +10,8 @@
 
 **Purpose**: Verify baseline build and test state before making any changes, so regressions are immediately attributable.
 
-- [ ] T001 Confirm clean baseline: run `./configure && make` and `cd tests && PATH="$PWD/../src:$PATH" ./dw-tests.sh`; record 7/7 PASS in a tmp note
-- [ ] T002 Count current tracked root-level files: `git ls-files | grep -v '/' | wc -l`; record for SC-001 comparison
+- [x] T001 Confirm clean baseline: run `./configure && make` and `cd tests && PATH="$PWD/../src:$PATH" ./dw-tests.sh`; record 7/7 PASS in a tmp note
+- [x] T002 Count current tracked root-level files: `git ls-files | grep -v '/' | wc -l`; record for SC-001 comparison
 
 ---
 
@@ -21,10 +21,10 @@
 
 **⚠️ Each task here is independently committable.**
 
-- [ ] T003 [US3] Remove committed editor backup files from git: `git rm configure~ config.h.in~`
-- [ ] T004 [US3] Add `*~` pattern to `.gitignore` (append after existing `*.plist` entry)
-- [ ] T005 [US3] Commit: `chore(009): remove editor backup files and ignore *~ pattern`
-- [ ] T006 [US3] Verify: `git ls-files | grep '~'` returns no output; `git status` is clean
+- [x] T003 [US3] Remove committed editor backup files from git: `git rm configure~ config.h.in~`
+- [x] T004 [US3] Add `*~` pattern to `.gitignore` (append after existing `*.plist` entry)
+- [x] T005 [US3] Commit: `chore(009): remove editor backup files and ignore *~ pattern`
+- [x] T006 [US3] Verify: `git ls-files | grep '~'` returns no output; `git status` is clean
 
 **Checkpoint**: No backup files in git. US3 (editor clutter) is now complete and independently verifiable.
 
@@ -36,11 +36,11 @@
 
 **Independent Test**: `ls third-party/glpk/` shows 7 files (6 GLPK + README); `git ls-files | grep 'GLPK_\|glpk-4.44'` shows only `third-party/glpk/` paths; `./configure && make` still succeeds.
 
-- [ ] T007 [US2] Create `third-party/glpk/README` explaining the directory contains GLPK 4.44 attribution and patch files bundled with the original dwsolver source distribution
-- [ ] T008 [US2] Move files with `git mv`: `GLPK_AUTHORS`, `GLPK_INSTALL`, `GLPK_NEWS`, `GLPK_README`, `GLPK_THANKS`, `glpk-4.44.ThreadReady.patch` → `third-party/glpk/`
-- [ ] T009 [US2] Update `Makefile.am` `EXTRA_DIST` (lines 7–8): replace root-relative GLPK filenames with `third-party/glpk/` prefixed paths so `make dist` still includes them
-- [ ] T010 [US2] Build verify: `./configure && make` succeeds; `cd tests && PATH="$PWD/../src:$PATH" ./dw-tests.sh` shows 7/7 PASS
-- [ ] T011 [US2] Commit: `chore(009): move GLPK attribution files to third-party/glpk/`
+- [x] T007 [US2] Create `third-party/glpk/README` explaining the directory contains GLPK 4.44 attribution and patch files bundled with the original dwsolver source distribution
+- [x] T008 [US2] Move files with `git mv`: `GLPK_AUTHORS`, `GLPK_INSTALL`, `GLPK_NEWS`, `GLPK_README`, `GLPK_THANKS`, `glpk-4.44.ThreadReady.patch` → `third-party/glpk/`
+- [x] T009 [US2] Update `Makefile.am` `EXTRA_DIST` (lines 7–8): replace root-relative GLPK filenames with `third-party/glpk/` prefixed paths so `make dist` still includes them
+- [x] T010 [US2] Build verify: `./configure && make` succeeds; `cd tests && PATH="$PWD/../src:$PATH" ./dw-tests.sh` shows 7/7 PASS
+- [x] T011 [US2] Commit: `chore(009): move GLPK attribution files to third-party/glpk/`
 
 **Checkpoint**: GLPK files are in `third-party/glpk/`. US2 is fully verifiable without any further tasks.
 
@@ -54,29 +54,29 @@
 
 ### configure.ac change
 
-- [ ] T012 [US1] In `configure.ac`, add `AC_CONFIG_AUX_DIR([build-aux])` on a new line immediately before `AM_INIT_AUTOMAKE` (line 9)
+- [x] T012 [US1] In `configure.ac`, add `AC_CONFIG_AUX_DIR([build-aux])` on a new line immediately before `AM_INIT_AUTOMAKE` (line 9)
 
 ### Regenerate with autoreconf
 
-- [ ] T013 [US1] Run `autoreconf -fi` from repo root; confirm `build-aux/` is created and contains: `compile`, `config.guess`, `config.sub`, `depcomp`, `install-sh`, `ltmain.sh`, `missing`
-- [ ] T014 [US1] Remove the old root-level copies: `git rm compile config.guess config.sub depcomp install-sh ltmain.sh missing`
-- [ ] T015 [US1] Stage new files: `git add build-aux/ configure Makefile.in aclocal.m4 src/Makefile.in tests/Makefile.in`
-- [ ] T016 [US1] Build verify (macOS): `./configure && make` succeeds; `cd tests && PATH="$PWD/../src:$PATH" ./dw-tests.sh` shows 7/7 PASS
-- [ ] T017 [US1] Commit: `chore(009): move autoconf aux scripts to build-aux/ via AC_CONFIG_AUX_DIR`
+- [x] T013 [US1] Run `autoreconf -fi` from repo root; confirm `build-aux/` is created and contains: `compile`, `config.guess`, `config.sub`, `depcomp`, `install-sh`, `ltmain.sh`, `missing`
+- [x] T014 [US1] Remove the old root-level copies: `git rm compile config.guess config.sub depcomp install-sh ltmain.sh missing`
+- [x] T015 [US1] Stage new files: `git add build-aux/ configure Makefile.in aclocal.m4 src/Makefile.in tests/Makefile.in`
+- [x] T016 [US1] Build verify (macOS): `./configure && make` succeeds; `cd tests && PATH="$PWD/../src:$PATH" ./dw-tests.sh` shows 7/7 PASS
+- [x] T017 [US1] Commit: `chore(009): move autoconf aux scripts to build-aux/ via AC_CONFIG_AUX_DIR`
 
 ### Update CI workflows
 
-- [ ] T018 [US1] In `.github/workflows/ci-linux.yml`: update all three `touch` steps — change `ltmain.sh` → `build-aux/ltmain.sh` in each `touch aclocal.m4 configure config.h.in ltmain.sh ...` line (lines 20, 39, 58)
-- [ ] T019 [US1] In `.github/workflows/ci-macos.yml`: update the `touch` step — change `ltmain.sh` → `build-aux/ltmain.sh`
-- [ ] T020 [US1] In `.github/workflows/ci-windows.yml`: update the `touch` step (line 34) — `build-aux/ltmain.sh`; update the two `cp` commands (lines 35–36) to copy to `build-aux/config.guess` and `build-aux/config.sub` instead of root
+- [x] T018 [US1] In `.github/workflows/ci-linux.yml`: update all three `touch` steps — change `ltmain.sh` → `build-aux/ltmain.sh` in each `touch aclocal.m4 configure config.h.in ltmain.sh ...` line (lines 20, 39, 58)
+- [x] T019 [US1] In `.github/workflows/ci-macos.yml`: update the `touch` step — change `ltmain.sh` → `build-aux/ltmain.sh`
+- [x] T020 [US1] In `.github/workflows/ci-windows.yml`: update the `touch` step (line 34) — `build-aux/ltmain.sh`; update the two `cp` commands (lines 35–36) to copy to `build-aux/config.guess` and `build-aux/config.sub` instead of root
 
 ### Update Dockerfile
 
-- [ ] T021 [US1] In `Dockerfile` (lines 20–23): update `touch ... ltmain.sh` → `build-aux/ltmain.sh`; update the two `cp` commands to target `build-aux/config.guess` and `build-aux/config.sub`
+- [x] T021 [US1] In `Dockerfile` (lines 20–23): update `touch ... ltmain.sh` → `build-aux/ltmain.sh`; update the two `cp` commands to target `build-aux/config.guess` and `build-aux/config.sub`
 
 ### Final verification
 
-- [ ] T022 [US1] Commit: `chore(009): update CI workflows and Dockerfile for build-aux/ paths`
+- [x] T022 [US1] Commit: `chore(009): update CI workflows and Dockerfile for build-aux/ paths`
 
 **Checkpoint**: Aux scripts are in `build-aux/`. CI should go green on all 6 check types after push.
 
@@ -86,10 +86,10 @@
 
 **Purpose**: Documentation update and final validation.
 
-- [ ] T023 Update `README.md` project structure description: add a mention of `build-aux/` (autoconf auxiliary scripts) and `third-party/` (GLPK attribution files) alongside the existing directory descriptions
-- [ ] T024 Final root count: `git ls-files | grep -v '/' | wc -l`; confirm reduction of ≥ 13 files vs baseline recorded in T002
-- [ ] T025 Commit: `docs(009): update README for new build-aux/ and third-party/ directories`
-- [ ] T026 Push branch and verify all 6 CI checks pass (macOS, Linux, Linux ASan+UBSan, Linux TSan, Docker, Windows)
+- [x] T023 Update `README.md` project structure description: add a mention of `build-aux/` (autoconf auxiliary scripts) and `third-party/` (GLPK attribution files) alongside the existing directory descriptions
+- [x] T024 Final root count: `git ls-files | grep -v '/' | wc -l`; confirm reduction of ≥ 13 files vs baseline recorded in T002
+- [x] T025 Commit: `docs(009): update README for new build-aux/ and third-party/ directories`
+- [x] T026 Push branch and verify all 6 CI checks pass (macOS, Linux, Linux ASan+UBSan, Linux TSan, Docker, Windows)
 
 ---
 
