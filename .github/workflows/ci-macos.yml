@@ -17,7 +17,13 @@ jobs:
         run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
 
       - name: Install dependencies
-        run: brew install glpk
+        run: |
+          brew install glpk
+          # Homebrew's GLPK formula does not ship a glpk.pc file; bypass pkg-config
+          # by exporting the CFLAGS/LIBS variables that PKG_CHECK_MODULES checks first.
+          GLPK_PREFIX=$(brew --prefix glpk)
+          echo "GLPK_CFLAGS=-I${GLPK_PREFIX}/include" >> $GITHUB_ENV
+          echo "GLPK_LIBS=-L${GLPK_PREFIX}/lib -lglpk" >> $GITHUB_ENV
 
       - name: Build
         run: ./configure --enable-named-semaphores && make
