@@ -2,120 +2,6 @@
 
 #INCLUDES = -I$(srcdir)/../include
 
-# -----------------------------------------------------------------------
-# All GLPK embedded source files (shared between library and binary).
-# -----------------------------------------------------------------------
-GLPK_SOURCES = \
-glpapi01.c \
-glpapi02.c \
-glpapi03.c \
-glpapi04.c \
-glpapi05.c \
-glpapi06.c \
-glpapi07.c \
-glpapi08.c \
-glpapi09.c \
-glpapi10.c \
-glpapi11.c \
-glpapi12.c \
-glpapi13.c \
-glpapi14.c \
-glpapi15.c \
-glpapi16.c \
-glpapi17.c \
-glpapi18.c \
-glpapi19.c \
-glpavl.c \
-glpbfd.c \
-glpbfx.c \
-glpcpx.c \
-glpdmp.c \
-glpdmx.c \
-glpenv01.c \
-glpenv02.c \
-glpenv03.c \
-glpenv04.c \
-glpenv05.c \
-glpenv06.c \
-glpenv07.c \
-glpenv08.c \
-glpfhv.c \
-glpgmp.c \
-glphbm.c \
-glpini01.c \
-glpini02.c \
-glpios01.c \
-glpios02.c \
-glpios03.c \
-glpios04.c \
-glpios05.c \
-glpios06.c \
-glpios07.c \
-glpios08.c \
-glpios09.c \
-glpios10.c \
-glpios11.c \
-glpios12.c \
-glpipm.c \
-glplib01.c \
-glplib02.c \
-glplib03.c \
-glplpf.c \
-glplpx01.c \
-glplpx02.c \
-glplpx03.c \
-glpluf.c \
-glplux.c \
-glpmat.c \
-glpmpl01.c \
-glpmpl02.c \
-glpmpl03.c \
-glpmpl04.c \
-glpmpl05.c \
-glpmpl06.c \
-glpmps.c \
-glpnet01.c \
-glpnet02.c \
-glpnet03.c \
-glpnet04.c \
-glpnet05.c \
-glpnet06.c \
-glpnet07.c \
-glpnet08.c \
-glpnet09.c \
-glpnpp01.c \
-glpnpp02.c \
-glpnpp03.c \
-glpnpp04.c \
-glpnpp05.c \
-glpqmd.c \
-glprgr.c \
-glprng01.c \
-glprng02.c \
-glpscf.c \
-glpscl.c \
-glpsdf.c \
-glpspm.c \
-glpspx01.c \
-glpspx02.c \
-glpsql.c \
-glpssx01.c \
-glpssx02.c \
-glptsp.c \
-amd/amd_1.c \
-amd/amd_2.c \
-amd/amd_aat.c \
-amd/amd_control.c \
-amd/amd_defaults.c \
-amd/amd_dump.c \
-amd/amd_info.c \
-amd/amd_order.c \
-amd/amd_post_tree.c \
-amd/amd_postorder.c \
-amd/amd_preprocess.c \
-amd/amd_valid.c \
-colamd/colamd.c
-
 # DW core files (everything except the CLI entry point and the new solver API).
 DW_CORE_SOURCES = \
 dw_blas.c \
@@ -130,8 +16,9 @@ dw_globals.c
 # -----------------------------------------------------------------------
 lib_LTLIBRARIES = libdwsolver.la
 
-libdwsolver_la_SOURCES  = $(GLPK_SOURCES) $(DW_CORE_SOURCES) dw_solver.c
-libdwsolver_la_CPPFLAGS = $(AM_CPPFLAGS) -DDWSOLVER_BUILDING_LIB
+libdwsolver_la_SOURCES  = $(DW_CORE_SOURCES) dw_solver.c
+libdwsolver_la_CPPFLAGS = $(AM_CPPFLAGS) -DDWSOLVER_BUILDING_LIB $(GLPK_CFLAGS)
+libdwsolver_la_LIBADD   = $(GLPK_LIBS)
 libdwsolver_la_CFLAGS   = $(AM_CFLAGS) -fvisibility=hidden
 libdwsolver_la_LDFLAGS  = -version-info 0:0:0
 
@@ -150,12 +37,12 @@ dwsolver_LDADD    = libdwsolver.la
 # -----------------------------------------------------------------------
 nobase_include_HEADERS = dw_solver.h
 
-EXTRA_DIST = amd/amd.h amd/amd_internal.h colamd/colamd.h \
-dw_blas.h      glpapi.h  glpfhv.h  glplib.h  glpnet.h  glpspm.h \
-dw.h           glpavl.h  glpgmp.h  glplpf.h  glpnpp.h  glpspx.h \
-dw_phases.h    glpbfd.h  glphbm.h  glpluf.h  glpqmd.h  glpsql.h \
-dw_rounding.h  glpbfx.h  glpios.h  glplux.h  glprgr.h  glpssx.h \
-dw_subprob.h   glpdmp.h  glpipm.h  glpmat.h  glprng.h  glpstd.h \
-dw_support.h   glpenv.h  glpmpl.h  glpscf.h  glptsp.h  glpk.h
+EXTRA_DIST = \
+dw_blas.h \
+dw.h \
+dw_phases.h \
+dw_rounding.h \
+dw_subprob.h \
+dw_support.h
 
 ## eof ##
