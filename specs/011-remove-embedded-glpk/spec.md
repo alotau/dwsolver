@@ -27,6 +27,7 @@ a system-installed GLPK library instead.
 - Q: How should the ABI compatibility constraint (caller must link the same GLPK build as libdwsolver) be handled? → A: Document-only — state in README and pkg-config; no static linking required
 - Q: What numeric tolerance should be used when comparing refactored-binary objective values against the baseline? → A: 1e-6 relative difference
 - Q: Should dwsolver's configure propagate GLPK's transitive link dependencies (e.g., GMP) automatically or leave it to the user? → A: Automatic — use `pkg-config --libs glpk` so transitive deps are discovered without user intervention
+- Q: Should `dw_solver.h` be refactored to hide GLPK types, or should consumers be required to have `libglpk-dev`? → A: Hide GLPK types (no `libglpk-dev` required for consumers). Note: `dw_solver.h` already exposes zero GLPK types; `dw.h` is an internal header not installed. No refactoring of the public header is needed — but the pkg-config file must use `Requires.private` (not `Requires`) so that consumers are not forced to have GLPK dev headers.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -126,7 +127,7 @@ After the change, `src/` contains only dwsolver's own source files.  No GLPK
 - **FR-005**: The existing `glpk_mutex` guards around GLPK file-I/O calls MUST be retained unchanged, as they protect sequential file-parsing state that remains non-reentrant even in modern GLPK.
 - **FR-006**: The `third-party/glpk/` directory and all files within it MUST be retained in the repository for provenance and attribution purposes.
 - **FR-007**: The project's `README.md` MUST document GLPK as an external dependency, including the minimum version, and provide instructions for installing it on all supported platforms.
-- **FR-008**: The `dwsolver.pc` pkg-config file MUST list GLPK as a `Requires` dependency so that consumers of `libdwsolver` know they must also link against GLPK.
+- **FR-008**: The `dwsolver.pc` pkg-config file MUST list GLPK under `Requires.private` (not `Requires`) so that: (a) downstream consumers of `libdwsolver` are informed that GLPK is a runtime dependency, and (b) consumers are **not** forced to have GLPK development headers installed, since `dw_solver.h` already exposes no GLPK types.
 - **FR-008a**: The `README.md` MUST include a note that callers of `libdwsolver` must link against the same GLPK shared library that dwsolver was built against; mixing GLPK builds produces undefined behaviour. No static-linking enforcement is required.
 - **FR-009**: The GitHub Actions CI workflow(s) MUST be updated to install GLPK ≥ 4.65 as a build-dependency step (e.g., `apt-get install libglpk-dev` on Ubuntu runners) before invoking `./configure && make`.
 - **FR-010**: The project `Dockerfile` MUST be updated to install GLPK ≥ 4.65 inside the container image (e.g., via the distribution package manager) so that container builds continue to succeed after the embedded sources are removed.
