@@ -37,6 +37,8 @@
 #include <glpk.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 #ifndef DECOMPOSE_H_
 #define DECOMPOSE_H_
@@ -173,5 +175,27 @@ extern signal_data* signals;
 static inline void dw_oom_abort(void* ptr, const char* ctx) {
     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
 }
+
+/* POS54-C: Check return value of fallible pthread_* primitives.
+ * pthread_* functions return 0 on success and the error code directly on
+ * failure — pass the return value as rc. */
+static inline void dw_pthread_check(int rc, const char *name) {
+    if (rc != 0) {
+        fprintf(stderr, "dwsolver: pthread error in %s: %s\n", name, strerror(rc));
+        exit(EXIT_FAILURE);
+    }
+}
+#define DW_PTHREAD_CHECK(rc, name) dw_pthread_check((rc), (name))
+
+/* POS54-C: Check return value of fallible sem_* primitives.
+ * sem_* functions return 0 on success and -1 on failure, setting errno —
+ * do NOT use DW_PTHREAD_CHECK for sem_* calls (strerror(-1) is not useful). */
+static inline void dw_sem_check(int ret, const char *name) {
+    if (ret != 0) {
+        fprintf(stderr, "dwsolver: sem error in %s: %s\n", name, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+}
+#define DW_SEM_CHECK(ret, name) dw_sem_check((ret), (name))
 
 #endif /*DECOMPOSE_H_*/

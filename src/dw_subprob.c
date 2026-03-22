@@ -77,6 +77,7 @@ void* subproblem_thread(void* arg) {
 	static double double_neg_one = -1.0;
 
 	char* local_buffer = malloc(sizeof(char)*100);
+	dw_oom_abort(local_buffer, "local_buffer");
 
 	double* col_zero_vector;
 
@@ -84,6 +85,7 @@ void* subproblem_thread(void* arg) {
 	glp_prob* lp;
 
 	glp_smcp *simplex_control_params = (glp_smcp*) malloc(sizeof(glp_smcp));
+	dw_oom_abort(simplex_control_params, "simplex_control_params");
 
 	/* Make some local copies of of things that won't change globally. */
 	id = my_data->my_id;
@@ -98,10 +100,11 @@ void* subproblem_thread(void* arg) {
 	simplex_control_params->msg_lev  = GLP_MSG_ERR;
 
 	/* Read in assigned problem and solve to get initial feasible solution. */
-	pthread_mutex_lock(&glpk_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	lp = lpx_read_cpxlp(my_data->infile_name);
-	pthread_mutex_unlock(&glpk_mutex);
+	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 	glp_iocp* int_parm = malloc(sizeof(glp_iocp));
+	dw_oom_abort(int_parm, "int_parm");
 	glp_init_iocp(int_parm);
 	int_parm->msg_lev = GLP_MSG_ERR;
 	for( i = 1; i <= glp_get_num_cols(lp); i++ ) {
@@ -124,21 +127,19 @@ void* subproblem_thread(void* arg) {
 	my_data->lp = lp;
 
 	/* Check that the master problem is ready for reading.  If not, wait. */
-	pthread_mutex_lock(&master_lp_ready_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&master_lp_ready_mutex), "pthread_mutex_lock(&master_lp_ready_mutex)");
 
 	//dw_printf(IMPORTANCE_DIAG, "Thread %d: Do I need to wait for a signal?\n",
 	//		id);
-	if (!signals->master_lp_ready) {
+	/* POS53-C: use while loop to guard against spurious wakeups. */
+	while (!signals->master_lp_ready) {
 
 		//dw_printf(IMPORTANCE_DIAG, "Thread %d: Yep.  Waiting...\n", id);
-		pthread_cond_wait(&master_lp_ready_cv, &master_lp_ready_mutex);
+		pthread_cond_wait(&master_lp_ready_cv, &master_lp_ready_mutex); /* return value: spurious wakeups handled by while guard */
 		//dw_printf(IMPORTANCE_DIAG,
 		//	"Thread %d: Master_lp_ready condition signal received.\n", id);
 	}
-	else {
-		//dw_printf(IMPORTANCE_DIAG, "Thread %d: Nope. Master is ready...\n", id);
-	}
-	pthread_mutex_unlock(&master_lp_ready_mutex);
+	pthread_mutex_unlock(&master_lp_ready_mutex); /* always succeeds: unlocking owned mutex */
 
 	/* Set up data structures that rely on master info. */
 	my_col                    = glp_get_num_cols(lp)+1;
@@ -147,19 +148,32 @@ void* subproblem_thread(void* arg) {
 	master_rows               = my_data->md->rows;
 	master_cols               = my_data->md->cols;
 	my_solution               = calloc(my_col, sizeof(double));
+	dw_oom_abort(my_solution, "my_solution");
 	y                         = calloc(master_cols, sizeof(double));
+	dw_oom_abort(y, "y");
 	my_data->col_translate    = malloc(sizeof(int)*my_col);
+	dw_oom_abort(my_data->col_translate, "my_data->col_translate");
 	my_data->c                = calloc(my_col, sizeof(double));
+	dw_oom_abort(my_data->c, "my_data->c");
 	col_zero_vector           = calloc(my_col, sizeof(double));
+	dw_oom_abort(col_zero_vector, "col_zero_vector");
 	my_data->condensed_x      = malloc(sizeof(double)*my_col);
+	dw_oom_abort(my_data->condensed_x, "my_data->condensed_x");
 	d_vector                  = malloc(sizeof(double)*my_col);
+	dw_oom_abort(d_vector, "d_vector");
 	my_data->val              = malloc(sizeof(double)*(D->rows_plus+num_clients));
+	dw_oom_abort(my_data->val, "my_data->val");
 	my_data->ind              = malloc(sizeof(int)*(D->rows_plus+num_clients));
+	dw_oom_abort(my_data->ind, "my_data->ind");
 	my_data->double_vector    = malloc(sizeof(double)*(my_col+num_clients));
+	dw_oom_abort(my_data->double_vector, "my_data->double_vector");
 	my_data->D_row_coords     = malloc(sizeof(int));
+	dw_oom_abort(my_data->D_row_coords, "my_data->D_row_coords");
 	my_data->D_col_coords     = malloc(sizeof(int));
+	dw_oom_abort(my_data->D_col_coords, "my_data->D_col_coords");
 	my_data->D_nnz		      = 0;
 	my_data->D_vals		      = malloc(sizeof(double));
+	dw_oom_abort(my_data->D_vals, "my_data->D_vals");
 	my_data->current_solution = my_solution;
 	my_data->r                = DW_INFINITY;
 	my_data->unbounded        = glp_get_status(lp);
@@ -171,14 +185,16 @@ void* subproblem_thread(void* arg) {
 	 * the values for my portion of the master 'c' vector.
 	 */
 	int*    temp_ind = malloc(sizeof(int)*(master_rows+1));
+	dw_oom_abort(temp_ind, "temp_ind");
 	double* temp_val = malloc(sizeof(double)*(master_rows+1));
+	dw_oom_abort(temp_val, "temp_val");
 
 	/* Locking the master_mutex is excessive here. The goal is to gather data
 	 * related to the master while being assured that data won't change.  Need
 	 * to implement a better mechanism here. This implementation serializes this
 	 * section of code over all subproblems.
 	 */
-	pthread_mutex_lock(&master_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&master_mutex), "pthread_mutex_lock(&master_mutex)");
 	for( i = 1; i < my_col; i++ ) {
 		temp = glp_find_col(original_master_lp, glp_get_col_name(lp, i));
 		if( my_data->globals->verbosity >= OUTPUT_ALL && id >= 0 ) {
@@ -233,7 +249,7 @@ void* subproblem_thread(void* arg) {
 	free(temp_ind);
 	free(temp_val);
 
-	pthread_mutex_unlock(&master_mutex);
+	pthread_mutex_unlock(&master_mutex); /* always succeeds: unlocking owned mutex */
 
 	/* Create my portion of the original objective coeff's. */
 	dw_printf(IMPORTANCE_DIAG,"Thread %d: There are %d cols.\n", id, my_col-1);
@@ -257,7 +273,7 @@ void* subproblem_thread(void* arg) {
 		 * concerned with col-1 elements.  The 0th element is generally
 		 * ignored. */
 
-		pthread_mutex_lock(&sub_data_mutex[id]);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[id]), "pthread_mutex_lock(sub_data_mutex[id])");
 
 		/* row_duals' * D = (D' * row_duals)' = y  |  q'D = y */
 #ifdef USE_INTEL_MKL
@@ -298,14 +314,21 @@ void* subproblem_thread(void* arg) {
 			glp_set_obj_coef(lp, i, d_vector[i]);
 		}
 
+		/* POS52-C: release mutex before long-running LP solve to avoid holding
+		 * sub_data_mutex[id] across glp_simplex/glp_intopt. */
+		pthread_mutex_unlock(&sub_data_mutex[id]); /* always succeeds: unlocking owned mutex */
+
 		/* Re-solve based on new objective. */
 		dw_printf(IMPORTANCE_DIAG," %d: Going to solve...\n", id);
 		ret = glp_simplex(lp, simplex_control_params);
-		my_data->obj = glp_get_obj_val(lp);
 		if( my_data->globals->enforce_sub_integrality ) {
 			glp_intopt(lp, int_parm);
-			my_data->obj = glp_mip_obj_val(lp);
 		}
+
+		/* Re-acquire mutex to update shared result fields in sub_data. */
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[id]), "pthread_mutex_lock(sub_data_mutex[id])");
+		my_data->obj = my_data->globals->enforce_sub_integrality ?
+						glp_mip_obj_val(lp) : glp_get_obj_val(lp);
 		dw_printf(IMPORTANCE_DIAG,
 				"Thread %d: Finished solve.  Simplex returns %d. glp_status = %d\n", id, ret, glp_get_status(lp));
 		my_data->unbounded = glp_get_status(lp);
@@ -340,7 +363,7 @@ void* subproblem_thread(void* arg) {
 		prepare_column(my_solution, y, my_data);
 
 		/*fflush(stdout); Not a very thread safe function. */
-		pthread_mutex_unlock(&sub_data_mutex[id]);
+		pthread_mutex_unlock(&sub_data_mutex[id]); /* always succeeds: unlocking owned mutex */
 		if( signal_availability(my_data) ) break;
 		//snprintf(local_buffer, BUFF_SIZE, "sub_%d_%d.cpxlp", id, j);
 		//lpx_write_cpxlp(my_data->lp, local_buffer);
@@ -365,35 +388,35 @@ void* subproblem_thread(void* arg) {
  */
 int signal_availability(subprob_struct* my_data) {
 	int rc = 0;
-	pthread_mutex_lock(&service_queue_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&service_queue_mutex), "pthread_mutex_lock(&service_queue_mutex)");
 	my_data->globals->service_queue[my_data->globals->tail_service_queue] =
 		my_data->my_id;
 	my_data->globals->tail_service_queue++;
 	my_data->globals->tail_service_queue %= my_data->globals->num_clients;
 #ifdef USE_NAMED_SEMAPHORES
-	sem_post(customers);
+	DW_SEM_CHECK(sem_post(customers), "sem_post(customers)");
 #else
-	sem_post(&customers);
+	DW_SEM_CHECK(sem_post(&customers), "sem_post(&customers)");
 #endif
-	pthread_mutex_unlock(&service_queue_mutex);
+	pthread_mutex_unlock(&service_queue_mutex); /* always succeeds: unlocking owned mutex */
 
 	/* Wait for signal here... */
-	pthread_mutex_lock(&next_iteration_mutex);
-	while(signals->current_iteration == my_data->local_iteration) {
-		pthread_cond_wait(&next_iteration_cv, &next_iteration_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
+	while (signals->current_iteration == my_data->local_iteration) {
+		pthread_cond_wait(&next_iteration_cv, &next_iteration_mutex); /* always succeeds: spurious wakeups handled by while loop */
 	}
-	pthread_mutex_unlock(&next_iteration_mutex);
+	pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 
 	/* Should check the my_data->command */
 	/* If it's COMMAND_STOP  then the master doesn't need anymore from us? */
-	pthread_mutex_lock(&sub_data_mutex[my_data->my_id]);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[my_data->my_id]), "pthread_mutex_lock(sub_data_mutex[my_id])");
 	if( my_data->command == COMMAND_STOP ) {
 		dw_printf(IMPORTANCE_DIAG,
 				"%d: Rec'd 'stop' signal.  Bailing right now.  Bye.\n",
 				my_data->my_id);
 		rc = 1;
 	}
-	pthread_mutex_unlock(&sub_data_mutex[my_data->my_id]);
+	pthread_mutex_unlock(&sub_data_mutex[my_data->my_id]); /* always succeeds: unlocking owned mutex */
 	my_data->local_iteration++;
 	return rc;
 }
@@ -432,7 +455,7 @@ void organize_solution(subprob_struct* data, double* sol, int my_col) {
 void prepare_column(double* solution, double* y, subprob_struct* data) {
 	int count = 0, i;
 	int id = data->my_id;
-	pthread_mutex_lock(&glpk_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	dw_printf(IMPORTANCE_DIAG,"%d: in prepare_column()\n", data->my_id);
 	for( i = 1; i <= data->num_cols; i++ ) {
 		dw_printf(IMPORTANCE_DIAG," %d:   %s: \t%3.2f\n", id,
@@ -440,7 +463,7 @@ void prepare_column(double* solution, double* y, subprob_struct* data) {
 				glp_get_col_prim(data->lp, i));
 	}
 
-	pthread_mutex_unlock(&glpk_mutex);
+	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 	/*   D * solution = y */
 #ifdef USE_INTEL_MKL

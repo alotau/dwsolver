@@ -74,8 +74,10 @@ int process_solution(subprob_struct* sub_data, char* out_file_name, int mode) {
 	int iteration;
 	int num_clients = sub_data->globals->num_clients;
 	int* num_infos = malloc(sizeof(int)*num_clients);
+	dw_oom_abort(num_infos, "num_infos");
 	const char* col_name;
 	char* local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(local_col_name, "local_col_name");
 	double var_value;
 	void *status;
 	FILE* out_file;
@@ -85,13 +87,18 @@ int process_solution(subprob_struct* sub_data, char* out_file_name, int mode) {
 
 	sol_info* temp_info;
 	sol_info** solution_organization = malloc(sizeof(sol_info*)*num_clients);
+	dw_oom_abort(solution_organization, "solution_organization");
 	int_thread_data* t_data = malloc(sizeof(int_thread_data)*num_clients);
+	dw_oom_abort(t_data, "t_data");
 	pthread_t* threads = (pthread_t*) malloc(sizeof(pthread_t)*num_clients);
+	dw_oom_abort(threads, "threads");
 
 	globals->final_x   =
 		calloc(glp_get_num_cols(original_master_lp)+1, sizeof(double));
+	dw_oom_abort(globals->final_x, "globals->final_x");
 	globals->relaxed_x =
 		calloc(glp_get_num_cols(original_master_lp)+1, sizeof(double));
+	dw_oom_abort(globals->relaxed_x, "globals->relaxed_x");
 
 	dw_printf(IMPORTANCE_DIAG, "Entered round_solution()...\n");
 
@@ -130,6 +137,7 @@ int process_solution(subprob_struct* sub_data, char* out_file_name, int mode) {
 			if( num_infos[subprob] == 0 ) {
 				/* Begin linked list of non-zero vars for this subproblem. */
 				solution_organization[subprob] = malloc(sizeof(sol_info));
+				dw_oom_abort(solution_organization[subprob], "solution_organization[subprob]");
 				temp_info = solution_organization[subprob];
 			}
 			else {
@@ -139,6 +147,7 @@ int process_solution(subprob_struct* sub_data, char* out_file_name, int mode) {
 					temp_info = temp_info->next;
 				}
 				temp_info->next = malloc(sizeof(sol_info));
+				dw_oom_abort(temp_info->next, "temp_info->next");
 				temp_info = temp_info->next;
 			}
 			/* Now populate the sol_info data structure. */
@@ -271,7 +280,9 @@ void check_broken_constraints(double* xx) {
 	int j;
 	int num_over_capacity = 0;
 	int*    ind = malloc(sizeof(int)*D->cols+1);
+	dw_oom_abort(ind, "ind");
 	double* val = malloc(sizeof(double)*D->cols+1);
+	dw_oom_abort(val, "val");
 	val[0] = 0.0;
 	ind[0] = 0;
 	int nz;
@@ -331,8 +342,11 @@ void print_zeros_simple(int_thread_data* my_data) {
 	//int time;
 	//const char* var_name;
 	char* local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(local_col_name, "local_col_name");
 	char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(curr_flight, "curr_flight");
 	char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(curr_sector, "curr_sector");
 
 
 	//printf("in print_zeros_simple...\n");
@@ -349,7 +363,7 @@ void print_zeros_simple(int_thread_data* my_data) {
 //			if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
 //			strcpy( curr_flight, strtok(NULL, ",") );
 //			strcpy( curr_sector, strtok(NULL, ",") );
-//			time = atoi(strtok(NULL, ")"));
+//			(void)strtok(NULL, ")") /* advance tokenizer past time field */;
 //			fprintf(zero_file, "%s %s\n", curr_flight, curr_sector);
 //		}
 
@@ -369,7 +383,6 @@ void print_zeros(int_thread_data* my_data) {
 	int curr_iter = signals->current_iteration;
 
 	int ground_delay = 0;
-	int time;
 	int prev_delay  = -1;
 	int curr_delay  = -2;
 	int new_delay   = -3;
@@ -378,12 +391,19 @@ void print_zeros(int_thread_data* my_data) {
 
 	const char* var_name;
 	char* local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(local_col_name, "local_col_name");
 	char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(curr_flight, "curr_flight");
 	char* temp_flight = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(temp_flight, "temp_flight");
 	char* prev_flight = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(prev_flight, "prev_flight");
 	char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(curr_sector, "curr_sector");
 	char* prev_sector = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(prev_sector, "prev_sector");
 	char* old_sector  = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(old_sector, "old_sector");
 
 	//if( globals->dw_verbosity >= OUTPUT_NORMAL )
 		//printf("in print_zeros...\n");
@@ -403,7 +423,7 @@ void print_zeros(int_thread_data* my_data) {
 			if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
 			strcpy( curr_flight, strtok(NULL, ",") );
 			strcpy( curr_sector, strtok(NULL, ",") );
-			time = atoi(strtok(NULL, ")"));
+			(void)strtok(NULL, ")") /* advance tokenizer past time field */;
 			//printf("%s ( %s, %s ) = %3.2f\n", var_name, curr_flight, curr_sector, x[subprob][curr_iter][j]);
 
 
@@ -503,6 +523,7 @@ void* solution_printing_thread(void* arg) {
 	/* Now use my_data to fill in x[i][current_iteration] with final var values. */
 	my_data->sub_data.globals->x[subprob][curr_iter] =
 		calloc((my_data->sub_data).num_cols_plus, sizeof(double));
+	dw_oom_abort(my_data->sub_data.globals->x[subprob][curr_iter], "x[subprob][curr_iter]");
 
 	for(i = 0; i < my_data->num_si; i++ ) {
 
@@ -515,15 +536,16 @@ void* solution_printing_thread(void* arg) {
 		}
 		temp_info = temp_info->next;
 	}
-	pthread_mutex_lock(&glpk_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	for( j = 1; j < (my_data->sub_data).num_cols_plus; j++ ) {
 		fprintf(my_data->zero_file, "%s\t%f\n",
 				glp_get_col_name(my_data->sub_data.lp, j),
 				my_data->sub_data.globals->x[subprob][curr_iter][j]);
 	}
-	pthread_mutex_unlock(&glpk_mutex);
+	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 	free(my_data->sub_data.globals->x[subprob][curr_iter]);
+	return NULL;
 }
 
 void* rounding_thread(void* arg) {
@@ -535,9 +557,13 @@ void* rounding_thread(void* arg) {
 
 	double val;
 	char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(curr_flight, "curr_flight");
 	char* prev_flight = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(prev_flight, "prev_flight");
 	char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(curr_sector, "curr_sector");
 	char* prev_sector = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(prev_sector, "prev_sector");
 
 	strcpy(curr_flight, "COOTIE");
 	strcpy(curr_sector, "COOTIE");
@@ -546,13 +572,11 @@ void* rounding_thread(void* arg) {
 
 	sol_info* temp_info;
 	int_thread_data* my_data = (int_thread_data*) arg;
-	pthread_mutex_lock(&master_lp_ready_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&master_lp_ready_mutex), "pthread_mutex_lock(&master_lp_ready_mutex)");
 	int my_round = round_up;
 	round_up = 1 - round_up;
 	//printf("Subproblem %d claiming round_up with value %d\n", my_data->id, my_round);
-	pthread_mutex_unlock(&master_lp_ready_mutex);
-
-	double temp;
+	pthread_mutex_unlock(&master_lp_ready_mutex); /* always succeeds: unlocking owned mutex */
 
 	subprob = my_data->id;
 	curr_iter = signals->current_iteration;
@@ -563,6 +587,7 @@ void* rounding_thread(void* arg) {
 	/* Now use my_data to fill in x[i][current_iteration] with final var values. */
 	my_data->sub_data.globals->x[subprob][curr_iter] =
 		calloc((my_data->sub_data).num_cols_plus, sizeof(double));
+	dw_oom_abort(my_data->sub_data.globals->x[subprob][curr_iter], "x[subprob][curr_iter]");
 
 	/* Get weighted sum of the appropriate solutions. Store in x[curr_iter]. */
 	//printf("%d entering for loop.  Will loop %d times.\n", my_data->id, my_data->num_si);
@@ -588,7 +613,7 @@ void* rounding_thread(void* arg) {
 			const char *col_name = glp_get_col_name(my_data->sub_data.lp, j);
 			i = glp_find_col(original_master_lp, col_name);
 
-			pthread_mutex_lock(&glpk_mutex);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 			if( /*x[subprob][curr_iter][j] == 0.0*/ 0 ) pre_round_zeros++;
 			else if(my_data->sub_data.globals->x[subprob][curr_iter][j] == 1.0 )
 				pre_round_ones++;
@@ -597,11 +622,10 @@ void* rounding_thread(void* arg) {
 			else printf("UH OH! ODD VALUED VARIABLE?  x[%d][%d][%d] = %e\n",
 					subprob, curr_iter, j ,
 					my_data->sub_data.globals->final_x[i]);
-			pthread_mutex_unlock(&glpk_mutex);
+			pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 			my_data->sub_data.globals->relaxed_x[i] = my_data->sub_data.globals->x[subprob][curr_iter][j];
 
-			temp = my_data->sub_data.globals->x[subprob][curr_iter][j];
 			if( my_data->sub_data.globals->x[subprob][curr_iter][j] < round_param )
 				my_data->sub_data.globals->x[subprob][curr_iter][j] = 0.0;
 			else if(my_data->sub_data.globals->x[subprob][curr_iter][j] >= (1.0 - round_param))
@@ -615,20 +639,20 @@ void* rounding_thread(void* arg) {
 			//printf("%s: col %d in sub is %d in master.\n", col_name, j, i);
 			my_data->sub_data.globals->final_x[i] = my_data->sub_data.globals->x[subprob][curr_iter][j];
 			/* Signal all subproblems that master is set up and ready. */
-			pthread_mutex_lock(&master_lp_ready_mutex);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&master_lp_ready_mutex), "pthread_mutex_lock(&master_lp_ready_mutex)");
 			if( my_data->sub_data.globals->final_x[i] == 0.0) post_round_zeros++;
 			else if( my_data->sub_data.globals->final_x[i] == 1.0 ) post_round_ones++;
 			else printf("UH OH! ROUNDING DIDN'T WORK?  final_x[%d] = %f\n", i, my_data->sub_data.globals->final_x[i]);
-			pthread_cond_broadcast(&master_lp_ready_cv);
-			pthread_mutex_unlock(&master_lp_ready_mutex);
+			pthread_cond_broadcast(&master_lp_ready_cv); /* always succeeds */
+			pthread_mutex_unlock(&master_lp_ready_mutex); /* always succeeds: unlocking owned mutex */
 
 
 		//	printf("%e\n", x[subprob][curr_iter][j]);
 		}
 		else if( my_data->sub_data.globals->x[subprob][curr_iter][j] <= (0.0+TOLERANCE) ) {
-			pthread_mutex_lock(&glpk_mutex);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 			pre_round_zeros++;
-			pthread_mutex_unlock(&glpk_mutex);
+			pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 			//	printf("Var x[%d][%d][%d] = %e \n ", subprob, curr_iter, j, x[subprob][curr_iter][j]);
 		}
 		else if( my_data->sub_data.globals->x[subprob][curr_iter][j] >=
@@ -640,9 +664,9 @@ void* rounding_thread(void* arg) {
 				/*x[subprob][curr_iter][j]*/ 1.0;
 			my_data->sub_data.globals->relaxed_x[i] =
 				/*x[subprob][curr_iter][j]*/ 1.0;
-			pthread_mutex_lock(&glpk_mutex);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 			pre_round_ones++;
-			pthread_mutex_unlock(&glpk_mutex);
+			pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 		}
 		else { /* Should never get here. */
 			printf("How'd we get here?  x[][][] = %e\n",
@@ -650,10 +674,10 @@ void* rounding_thread(void* arg) {
 		}
 	}
 
-	pthread_mutex_lock(&glpk_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	fflush(stdout);
 	print_zeros_simple(my_data);
-	pthread_mutex_unlock(&glpk_mutex);
+	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 	pthread_exit(NULL);
 }

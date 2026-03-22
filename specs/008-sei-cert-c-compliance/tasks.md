@@ -17,7 +17,7 @@
 
 **Purpose**: Add the `DW_PTHREAD_CHECK` error-check helper — the prerequisite macro for all P1 work. No other phase can begin until this is in place.
 
-- [ ] T001 Add `dw_pthread_check()` inline function and `DW_PTHREAD_CHECK` macro to `src/dw_support.h` (see data-model.md pattern; analogous to existing `dw_oom_abort`); also add `dw_sem_check()` and `DW_SEM_CHECK` variant that uses `strerror(errno)` instead of `strerror(rc)` — required because `sem_*` functions return -1 on failure and set `errno`, not the error code directly
+- [X] T001 Add `dw_pthread_check()` inline function and `DW_PTHREAD_CHECK` macro to `src/dw_support.h` (see data-model.md pattern; analogous to existing `dw_oom_abort`); also add `dw_sem_check()` and `DW_SEM_CHECK` variant that uses `strerror(errno)` instead of `strerror(rc)` — required because `sem_*` functions return -1 on failure and set `errno`, not the error code directly
 
 **Checkpoint**: `make` succeeds; macro usable from all `dw_*.c` files.
 
@@ -29,9 +29,9 @@
 
 **⚠️ Complete before any user story implementation begins**
 
-- [ ] T002 Run `cppcheck --enable=all src/dw_*.c` and capture output to `specs/008-sei-cert-c-compliance/baseline-cppcheck.txt`
-- [ ] T003 [P] Compile with `-Wall -Wextra -Wsign-compare` and capture warnings to `specs/008-sei-cert-c-compliance/baseline-warnings.txt` (`gcc -Wall -Wextra -Wsign-compare -c src/dw_*.c -I src/ 2>&1 | grep -v 'glp' > baseline-warnings.txt`)
-- [ ] T004 [P] Run full test suite and confirm all tests pass: `./tests/dw-tests.sh`
+- [X] T002 Run `cppcheck --enable=all src/dw_*.c` and capture output to `specs/008-sei-cert-c-compliance/baseline-cppcheck.txt`
+- [X] T003 [P] Compile with `-Wall -Wextra -Wsign-compare` and capture warnings to `specs/008-sei-cert-c-compliance/baseline-warnings.txt` (`gcc -Wall -Wextra -Wsign-compare -c src/dw_*.c -I src/ 2>&1 | grep -v 'glp' > baseline-warnings.txt`)
+- [X] T004 [P] Run full test suite and confirm all tests pass: `./tests/dw-tests.sh`
 
 **Checkpoint**: Baseline captured; all tests green before any code changes.
 
@@ -43,13 +43,13 @@
 
 **Independent Test**: `grep -n 'pthread_\|sem_' src/dw_*.c | grep -v '//' | grep -vE 'DW_PTHREAD_CHECK|always succeeds|pthread_t |pthread_attr_t|pthread_mutex_t|pthread_cond_t|pthread_mutexattr|sem_t'` returns zero unchecked call sites; `make` succeeds; `./tests/dw-tests.sh` passes.
 
-- [ ] T005 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_init`, `pthread_cond_init`, `pthread_attr_init`, `pthread_mutexattr_init`, `pthread_attr_setdetachstate` calls in `src/dw_support.c` init_pthread_data() (lines ~190–212 per contracts/pthread-call-sites.md); apply `DW_SEM_CHECK` to `sem_init` (line ~209) — note `sem_*` uses errno, not rc; test `rc = pthread_attr_setstacksize` result; annotate `pthread_attr_getstacksize` calls as always-succeeds
-- [ ] T006 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` calls in `src/dw_main.c` (lines 221, 258, 458, 479, 541, 640, 644, 826); annotate all `pthread_mutex_unlock` and `pthread_cond_broadcast` calls as always-succeeds; verify `pthread_create` (line 204) and `pthread_join` (line 706) already checked
-- [ ] T007 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` calls in `src/dw_phases.c` (lines 87, 97, 117, 271, 280, 334, 343, 360, 511, 521, 530); apply `DW_SEM_CHECK` to `sem_wait` calls at lines 83, 85, 330, 332 (previously missing from audit — 4 sites total; `sem_*` uses errno, not rc); annotate all `pthread_mutex_unlock` and `pthread_cond_broadcast` as always-succeeds
-- [ ] T008 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` and `pthread_cond_wait` call sites in `src/dw_subprob.c` (lines 101, 127, 181, 260, 368, 381, 389, 435 per contracts/pthread-call-sites.md); apply `DW_SEM_CHECK` to `sem_post` calls at lines 374 and 376 (`sem_*` uses errno, not rc); annotate all unlocks and broadcasts as always-succeeds
-- [ ] T009 [P] [US1] Apply `DW_PTHREAD_CHECK` to unchecked `pthread_mutex_lock` calls in `src/dw_rounding.c` (lines 518, 549, 591); annotate corresponding unlocks as always-succeeds; verify `pthread_create` (lines 175, 181) and `pthread_join` (line 199) already checked
-- [ ] T010 [US1] Compile `src/dw_*.c` after all US1 edits (`make`) and fix any build errors introduced by the changes
-- [ ] T011 [US1] Run `./tests/dw-tests.sh` and confirm all examples reproduce expected optima; fix any regressions before proceeding
+- [X] T005 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_init`, `pthread_cond_init`, `pthread_attr_init`, `pthread_mutexattr_init`, `pthread_attr_setdetachstate` calls in `src/dw_support.c` init_pthread_data() (lines ~190–212 per contracts/pthread-call-sites.md); apply `DW_SEM_CHECK` to `sem_init` (line ~209) — note `sem_*` uses errno, not rc; test `rc = pthread_attr_setstacksize` result; annotate `pthread_attr_getstacksize` calls as always-succeeds
+- [X] T006 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` calls in `src/dw_main.c` (lines 221, 258, 458, 479, 541, 640, 644, 826); annotate all `pthread_mutex_unlock` and `pthread_cond_broadcast` calls as always-succeeds; verify `pthread_create` (line 204) and `pthread_join` (line 706) already checked
+- [X] T007 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` calls in `src/dw_phases.c` (lines 87, 97, 117, 271, 280, 334, 343, 360, 511, 521, 530); apply `DW_SEM_CHECK` to `sem_wait` calls at lines 83, 85, 330, 332 (previously missing from audit — 4 sites total; `sem_*` uses errno, not rc); annotate all `pthread_mutex_unlock` and `pthread_cond_broadcast` as always-succeeds
+- [X] T008 [P] [US1] Apply `DW_PTHREAD_CHECK` to all unchecked `pthread_mutex_lock` and `pthread_cond_wait` call sites in `src/dw_subprob.c` (lines 101, 127, 181, 260, 368, 381, 389, 435 per contracts/pthread-call-sites.md); apply `DW_SEM_CHECK` to `sem_post` calls at lines 374 and 376 (`sem_*` uses errno, not rc); annotate all unlocks and broadcasts as always-succeeds
+- [X] T009 [P] [US1] Apply `DW_PTHREAD_CHECK` to unchecked `pthread_mutex_lock` calls in `src/dw_rounding.c` (lines 518, 549, 591); annotate corresponding unlocks as always-succeeds; verify `pthread_create` (lines 175, 181) and `pthread_join` (line 199) already checked
+- [X] T010 [US1] Compile `src/dw_*.c` after all US1 edits (`make`) and fix any build errors introduced by the changes
+- [X] T011 [US1] Run `./tests/dw-tests.sh` and confirm all examples reproduce expected optima; fix any regressions before proceeding
 
 **Checkpoint**: Zero unchecked pthread/sem call sites; all tests pass.
 
@@ -61,10 +61,10 @@
 
 **Independent Test**: Re-audit `contracts/glpk-lock-state.md` — all 10 GLPK call sites show "None" in the "Mutexes Held" column; `./tests/dw-tests.sh` passes; all examples reproduce expected optima.
 
-- [ ] T012 [US2] In `src/dw_subprob.c`, fix the spurious-wakeup bug at line ~131: change `if (!signals->master_lp_ready)` to `while (!signals->master_lp_ready)` and add POS53-C comment (distinct from the line-382 fix already on `fix/spurious-wakeup-cond-wait`)
-- [ ] T013 [US2] In `src/dw_subprob.c`, fix POS52-C violations at lines ~303 and ~306 (main iteration loop): release `sub_data_mutex[id]` after all `glp_set_obj_coef` calls complete; extract result values (`obj_val`, `result_unbounded`) to local variables; call `glp_simplex` / `glp_intopt` without the lock; re-acquire `sub_data_mutex[id]` before writing `my_data->obj`, `my_data->unbounded`, and solution arrays back (see contracts/glpk-lock-state.md fix specification)
-- [ ] T014 [US2] Compile `src/dw_subprob.c` (`make`) and fix any build errors
-- [ ] T015 [US2] Run `./tests/dw-tests.sh` and confirm all examples reproduce expected optima; verify the POS52-C fix does not change any output values
+- [X] T012 [US2] In `src/dw_subprob.c`, fix the spurious-wakeup bug at line ~131: change `if (!signals->master_lp_ready)` to `while (!signals->master_lp_ready)` and add POS53-C comment (distinct from the line-382 fix already on `fix/spurious-wakeup-cond-wait`)
+- [X] T013 [US2] In `src/dw_subprob.c`, fix POS52-C violations at lines ~303 and ~306 (main iteration loop): release `sub_data_mutex[id]` after all `glp_set_obj_coef` calls complete; extract result values (`obj_val`, `result_unbounded`) to local variables; call `glp_simplex` / `glp_intopt` without the lock; re-acquire `sub_data_mutex[id]` before writing `my_data->obj`, `my_data->unbounded`, and solution arrays back (see contracts/glpk-lock-state.md fix specification)
+- [X] T014 [US2] Compile `src/dw_subprob.c` (`make`) and fix any build errors
+- [X] T015 [US2] Run `./tests/dw-tests.sh` and confirm all examples reproduce expected optima; verify the POS52-C fix does not change any output values
 
 **Checkpoint**: GLPK solve sites clean; spurious-wakeup guards in place; all tests pass.
 
@@ -76,8 +76,8 @@
 
 **Independent Test**: `contracts/lock-order.md` exists and lists all synchronization primitives (six actively-nested + two isolated) in required acquisition order with per-site verdicts; manual scan of every multi-lock path in `src/dw_*.c` shows zero inversion rows marked ❌.
 
-- [ ] T016 [US3] Review `contracts/lock-order.md` (already written in plan phase) against current source after US1 and US2 changes; update any line numbers that shifted due to edits in T005–T013; confirm all per-site verdicts remain ✅ PASS
-- [ ] T017 [US3] Add a brief lock-order comment block at the top of `src/dw_support.c` (near `init_pthread_data`) documenting the six-level acquisition order (see data-model.md Lock Acquisition Total Order table) so the order is discoverable in source, not just in specs
+- [X] T016 [US3] Review `contracts/lock-order.md` (already written in plan phase) against current source after US1 and US2 changes; update any line numbers that shifted due to edits in T005–T013; confirm all per-site verdicts remain ✅ PASS
+- [X] T017 [US3] Add a brief lock-order comment block at the top of `src/dw_support.c` (near `init_pthread_data`) documenting the six-level acquisition order (see data-model.md Lock Acquisition Total Order table) so the order is discoverable in source, not just in specs
 
 **Checkpoint**: Lock-order documented in both specs and source; no inversions; no code correctness changes required (research confirmed zero inversions).
 
@@ -89,12 +89,12 @@
 
 **Independent Test**: `grep -n 'malloc\|calloc' src/dw_*.c` shows no site without an immediately following null-check; `grep -n 'fopen' src/dw_*.c` shows all sites with null-check; `make` succeeds; `./tests/dw-tests.sh` passes.
 
-- [ ] T018 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_support.c` (priority sites: lines 99, 105–108, 136–137, 163–164, 173–174, 187, 193, 280, 378, 503–506, 510, 593–594, 609, 670, 709)
-- [ ] T019 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_main.c` (priority sites: lines 110, 119, 121, 156–157, 159, 187, 201, 240, 242, 314, 338, 374, 417, 493, 495, 497, 547, 764)
-- [ ] T020 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_phases.c` (lines 72–75, 114, 166, 322, 389–390, 395–396, 413)
-- [ ] T021 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_subprob.c` (lines 79, 86, 104, 149–160, 173–174) and `src/dw_rounding.c` (lines 76, 78, 87–89, 92, 94, 132, 141, 273–274, 333–335, 380–382)
-- [ ] T022 [US4] Verify all `fopen` call sites in `src/dw_*.c` have null-checks (already present per research); verify every successfully-opened file handle has a reachable `fclose` on all exit paths — add missing `fclose` calls if any are found
-- [ ] T023 [US4] Compile (`make`) and run `./tests/dw-tests.sh`; fix any regressions
+- [X] T018 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_support.c` (priority sites: lines 99, 105–108, 136–137, 163–164, 173–174, 187, 193, 280, 378, 503–506, 510, 593–594, 609, 670, 709)
+- [X] T019 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_main.c` (priority sites: lines 110, 119, 121, 156–157, 159, 187, 201, 240, 242, 314, 338, 374, 417, 493, 495, 497, 547, 764)
+- [X] T020 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_phases.c` (lines 72–75, 114, 166, 322, 389–390, 395–396, 413)
+- [X] T021 [P] [US4] Add `dw_oom_abort()` null-checks after every unchecked `malloc`/`calloc` in `src/dw_subprob.c` (lines 79, 86, 104, 149–160, 173–174) and `src/dw_rounding.c` (lines 76, 78, 87–89, 92, 94, 132, 141, 273–274, 333–335, 380–382)
+- [X] T022 [US4] Verify all `fopen` call sites in `src/dw_*.c` have null-checks (already present per research); verify every successfully-opened file handle has a reachable `fclose` on all exit paths — add missing `fclose` calls if any are found
+- [X] T023 [US4] Compile (`make`) and run `./tests/dw-tests.sh`; fix any regressions
 
 **Checkpoint**: All allocation sites null-checked; all file handles closed; tests pass.
 
@@ -106,10 +106,10 @@
 
 **Independent Test**: `gcc -Wall -Wextra -Wsign-compare -c src/dw_*.c -I src/ 2>&1 | grep -v 'glp'` produces zero lines of output; `./tests/dw-tests.sh` passes.
 
-- [ ] T024 [P] [US5] In `src/dw_main.c`, fix all signed/unsigned comparison warnings: loop counters compared to `glp_get_num_cols`/`glp_get_num_rows` return (`int`); use explicit `(int)` casts at GLPK boundary call sites where `size_t` → `int` conversions occur
-- [ ] T025 [P] [US5] In `src/dw_phases.c` and `src/dw_subprob.c`, fix all signed/unsigned comparison warnings using the same explicit-cast pattern
-- [ ] T026 [P] [US5] In `src/dw_support.c` and `src/dw_rounding.c`, fix all signed/unsigned comparison warnings
-- [ ] T027 [US5] Compile the full project (`make`) with `-Wall -Wextra -Wsign-compare` added to `CFLAGS` in `Makefile` (or `configure.ac`); confirm zero warnings remain from `dw_*.c` files; run `./tests/dw-tests.sh`
+- [X] T024 [P] [US5] In `src/dw_main.c`, fix all signed/unsigned comparison warnings: loop counters compared to `glp_get_num_cols`/`glp_get_num_rows` return (`int`); use explicit `(int)` casts at GLPK boundary call sites where `size_t` → `int` conversions occur
+- [X] T025 [P] [US5] In `src/dw_phases.c` and `src/dw_subprob.c`, fix all signed/unsigned comparison warnings using the same explicit-cast pattern
+- [X] T026 [P] [US5] In `src/dw_support.c` and `src/dw_rounding.c`, fix all signed/unsigned comparison warnings
+- [X] T027 [US5] Compile the full project (`make`) with `-Wall -Wextra -Wsign-compare` added to `CFLAGS` in `Makefile` (or `configure.ac`); confirm zero warnings remain from `dw_*.c` files; run `./tests/dw-tests.sh`
 
 **Checkpoint**: Zero integer-type warnings; tests pass; baseline-warnings.txt new count = 0 for dw_*.c.
 

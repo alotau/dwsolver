@@ -93,29 +93,32 @@ next_iteration_mutex (unlock :647)
 
 ```
 master_lp_ready_mutex (lock :127)       ← Level 2, isolated ✅
-pthread_cond_wait (:134)
-master_lp_ready_mutex (unlock :141)
+pthread_cond_wait (:135)
+master_lp_ready_mutex (unlock :139)
 
-master_mutex (lock :181)                ← Level 6, isolated ✅
-master_mutex (unlock :236)
+master_mutex (lock :179)                ← Level 6, isolated ✅
+master_mutex (unlock :234)
 
-sub_data_mutex[id] (lock :260)
-  [After POS52-C fix: glp_simplex NOT called here]
-sub_data_mutex[id] (unlock :343)        ← BEFORE sem_post
+sub_data_mutex[id] (lock :258)
+  [POS52-C fix: unlock before LP solve]
+sub_data_mutex[id] (unlock :301)        ← released before glp_simplex ✅
+  glp_simplex / glp_intopt run WITHOUT any lock held ✅
+sub_data_mutex[id] (re-lock :311)       ← re-acquired to write results ✅
+sub_data_mutex[id] (unlock :348)        ← BEFORE sem_post
 
-service_queue_mutex (lock :368)         ← Level 3, sub_data released ✅
-sem_post :374/376
-service_queue_mutex (unlock :378)
+service_queue_mutex (lock :373)         ← Level 3, sub_data released ✅
+sem_post :379/381
+service_queue_mutex (unlock :383)
 
-next_iteration_mutex (lock :381)        ← Level 5, service_queue released ✅
-pthread_cond_wait (:383)
-next_iteration_mutex (unlock :385)
+next_iteration_mutex (lock :386)        ← Level 5, service_queue released ✅
+pthread_cond_wait (:388)
+next_iteration_mutex (unlock :390)
 
-sub_data_mutex[my_data->my_id] (lock :389)   ← Level 4, alone ✅
-sub_data_mutex[my_data->my_id] (unlock :396)
+sub_data_mutex[my_data->my_id] (lock :394)   ← Level 4, alone ✅
+sub_data_mutex[my_data->my_id] (unlock :401)
 
-glpk_mutex (lock :435)                 ← Level 1, alone ✅
-glpk_mutex (unlock :443)
+glpk_mutex (lock :440)                 ← Level 1, alone ✅
+glpk_mutex (unlock :448)
 ```
 
 **Verdict**: ✅ PASS — No pairs violate the level order. `master_mutex` and `sub_data_mutex` are used sequentially (never nested together).

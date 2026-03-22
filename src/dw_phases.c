@@ -70,9 +70,13 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 	char* col_name = NULL;
 	if( first_run ) {
 		ind_local      = (int*)    malloc(sizeof(int)*3);
+		dw_oom_abort(ind_local, "ind_local");
 		val_local      = (double*) malloc(sizeof(double)*3);
+		dw_oom_abort(val_local, "val_local");
 		y_accumulators = (double*) calloc(D->rows+1 , sizeof(double));
+		dw_oom_abort(y_accumulators, "y_accumulators");
 		col_name       = malloc(sizeof(char)*BUFF_SIZE);
+		dw_oom_abort(col_name, "col_name");
 	}
 
 	dw_printf(IMPORTANCE_DIAG, "######## In master_phase_one().\n");
@@ -80,21 +84,21 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 	/* We need a response from each of the clients. 'count' keeps track. */
 	while(count < num_clients) {
 #ifdef USE_NAMED_SEMAPHORES
-		sem_wait(customers);
+		DW_SEM_CHECK(sem_wait(customers), "sem_wait(customers)");
 #else
-		sem_wait(&customers);
+		DW_SEM_CHECK(sem_wait(&customers), "sem_wait(&customers)");
 #endif
-		pthread_mutex_lock(&service_queue_mutex);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&service_queue_mutex), "pthread_mutex_lock(&service_queue_mutex)");
 		index = fg->service_queue[fg->head_service_queue];
 		fg->head_service_queue++;
 		fg->head_service_queue %= num_clients;
-		pthread_mutex_unlock(&service_queue_mutex);
+		pthread_mutex_unlock(&service_queue_mutex); /* always succeeds: unlocking owned mutex */
 		dw_printf(IMPORTANCE_DIAG, "######## Master servicing thread %d.\n", index);
 
 		count++;
 
 		/* Add column when sub_data[index].r > sub_data[index].obj */
-		pthread_mutex_lock(&sub_data_mutex[index]);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[index]), "pthread_mutex_lock(sub_data_mutex[index])");
 		dw_printf(IMPORTANCE_DIAG, "I think r = %3.6f and obj = %3.6f and unbounded = %s\n",
 				sub_data[index].r, sub_data[index].obj,
 				sub_data[index].unbounded == GLP_UNBND ? "GLP_UNBOUND" : "not GLP_UNBND");
@@ -112,16 +116,17 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 				glp_set_col_kind(master_lp, col, GLP_IV);
 			}
 			obj_names[*obj_count] = malloc(sizeof(char)*BUFF_SIZE);
+			dw_oom_abort(obj_names[*obj_count], "obj_names[*obj_count]");
 
 			/* Lock here is overkill, but it stops warnings from helgrind. */
-			pthread_mutex_lock(&next_iteration_mutex);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 			if( sub_data[index].unbounded != GLP_UNBND )
 				snprintf(obj_names[*obj_count], BUFF_SIZE - 1,
 						"lambda_%d_%d", index, signals->current_iteration);
 			else
 				snprintf(obj_names[*obj_count], BUFF_SIZE - 1,
 						"theta_%d_%d", index, signals->current_iteration);
-			pthread_mutex_unlock(&next_iteration_mutex);
+			pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 
 			glp_set_col_name(master_lp, col, obj_names[*obj_count]);
 
@@ -164,6 +169,7 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 				}
 
 			fg->x[index][signals->current_iteration] = malloc(sizeof(double)*sub_data[index].num_cols_plus);
+			dw_oom_abort(fg->x[index][signals->current_iteration], "fg->x[index][iter]");
 
 			for( i = 1; i < sub_data[index].num_cols_plus; i++ ) {
 				fg->x[index][signals->current_iteration][i] =
@@ -175,7 +181,7 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 		else {
 			fg->x[index][signals->current_iteration] = NULL;
 		}
-		pthread_mutex_unlock(&sub_data_mutex[index]);
+		pthread_mutex_unlock(&sub_data_mutex[index]); /* always succeeds: unlocking owned mutex */
 		dw_printf(IMPORTANCE_DIAG,
 				"######## Master done servicing thread %d.\n", index);
 
@@ -270,19 +276,19 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 	 * This target is the dual value of the convexity constraint associated
 	 * with the subproblem. */
 	for( i = 0; i < num_clients; i ++ ) {
-		pthread_mutex_lock(&sub_data_mutex[i]);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[i]), "pthread_mutex_lock(sub_data_mutex[i])");
 		sub_data[i].r = glp_get_row_dual(master_lp, D->rows + 1 + i);
-		pthread_mutex_unlock(&sub_data_mutex[i]);
+		pthread_mutex_unlock(&sub_data_mutex[i]); /* always succeeds: unlocking owned mutex */
 	}
 
 	/* In case a subthread hasn't actually blocked on the next_iteration_cv
 	 * signal, we keep track of the current iteration for the subthreads to
 	 * check against to see if they are behind and can bypass waiting for the
 	 * signal (which they missed). */
-	pthread_mutex_lock(&next_iteration_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 	signals->current_iteration++;
-	pthread_cond_broadcast(&next_iteration_cv);
-	pthread_mutex_unlock(&next_iteration_mutex);
+	pthread_cond_broadcast(&next_iteration_cv); /* always succeeds */
+	pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 
 	if( first_run ) {
 		free(ind_local);
@@ -329,20 +335,20 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 	/* We need a response from each of the clients. 'count' keeps track. */
 	while(count < num_clients) {
 #ifdef USE_NAMED_SEMAPHORES
-		sem_wait(customers);
+		DW_SEM_CHECK(sem_wait(customers), "sem_wait(customers)");
 #else
-		sem_wait(&customers);
+		DW_SEM_CHECK(sem_wait(&customers), "sem_wait(&customers)");
 #endif
-		pthread_mutex_lock(&service_queue_mutex);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&service_queue_mutex), "pthread_mutex_lock(&service_queue_mutex)");
 		index = fg->service_queue[fg->head_service_queue];
 		fg->head_service_queue++;
 		fg->head_service_queue %= num_clients;
-		pthread_mutex_unlock(&service_queue_mutex);
+		pthread_mutex_unlock(&service_queue_mutex); /* always succeeds: unlocking owned mutex */
 		dw_printf(IMPORTANCE_DIAG, "######## Master servicing thread %d.\n", index);
 		count++;
 
 		/* Add column when sub_data[index].r > sub_data[index].obj */
-		pthread_mutex_lock(&sub_data_mutex[index]);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[index]), "pthread_mutex_lock(sub_data_mutex[index])");
 		dw_printf(IMPORTANCE_DIAG, "I think r = %3.6f and obj = %3.6f and unbounded = %s\n",
 				sub_data[index].r, sub_data[index].obj,
 				sub_data[index].unbounded == GLP_UNBND ? "GLP_UNBOUND" : "not GLP_UNBND");
@@ -359,14 +365,14 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 				glp_set_col_bnds(master_lp, col, GLP_DB, 0.0, 1.0);
 				glp_set_col_kind(master_lp, col, GLP_IV);
 			}
-			pthread_mutex_lock(&next_iteration_mutex);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 			if( sub_data[index].unbounded != GLP_UNBND )
 				snprintf(buffer, BUFF_SIZE - 1,
 						"lambda_%d_%d", index, signals->current_iteration);
 			else
 				snprintf(buffer, BUFF_SIZE - 1,
 						"theta_%d_%d", index, signals->current_iteration);
-			pthread_mutex_unlock(&next_iteration_mutex);
+			pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 			dw_printf(IMPORTANCE_DIAG, "Master is adding a column called %s.\n",
 					buffer);
 
@@ -389,13 +395,17 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 				//Get column.  Step through the indices and check aux var value associated with row.
 				int nrows = glp_get_num_rows(master_lp);
 				int* ind2 = malloc(sizeof(int)    * (nrows + 1));
+				dw_oom_abort(ind2, "ind2");
 				double* val2 = malloc(sizeof(double) * (nrows + 1));
+				dw_oom_abort(val2, "val2");
 				int len = glp_get_mat_col(master_lp, col, ind2, val2);
 				for( j = 1; j <= len; j++) {
 					if( glp_get_row_prim(master_lp, ind2[j]) <= TOLERANCE )  {
 						int ncols = glp_get_num_cols(master_lp);
 						int* ind3 = malloc(sizeof(int)    * (ncols + 1));
+						dw_oom_abort(ind3, "ind3");
 						double* val3 = malloc(sizeof(double) * (ncols + 1));
+						dw_oom_abort(val3, "val3");
 						printf("      %s is at its bound (%2.1f).\n", glp_get_row_name(master_lp, ind2[j]), glp_get_row_ub(master_lp, ind2[j]));
 						int len2 = glp_get_mat_row(master_lp, ind2[j], ind3, val3);
 
@@ -413,6 +423,7 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 			rc++;
 
 			fg->x[index][signals->current_iteration] = malloc(sizeof(double)*sub_data[index].num_cols_plus);
+			dw_oom_abort(fg->x[index][signals->current_iteration], "fg->x[index][iter]");
 
 			for( i = 1; i < sub_data[index].num_cols_plus; i++ ) {
 				fg->x[index][signals->current_iteration][i] =
@@ -422,7 +433,7 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 		else {
 			fg->x[index][signals->current_iteration] = NULL;
 		}
-		pthread_mutex_unlock(&sub_data_mutex[index]);
+		pthread_mutex_unlock(&sub_data_mutex[index]); /* always succeeds: unlocking owned mutex */
 
 #ifdef VERBOSE
 		printf("######## Master done servicing thread %d.\n", index);
@@ -510,29 +521,29 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 		printf("################################################\n");
 	}
 	/* Save the dual cost vector for the subprobs' use in next iteration.*/
-	pthread_mutex_lock(&master_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&master_mutex), "pthread_mutex_lock(&master_mutex)");
 	for( i = 1; i <= D->rows; i++ ) {
 		md->row_duals[i] = glp_get_row_dual(master_lp, i);
 	}
-	pthread_mutex_unlock(&master_mutex);
+	pthread_mutex_unlock(&master_mutex); /* always succeeds: unlocking owned mutex */
 
 	/* This is the target for the subproblem to beat on next iteration.
 	 * This target is the dual value of the convexity constraint associated
 	 * with the subproblem. */
 	for( i = 0; i < num_clients; i ++ ) {
-		pthread_mutex_lock(&sub_data_mutex[i]);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[i]), "pthread_mutex_lock(sub_data_mutex[i])");
 		sub_data[i].r = glp_get_row_dual(master_lp, D->rows + 1 + i);
-		pthread_mutex_unlock(&sub_data_mutex[i]);
+		pthread_mutex_unlock(&sub_data_mutex[i]); /* always succeeds: unlocking owned mutex */
 	}
 
 	/* In case a subthread hasn't actually blocked on the next_iteration_cv
 	 * signal, we keep track of the current iteration for the subthreads to
 	 * check against to see if they are behind and can bypass waiting for the
 	 * signal (which they missed). */
-	pthread_mutex_lock(&next_iteration_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 	signals->current_iteration++;
-	pthread_cond_broadcast(&next_iteration_cv);
-	pthread_mutex_unlock(&next_iteration_mutex);
+	pthread_cond_broadcast(&next_iteration_cv); /* always succeeds */
+	pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 
 	free(buffer);
 
