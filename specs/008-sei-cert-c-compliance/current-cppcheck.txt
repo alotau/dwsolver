@@ -1,0 +1,83 @@
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+src/dw_main.c:142:10: warning: Potential leak of memory pointed to by 'md' [unix.Malloc]
+  142 |                 return rc;
+      |                        ^~
+src/dw_main.c:789:8: warning: Although the value stored to 'integerization_zero_file' is used in the enclosing expression, the value is never actually read from 'integerization_zero_file' [deadcode.DeadStores]
+  789 |                 if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+      |                      ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_main.c:790:4: warning: Potential leak of memory pointed to by 'local_buffer' [unix.Malloc]
+  790 |                         printf("Problem opening file: %s\n", INTEGERIZED_ZEROS_FILE);
+      |                         ^~~~~~
+src/dw_main.c:790:4: warning: Potential leak of memory pointed to by 'threads' [unix.Malloc]
+  790 |                         printf("Problem opening file: %s\n", INTEGERIZED_ZEROS_FILE);
+      |                         ^~~~~~
+src/dw_main.c:790:4: warning: Potential leak of memory pointed to by 'sub_data' [unix.Malloc]
+  790 |                         printf("Problem opening file: %s\n", INTEGERIZED_ZEROS_FILE);
+      |                         ^~~~~~
+src/dw_main.c:794:3: warning: Opened stream never closed. Potential resource leak [unix.Stream]
+  794 |                 process_solution(sub_data, INTEGERIZED_ZEROS_FILE, DW_MODE_PRINT_RELAXED);
+      |                 ^~~~~~~~~~~~~~~~
+src/dw_main.c:806:4: warning: Value stored to 't0' is never read [deadcode.DeadStores]
+  806 |                         t0 = time(NULL);
+      |                         ^    ~~~~~~~~~~
+src/dw_main.c:807:4: warning: Value stored to 'c0' is never read [deadcode.DeadStores]
+  807 |                         c0 = clock();
+      |                         ^    ~~~~~~~
+8 warnings generated.
+src/dw_phases.c:159:37: warning: Call to blocking function 'getc' inside of critical section [unix.BlockInCriticalSection]
+  159 |                         if( sub_data[index].ind[1] < 1 ) getc(stdin);
+      |                                                          ^~~~~~~~~~~
+1 warning generated.
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+warning: Path diagnostic report is not generated. Current output format does not support diagnostics that cross file boundaries. Refer to --analyzer-output for valid output formats
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'num_infos' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^~~~~~~~~
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'local_col_name' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^~~~~~~~~
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'solution_organization' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^~~~~~~~~
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 't_data' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^~~~~~~~~
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'threads' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^~~~~~~~~
+src/dw_rounding.c:422:4: warning: Null pointer passed as 2nd argument to string copy function [unix.cstring.NullArg]
+  422 |                         strcpy(local_col_name, var_name);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/secure/_string.h:249:21: note: expanded from macro 'strcpy'
+  249 | #define strcpy(...) __strcpy_chk_func (__VA_ARGS__)
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/secure/_string.h:172:3: note: expanded from macro '__strcpy_chk_func'
+  172 |                 __builtin___strcpy_chk (dest, __VA_ARGS__, __darwin_obsz (dest))
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6 warnings generated.
+src/dw_subprob.c:93:2: warning: Value stored to 'verbosity' is never read [deadcode.DeadStores]
+   93 |         verbosity = my_data->globals->verbosity;
+      |         ^           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:115:2: warning: Value stored to 'ret' is never read [deadcode.DeadStores]
+  115 |         ret = glp_simplex(lp, simplex_control_params);
+      |         ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:242:51: warning: Array access (via field 'D_row_coords') results in a null pointer dereference [core.NullDereference]
+  242 |                                 my_data->D_row_coords[my_data->D_nnz + j - 1] = temp_ind[j]-1;
+      |                                          ~~~~~~~~~~~~                         ^
+src/dw_subprob.c:243:51: warning: Array access (via field 'D_col_coords') results in a null pointer dereference [core.NullDereference]
+  243 |                                 my_data->D_col_coords[my_data->D_nnz + j - 1] = i-1;
+      |                                          ~~~~~~~~~~~~                         ^
+src/dw_subprob.c:244:45: warning: Array access (via field 'D_vals') results in a null pointer dereference [core.NullDereference]
+  244 |                                 my_data->D_vals[my_data->D_nnz + j - 1] = temp_val[j];
+      |                                          ~~~~~~                         ^
+5 warnings generated.
+src/dw_support.c:49:10: fatal error: 'config.h' file not found
+   49 | #include <config.h>
+      |          ^~~~~~~~~~
+1 error generated.

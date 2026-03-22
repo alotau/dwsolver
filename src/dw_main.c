@@ -154,6 +154,7 @@ int main(int argc, char* argv[]) {
 
 	num_clients   = globals->num_clients; /* Doesn't change. Make local copy.*/
 	globals->x    = malloc(sizeof(double**)*num_clients);
+	dw_oom_abort(globals->x, "globals->x");
 	threads       = malloc(sizeof(pthread_t)*num_clients);
 	dw_oom_abort(threads, "threads");
 	sub_data      = malloc(sizeof(subprob_struct)*num_clients);
@@ -199,6 +200,7 @@ int main(int argc, char* argv[]) {
 		sub_data[i].md               = md;
 
 		globals->x[i]           = malloc(sizeof(double*)*MAX_PHASE2_ITERATIONS);
+		dw_oom_abort(globals->x[i], "globals->x[i]");
 
 		/* Actually create the thread now. */
 		rc = pthread_create(&threads[i],
@@ -218,9 +220,9 @@ int main(int argc, char* argv[]) {
  *
  *****************/
 	/* Open the file containing the original master problem. */
-	pthread_mutex_lock(&glpk_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	original_master_lp = lpx_read_cpxlp(globals->master_name);
-	pthread_mutex_unlock(&glpk_mutex);
+	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 	/* Prepare the parameters for the simplex method. */
 	glp_init_smcp(simplex_control_params);
@@ -255,10 +257,10 @@ int main(int argc, char* argv[]) {
 	glp_create_index(original_master_lp);
 
 	/* Signal all subproblems that master is set up and ready. */
-	pthread_mutex_lock(&master_lp_ready_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&master_lp_ready_mutex), "pthread_mutex_lock(&master_lp_ready_mutex)");
 	signals->master_lp_ready = 1;
-	pthread_cond_broadcast(&master_lp_ready_cv);
-	pthread_mutex_unlock(&master_lp_ready_mutex);
+	pthread_cond_broadcast(&master_lp_ready_cv); /* always succeeds */
+	pthread_mutex_unlock(&master_lp_ready_mutex); /* always succeeds: unlocking owned mutex */
 
 	/* Create the _real_ master problem while subprobs do their initial solve.*/
 	master_lp = glp_create_prob();
@@ -312,6 +314,7 @@ int main(int argc, char* argv[]) {
 	/* Create enough space to accommodate an auxiliary variable for each row. */
 	/* Would be more efficient to determine the amount of memory dynamically. */
 	phase1_vars = malloc(sizeof(char*)*D->rows);
+	dw_oom_abort(phase1_vars, "phase1_vars");
 
 	/* Keep track of how many auxiliary variables are added. */
 	num_phase1_vars = 0;
@@ -336,6 +339,7 @@ int main(int argc, char* argv[]) {
 		 */
 		if( row_type == GLP_FX ) {
 			phase1_vars[num_phase1_vars] = malloc(sizeof(char)*BUFF_SIZE);
+			dw_oom_abort(phase1_vars[num_phase1_vars], "phase1_vars[num_phase1_vars]");
 			rc = snprintf(phase1_vars[num_phase1_vars], BUFF_SIZE-1, "y_%d", i);
 			if( rc >= BUFF_SIZE - 1) /* Bail if buffer overflow. */
 				buffer_overflow( "y_(row_number)", BUFF_SIZE-1);
@@ -372,6 +376,7 @@ int main(int argc, char* argv[]) {
 			//if( glp_get_row_ub(master_lp, i) < 0 ) {
 				int new_col = glp_add_cols(master_lp, 1);
 				phase1_vars[num_phase1_vars] = malloc(sizeof(char)*BUFF_SIZE);
+				dw_oom_abort(phase1_vars[num_phase1_vars], "phase1_vars[num_phase1_vars]");
 				rc = snprintf(phase1_vars[num_phase1_vars],
 						BUFF_SIZE-1, "y_%d", i);
 				if( rc >= BUFF_SIZE - 1) /* Bail if buffer overflow. */
@@ -415,6 +420,7 @@ int main(int argc, char* argv[]) {
 			//if( glp_get_row_lb(master_lp, i) > 0 ) {
 				int new_col = glp_add_cols(master_lp, 1);
 				phase1_vars[num_phase1_vars] = malloc(sizeof(char)*BUFF_SIZE);
+				dw_oom_abort(phase1_vars[num_phase1_vars], "phase1_vars[num_phase1_vars]");
 				rc = snprintf(phase1_vars[num_phase1_vars],
 						BUFF_SIZE-1, "y_%d", i);
 				if( rc >= BUFF_SIZE - 1) /* Bail if buffer overflow. */
@@ -455,9 +461,9 @@ int main(int argc, char* argv[]) {
 	/* Print current problem, just slack/auxiliary variables.  For debugging.*/
 
 	if( glp_get_num_cols(master_lp) > 0 ) {
-		pthread_mutex_lock(&glpk_mutex);
+		DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 		lpx_write_cpxlp(master_lp, "pre_master.cpxlp");
-		pthread_mutex_unlock(&glpk_mutex);
+		pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 	}
 
 	dw_printf(IMPORTANCE_AVG,
@@ -476,9 +482,9 @@ int main(int argc, char* argv[]) {
 
 		/* Let clients know that we're in Phase I. */
 		for( j = 0; j < num_clients; j++ ) {
-			pthread_mutex_lock(&sub_data_mutex[j]);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[j]), "pthread_mutex_lock(sub_data_mutex[j])");
 			sub_data[j].phase_one = 1;
-			pthread_mutex_unlock(&sub_data_mutex[j]);
+			pthread_mutex_unlock(&sub_data_mutex[j]); /* always succeeds: unlocking owned mutex */
 		}
 		dw_printf(IMPORTANCE_AVG,
 				"### Commencing Phase I for reduced master problem...\n");
@@ -538,13 +544,14 @@ int main(int argc, char* argv[]) {
 
 		/* Let subproblems know we are out of phase one. */
 		for( j = 0; j < num_clients; j++ ) {
-			pthread_mutex_lock(&sub_data_mutex[j]);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[j]), "pthread_mutex_lock(sub_data_mutex[j])");
 			sub_data[j].phase_one = 0;
-			pthread_mutex_unlock(&sub_data_mutex[j]);
+			pthread_mutex_unlock(&sub_data_mutex[j]); /* always succeeds: unlocking owned mutex */
 		}
 
 		/* Delete the y columns. */
 		col_deletion_indicies = malloc(sizeof(int)*(D->rows + 1));
+		dw_oom_abort(col_deletion_indicies, "col_deletion_indicies");
 		for( i = 0; i < num_phase1_vars; i++ ) {
 			col_deletion_indicies[i+1] =
 				glp_find_col(master_lp, phase1_vars[i]);
@@ -689,14 +696,14 @@ int main(int argc, char* argv[]) {
 				 * be easily(?) refactored to send the correct code
 				 * dependent upon the value of rc in phase_2_iteration().
 				 */
-				pthread_mutex_lock(&sub_data_mutex[i]);
+				DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[i]), "pthread_mutex_lock(sub_data_mutex[i])");
 				sub_data[i].command = COMMAND_STOP;
-				pthread_mutex_unlock(&sub_data_mutex[i]);
+				pthread_mutex_unlock(&sub_data_mutex[i]); /* always succeeds: unlocking owned mutex */
 			}
-			pthread_mutex_lock(&next_iteration_mutex);
+			DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 			signals->current_iteration++;
-			pthread_cond_broadcast(&next_iteration_cv);
-			pthread_mutex_unlock(&next_iteration_mutex);
+			pthread_cond_broadcast(&next_iteration_cv); /* always succeeds */
+			pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 			break;
 		}
 		else {
@@ -814,6 +821,7 @@ int main(int argc, char* argv[]) {
 		dw_printf(IMPORTANCE_AVG, "Going to integerize by enforcing binary constraint on lambdas.\n");
 		dw_printf(IMPORTANCE_AVG, "Note that this isn't guaranteed to work well or at all.\n");
 		glp_iocp* int_parm = malloc(sizeof(glp_iocp));
+		dw_oom_abort(int_parm, "int_parm");
 		glp_init_iocp(int_parm);
 		int_parm->mip_gap = globals->mip_gap;
 		glp_intopt(master_lp, int_parm);
@@ -875,9 +883,9 @@ int main(int argc, char* argv[]) {
 /* The function that glp_term_hook uses to redirect terminal output */
 static int hook(void* info, const char* s) {
 	FILE* outfile = info;
-	pthread_mutex_lock(&fputs_mutex);
+	DW_PTHREAD_CHECK(pthread_mutex_lock(&fputs_mutex), "pthread_mutex_lock(&fputs_mutex)");
 	fputs(s, outfile);
-	pthread_mutex_unlock(&fputs_mutex);
+	pthread_mutex_unlock(&fputs_mutex); /* always succeeds: unlocking owned mutex */
 	return 1;
 }
 

@@ -14,6 +14,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-21
 - File-based (CPLEX `.lp` format, shell-script test runner) (006-test-coverage)
 - Markdown / Mermaid diagram syntax (GitHub-native rendering, no version dependency) + None — Mermaid renders natively in GitHub Markdown as of 2022 (007-architecture-diagrams)
 - Plain `.md` files committed to the repository (007-architecture-diagrams)
+- C99 (GCC/Clang on macOS/Linux; MinGW-w64 on Windows) + POSIX Threads (pthreads); embedded GLPK 4.44 (treated as a library boundary — `src/glp*.c` not modified) (008-sei-cert-c-compliance)
+- N/A (solver writes solution files; no database) (008-sei-cert-c-compliance)
 
 - C99 (POSIX; GCC 9+ and Clang 12+ are primary targets) + POSIX Threads (pthreads); GLPK 4.44 (embedded, thread-patched) (002-cross-platform-repair)
 
@@ -33,9 +35,11 @@ tests/
 C99 (POSIX; GCC 9+ and Clang 12+ are primary targets): Follow standard conventions
 
 ## Recent Changes
+- 008-sei-cert-c-compliance: Added C99 (GCC/Clang on macOS/Linux; MinGW-w64 on Windows) + POSIX Threads (pthreads); embedded GLPK 4.44 (treated as a library boundary — `src/glp*.c` not modified)
 - 007-architecture-diagrams: Added Markdown / Mermaid diagram syntax (GitHub-native rendering, no version dependency) + None — Mermaid renders natively in GitHub Markdown as of 2022
 - 006-test-coverage: Added C99 (GCC and Clang; MinGW-w64 on Windows) + Embedded GLPK 4.44, POSIX pthreads, libc/libm
 - 005-windows-build-fix: Added C99 (targeting GCC ≥ 9 and Clang ≥ 12) + GLPK 4.44 (thread-patched, embedded in `src/`), pthreads (POSIX or winpthreads on Windows)
+- 004-docker-containerized-build: Added Dockerfile (no language version constraint); underlying binary is C99 + Docker Engine ≥ 20.10; `ubuntu:24.04` base image; `build-essential` + `automake` (builder stage only)
 
 
 <!-- MANUAL ADDITIONS START -->

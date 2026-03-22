@@ -1,0 +1,22 @@
+src/dw_blas.c:104:41: warning: unused parameter 'k' [-Wunused-parameter]
+  104 | void dw_dcoogemv(const int m, const int k, const double *val,
+      |                                         ^
+1 warning generated.
+src/dw_rounding.c:372:6: warning: variable 'time' set but not used [-Wunused-but-set-variable]
+  372 |         int time;
+      |             ^
+src/dw_rounding.c:527:1: warning: non-void function does not return a value [-Wreturn-type]
+  527 | }
+      | ^
+src/dw_rounding.c:555:9: warning: variable 'temp' set but not used [-Wunused-but-set-variable]
+  555 |         double temp;
+      |                ^
+3 warnings generated.
+src/dw_subprob.c:62:19: warning: variable 'verbosity' set but not used [-Wunused-but-set-variable]
+   62 |         int num_clients, verbosity;
+      |                          ^
+1 warning generated.
+src/dw_support.c:48:10: fatal error: 'config.h' file not found
+   48 | #include <config.h>
+      |          ^~~~~~~~~~
+1 error generated.

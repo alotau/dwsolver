@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <unistd.h>
 #include <pthread.h>
 #include <config.h>
 #include <glpk.h>
@@ -103,9 +104,13 @@ void prepare_D(int num_rows, int* ind, double* val) {
 	D->rows_plus= num_rows+1;
 	D->values   =
 		(double*) malloc(sizeof(double)*glp_get_num_nz(original_master_lp));
+	dw_oom_abort(D->values, "D->values");
 	D->columns  = (int*) malloc(sizeof(int)*glp_get_num_nz(original_master_lp));
+	dw_oom_abort(D->columns, "D->columns");
 	D->pointerB = (int*) malloc(sizeof(int)*num_rows);
+	dw_oom_abort(D->pointerB, "D->pointerB");
 	D->pointerE = (int*) malloc(sizeof(int)*num_rows);
+	dw_oom_abort(D->pointerE, "D->pointerE");
 
 	count = 0;  /* 1 for 1-based indexing, 0 for 0-based indexing? */
 	for( i = 1; i <= num_rows; i++ ) {
@@ -161,7 +166,9 @@ void init_globals(faux_globals* fg) {
 	fg->rounding_flag = 0;
 	fg->enforce_sub_integrality = 0;
 	simplex_control_params = (glp_smcp*) malloc(sizeof(glp_smcp));
+	dw_oom_abort(simplex_control_params, "simplex_control_params");
 	parm = malloc(sizeof(glp_iocp));
+	dw_oom_abort(parm, "parm");
 
 	/* Global variables for all threads to put/pop to/from service queue. */
 	fg->head_service_queue = 0;
@@ -171,6 +178,7 @@ void init_globals(faux_globals* fg) {
 /* These are basically flags that get set/reset throughout algorithm. */
 void init_signals(faux_globals* fg) {
 	fg->service_queue = (int*) malloc(sizeof(int)*fg->num_clients);
+	dw_oom_abort(fg->service_queue, "fg->service_queue");
 	signals       = (signal_data*) malloc(sizeof(signal_data));
 	dw_oom_abort(signals, "signals");
 
@@ -180,42 +188,76 @@ void init_signals(faux_globals* fg) {
 	signals->next_iteration_ready = 0;
 }
 
-/* Initialize global pthread data structures. */
+/* Initialize global pthread data structures.
+ *
+ * POS51-C LOCK ACQUISITION ORDER — must be followed at ALL call sites:
+ *
+ *   Level 1 (innermost): glpk_mutex          — single GLPK file I/O calls only
+ *   Level 2:             master_lp_ready_mutex — startup barrier + cond var
+ *   Level 3:             service_queue_mutex   — brief service-queue head update
+ *   Level 4:             sub_data_mutex[i]     — per-subproblem data (array)
+ *   Level 5:             next_iteration_mutex  — iteration counter + cond var
+ *   Level 6 (outermost): master_mutex          — row_duals[] dual vector
+ *   Isolated:            reduced_cost_mutex, fputs_mutex — never nested
+ *
+ * When acquiring multiple locks, ALWAYS acquire in ascending level order.
+ * See specs/008-sei-cert-c-compliance/contracts/lock-order.md for full audit.
+ */
 void init_pthread_data(faux_globals* fg) {
 	size_t stacksize;
 	int rc, i;
 	pthread_mutexattr_t* my_mutex_attr = malloc(sizeof(pthread_mutexattr_t));
+	dw_oom_abort(my_mutex_attr, "my_mutex_attr");
 
 	/* Initialize mutual exclusion and condition variable objects */
-	pthread_mutexattr_init(my_mutex_attr);
+	DW_PTHREAD_CHECK(pthread_mutexattr_init(my_mutex_attr), "pthread_mutexattr_init");
 
 	sub_data_mutex =
 		(pthread_mutex_t*) malloc(sizeof(pthread_mutex_t)*fg->num_clients);
+	dw_oom_abort(sub_data_mutex, "sub_data_mutex");
 	for( i = 0; i < fg->num_clients; i++ )
-		pthread_mutex_init(&(sub_data_mutex[i]), NULL);
-	pthread_mutex_init(&master_lp_ready_mutex, NULL);
-	pthread_cond_init (&master_lp_ready_cv, NULL);
-	pthread_mutex_init(&service_queue_mutex, NULL);
-	pthread_mutex_init(&next_iteration_mutex, my_mutex_attr);
-	pthread_mutex_init(&master_mutex, NULL);
-	pthread_mutex_init(&reduced_cost_mutex, NULL);
-	pthread_mutex_init(&glpk_mutex, NULL);
-	pthread_mutex_init(&fputs_mutex, NULL);
-	pthread_cond_init (&next_iteration_cv, NULL);
-	pthread_attr_init (&attr);
+		DW_PTHREAD_CHECK(pthread_mutex_init(&(sub_data_mutex[i]), NULL), "pthread_mutex_init(sub_data_mutex[i])");
+	DW_PTHREAD_CHECK(pthread_mutex_init(&master_lp_ready_mutex, NULL), "pthread_mutex_init(&master_lp_ready_mutex)");
+	DW_PTHREAD_CHECK(pthread_cond_init(&master_lp_ready_cv, NULL), "pthread_cond_init(&master_lp_ready_cv)");
+	DW_PTHREAD_CHECK(pthread_mutex_init(&service_queue_mutex, NULL), "pthread_mutex_init(&service_queue_mutex)");
+	DW_PTHREAD_CHECK(pthread_mutex_init(&next_iteration_mutex, my_mutex_attr), "pthread_mutex_init(&next_iteration_mutex)");
+	DW_PTHREAD_CHECK(pthread_mutex_init(&master_mutex, NULL), "pthread_mutex_init(&master_mutex)");
+	DW_PTHREAD_CHECK(pthread_mutex_init(&reduced_cost_mutex, NULL), "pthread_mutex_init(&reduced_cost_mutex)");
+	DW_PTHREAD_CHECK(pthread_mutex_init(&glpk_mutex, NULL), "pthread_mutex_init(&glpk_mutex)");
+	DW_PTHREAD_CHECK(pthread_mutex_init(&fputs_mutex, NULL), "pthread_mutex_init(&fputs_mutex)");
+	DW_PTHREAD_CHECK(pthread_cond_init(&next_iteration_cv, NULL), "pthread_cond_init(&next_iteration_cv)");
+	DW_PTHREAD_CHECK(pthread_attr_init(&attr), "pthread_attr_init");
 #ifdef USE_NAMED_SEMAPHORES
 	customers = sem_open(CUST_NAMED_SEMAPHORE, O_CREAT, S_IRWXU, 0);
+	if (customers == SEM_FAILED) { /* POS54-C: sem_open returns SEM_FAILED on error */
+		int err = errno;
+		fprintf(stderr, "dwsolver: sem_open(%s) failed: %s\n", CUST_NAMED_SEMAPHORE, strerror(err));
+		exit(EXIT_FAILURE);
+	}
 #else
-	sem_init(&customers, 0, 0);
+	DW_SEM_CHECK(sem_init(&customers, 0, 0), "sem_init(&customers)");
 #endif
 	/* Make sure each thread is join-able. */
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+	DW_PTHREAD_CHECK(pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE), "pthread_attr_setdetachstate");
 
 	/* Give each thread plenty of stack memory.  Probably unnecessary. */
-	pthread_attr_getstacksize (&attr, &stacksize);
+	pthread_attr_getstacksize(&attr, &stacksize); /* always succeeds: attr initialized */
 	stacksize = sizeof(double)*STACKMEM;
-	rc = pthread_attr_setstacksize (&attr, stacksize);
-	pthread_attr_getstacksize (&attr, &stacksize);
+	/* Round up to system page boundary (required by POSIX pthread_attr_setstacksize). */
+	{
+#if defined(_SC_PAGESIZE)
+		long pg = sysconf(_SC_PAGESIZE);
+#else
+		long pg = 4096; /* Windows/MinGW: x86-64 page size is always 4096 */
+#endif
+		if (pg > 1) {
+			size_t align = (size_t)pg;
+			stacksize = (stacksize + align - 1) & ~(align - 1);
+		}
+	}
+	rc = pthread_attr_setstacksize(&attr, stacksize);
+	DW_PTHREAD_CHECK(rc, "pthread_attr_setstacksize");
+	pthread_attr_getstacksize(&attr, &stacksize); /* always succeeds: attr initialized */
 
 	free(my_mutex_attr);
 }
@@ -278,6 +320,7 @@ void purge_nonbasics(void) {
 	int i;
 	int count = 0;
 	int* nb_indices = malloc(sizeof(int)* (glp_get_num_cols(master_lp)+1));
+	dw_oom_abort(nb_indices, "nb_indices");
 
 	dw_printf(IMPORTANCE_AVG, "There are currently %d structural variables.\n",
 			glp_get_num_cols(master_lp));
@@ -501,13 +544,18 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  	}
 
  	fg->subproblem_names = malloc(sizeof(char*)*fg->num_clients);
+ 	dw_oom_abort(fg->subproblem_names, "fg->subproblem_names");
  	subproblem_files     = malloc(sizeof(FILE*)*fg->num_clients);
+ 	dw_oom_abort(subproblem_files, "subproblem_files");
  	fg->master_name      = malloc(sizeof(char)*BUFF_SIZE);
+ 	dw_oom_abort(fg->master_name, "fg->master_name");
  	fg->monolithic_name  = malloc(sizeof(char)*BUFF_SIZE);
+ 	dw_oom_abort(fg->monolithic_name, "fg->monolithic_name");
 
  	/* Get number of clients, then get each client file's name. */
  	for( i = 0; i < fg->num_clients; i++ ) {
  		fg->subproblem_names[i] = malloc(sizeof(char)*BUFF_SIZE);
+ 		dw_oom_abort(fg->subproblem_names[i], "fg->subproblem_names[i]");
  		fgets(fg->subproblem_names[i], BUFF_SIZE, input_file);
  		fg->subproblem_names[i][strlen(fg->subproblem_names[i])-1] = '\0';
  		if( (subproblem_files[i] = fopen(fg->subproblem_names[i], "r")) == NULL ) {
@@ -591,7 +639,9 @@ int parse_zero_var(double value, int index, glp_prob* lp, FILE* zero_file) {
 	if( value < TOLERANCE) {
 		var_name = glp_get_col_name(lp, index);
 		local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+		dw_oom_abort(local_col_name, "local_col_name");
 		sector_name = malloc(sizeof(char)*BUFF_SIZE);
+		dw_oom_abort(sector_name, "sector_name");
 		strcpy(local_col_name, var_name);
 		if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
 		strcpy( sector_name, strtok(NULL, ",") );
@@ -607,6 +657,7 @@ void write_basis(int iteration) {
 	int i;
 	int basic_var_count = 0;
 	char* filename = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(filename, "filename");
 	FILE* basis_file;
 	snprintf(filename, BUFF_SIZE, "basis_iteration_%d", iteration);
 	if( (basis_file = fopen(filename, "w")) == NULL 	) {
@@ -668,6 +719,7 @@ void get_solution(subprob_struct* sub_data) {
 	int iteration;
 	const char* col_name;
 	char* local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+	dw_oom_abort(local_col_name, "local_col_name");
 	for( i = D->rows_plus; i <= glp_get_num_cols(master_lp); i++ ) {
 		if( glp_get_col_prim(master_lp, i) != 0.0 ) {
 			col_name = glp_get_col_name(master_lp, i);
@@ -707,6 +759,7 @@ int dirty_feas_check(void) {
 	int bad = 0;
 	double bound;
 	double* row_coef = malloc(sizeof(double)*glp_get_num_cols(original_master_lp));
+	dw_oom_abort(row_coef, "row_coef");
 	for( i = 1; i <= glp_get_num_rows(original_master_lp); i++) {
 		dw_printf(IMPORTANCE_AVG, "Row %d... ", i);
 		sum = 0;
