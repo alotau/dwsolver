@@ -181,7 +181,11 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
  *****************/
 	/* Open the file containing the original master problem. */
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
-	original_master_lp = lpx_read_cpxlp(globals->master_name);
+	original_master_lp = glp_create_prob();
+	if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+		glp_delete_prob(original_master_lp);
+		original_master_lp = NULL;
+	}
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 	if (original_master_lp == NULL) {
@@ -431,7 +435,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	 * side-effects in library mode. */
 	if( globals->write_intermediate_opt_files && glp_get_num_cols(master_lp) > 0 ) {
 		DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
-		lpx_write_cpxlp(master_lp, "pre_master.cpxlp");
+		glp_write_lp(master_lp, NULL, "pre_master.cpxlp");
 		pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 	}
 
@@ -474,7 +478,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 		if( globals->write_intermediate_opt_files ) {
 			snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp");
-			lpx_write_cpxlp(master_lp, local_buffer);
+			glp_write_lp(master_lp, NULL, local_buffer);
 		}
 
 		/* Actually perform the Dantzig-Wolfe algorithm now. */
@@ -490,7 +494,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 			if( globals->write_intermediate_opt_files ) {
 				snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", j+1);
-				lpx_write_cpxlp(master_lp, local_buffer);
+				glp_write_lp(master_lp, NULL, local_buffer);
 			}
 
 			if( -TOLERANCE < glp_get_obj_val(master_lp) &&
@@ -642,7 +646,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 		if( globals->write_intermediate_opt_files ) {
 			snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", j);
-			lpx_write_cpxlp(master_lp, local_buffer);
+			glp_write_lp(master_lp, NULL, local_buffer);
 		}
 
 		rc = phase_2_iteration(sub_data, globals, md);

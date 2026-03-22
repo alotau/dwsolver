@@ -19,8 +19,8 @@
 
 **Purpose**: Establish a pre-change baseline and confirm local development environment.
 
-- [ ] T001 Run `PATH="$PWD/src:$PATH" ./tests/dw-tests.sh 2>&1 | tee specs/011-remove-embedded-glpk/baseline-tests.txt` and record pass/fail counts for each example
-- [ ] T002 Run `pkg-config --modversion glpk` to confirm GLPK ≥ 4.65 is installed locally; if absent, install via `brew install glpk` (macOS) or `sudo apt-get install libglpk-dev` (Linux)
+- [X] T001 Run `PATH="$PWD/src:$PATH" ./tests/dw-tests.sh 2>&1 | tee specs/011-remove-embedded-glpk/baseline-tests.txt` and record pass/fail counts for each example
+- [X] T002 Run `pkg-config --modversion glpk` to confirm GLPK ≥ 4.65 is installed locally; if absent, install via `brew install glpk` (macOS) or `sudo apt-get install libglpk-dev` (Linux)
 
 ---
 

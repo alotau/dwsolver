@@ -100,7 +100,11 @@ void* subproblem_thread(void* arg) {
 
 	/* Read in assigned problem and solve to get initial feasible solution. */
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
-	lp = lpx_read_cpxlp(my_data->infile_name);
+	lp = glp_create_prob();
+	if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+		glp_delete_prob(lp);
+		lp = NULL;
+	}
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 	glp_iocp* int_parm = malloc(sizeof(glp_iocp));
 	dw_oom_abort(int_parm, "int_parm");

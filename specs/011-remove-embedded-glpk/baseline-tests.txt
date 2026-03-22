@@ -1,0 +1,27 @@
+Test: Bertsimas textbook example
+  PASS: Got expected solution.
+
+Test: Lasdon textbook example
+  PASS: Got expected solution.
+
+Test: Mitchell web example
+  PASS: Got expected solution.
+
+Test: Trick web example
+  PASS: Got expected objective value.
+
+Test: Four seas example
+  PASS: Got expected objective value.
+
+Test: Dantzig textbook example
+  PASS: Got expected objective value.
+
+Test: single_sub (num_clients=1 semaphore path)
+  PASS: Got expected solution.
+
+Test: one_iter (fast Phase II convergence path)
+  PASS: Got expected objective value.
+
+Test: neg_y (GLP_LO coupling / y-accumulator sign path)
+  PASS: Got expected solution.
+
