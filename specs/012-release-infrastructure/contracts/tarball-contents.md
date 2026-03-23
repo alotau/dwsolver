@@ -36,8 +36,12 @@ All paths are relative to the `dwsolver-<ver>/` root inside the tarball.
 | `Dockerfile` | top-level `Makefile.am` | Container build definition |
 | `.github/` | top-level `Makefile.am` | CI and release workflow YAML |
 | `third-party/glpk/glpk-4.44.ThreadReady.patch` | top-level `Makefile.am` | Historical patch (attribution) |
-| `third-party/glpk/README.thread-safe.md` | top-level `Makefile.am` | Thread-safety notes |
-| `third-party/glpk/GLPK-4.44-LICENSE` | top-level `Makefile.am` | Upstream license for reference |
+| `third-party/glpk/GLPK_INSTALL` | top-level `Makefile.am` | Bundled GLPK upstream install notes |
+| `third-party/glpk/GLPK_AUTHORS` | top-level `Makefile.am` | Bundled GLPK upstream authors |
+| `third-party/glpk/GLPK_README` | top-level `Makefile.am` | Bundled GLPK upstream readme |
+| `third-party/glpk/GLPK_NEWS` | top-level `Makefile.am` | Bundled GLPK upstream changelog |
+| `third-party/glpk/GLPK_THANKS` | top-level `Makefile.am` | Bundled GLPK upstream acknowledgements |
+| `third-party/glpk/README` | top-level `Makefile.am` | Local notes for embedded GLPK snapshot |
 | `ADDITIONAL_LICENSE_TERMS` | top-level `Makefile.am` | Supplemental license file |
 | `ChangeLog` | top-level `Makefile.am` | |
 | `tests/dw-tests.sh` | `tests/Makefile.am` | Integration test driver |
