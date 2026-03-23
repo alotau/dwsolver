@@ -21,6 +21,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-22
 - File-based (LP problem files on disk; no database) (010-callable-library)
 - C99 + GLPK ≥ 4.65 (external, via `pkg-config`), POSIX pthreads (011-remove-embedded-glpk)
 - N/A (solver reads/writes LP files from disk) (011-remove-embedded-glpk)
+- C99 (no source changes); GNU Autotools (automake 1.16+, autoconf 2.71+, libtool 2.4+); GitHub Actions YAML + GLPK ≥ 4.65 (external); `softprops/action-gh-release` (SHA-pinned); `actions/checkout` (SHA-pinned) (012-release-infrastructure)
+- N/A — artifacts are source tarballs (`.tar.gz`) and GitHub Release assets (012-release-infrastructure)
 
 - C99 (POSIX; GCC 9+ and Clang 12+ are primary targets) + POSIX Threads (pthreads); GLPK 4.44 (embedded, thread-patched) (002-cross-platform-repair)
 
@@ -40,9 +42,9 @@ tests/
 C99 (POSIX; GCC 9+ and Clang 12+ are primary targets): Follow standard conventions
 
 ## Recent Changes
+- 012-release-infrastructure: Added C99 (no source changes); GNU Autotools (automake 1.16+, autoconf 2.71+, libtool 2.4+); GitHub Actions YAML + GLPK ≥ 4.65 (external); `softprops/action-gh-release` (SHA-pinned); `actions/checkout` (SHA-pinned)
 - 011-remove-embedded-glpk: Added C99 + GLPK ≥ 4.65 (external, via `pkg-config`), POSIX pthreads
 - 010-callable-library: Added C99 + GLPK 4.44 (thread-patched, embedded in `src/`); POSIX Threads (pthreads); GNU Autotools + libtool
-- 009-repo-structure-cleanup: Added C (C99); shell for CI workflows + GNU Autotools (autoconf ≥ 2.60, automake ≥ 1.11), GLPK 4.44 (embedded)
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -86,6 +86,34 @@ docker run --rm -v "$PWD/examples/book_dantzig:/data" dwsolver book_dantzig.lp
 The container's working directory is `/data`.  Any `.lp` input files and output
 files live there; mount the directory that holds your problem files.
 
+## Cutting a Release
+
+1. **Bump the version** in `configure.ac` (`AC_INIT([dwsolver], [X.Y.Z], ...)`) and commit.
+2. **Verify locally** — `make distcheck` builds the source tarball and then re-builds and re-tests from inside a clean unpack:
+   ```sh
+   # Linux:
+   GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk make distcheck
+
+   # macOS (Homebrew):
+   GLPK_PREFIX=$(brew --prefix glpk)
+   GLPK_CFLAGS="-I${GLPK_PREFIX}/include" GLPK_LIBS="-L${GLPK_PREFIX}/lib -lglpk" \
+     make distcheck \
+     DISTCHECK_CONFIGURE_FLAGS="--enable-named-semaphores --enable-recursive-mutex"
+   ```
+   This produces `dwsolver-X.Y.Z.tar.gz`.
+3. **Tag and push**:
+   ```sh
+   git tag -s vX.Y.Z -m "Release X.Y.Z"
+   git push origin vX.Y.Z
+   ```
+4. The [Release workflow](.github/workflows/release.yml) triggers automatically, runs `make distcheck`
+   on Ubuntu, and publishes a GitHub Release with the tarball and auto-generated release notes.
+
+> **Library versioning**: if the public `libdwsolver` API changes, update the libtool
+> `version-info` triple in `src/Makefile.am` according to the standard rules:
+> increment `CURRENT` for any interface change, reset `REVISION` to 0,
+> and increment `AGE` only if the change is backward-compatible (otherwise set `AGE=0`).
+
 ## SEI CERT C Compliance
 
 The solver's C source code has been audited and remediated against the [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard), focusing on the concurrency and POSIX rules most relevant to a multi-threaded solver:

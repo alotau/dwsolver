@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write   # required to create GitHub Releases
+
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential automake pkg-config libglpk-dev
+          # libglpk-dev on Ubuntu does not ship a glpk.pc file; bypass
+          # pkg-config by exporting the vars PKG_CHECK_MODULES checks first.
+          echo "GLPK_CFLAGS=-I/usr/include" >> $GITHUB_ENV
+          echo "GLPK_LIBS=-lglpk"           >> $GITHUB_ENV
+
+      - name: Suppress automake regeneration
+        run: |
+          touch aclocal.m4 configure config.h.in build-aux/ltmain.sh \
+                Makefile.in src/Makefile.in tests/Makefile.in
+
+      - name: Run make distcheck
+        run: |
+          # make distcheck builds the tarball, then unpacks and runs
+          # ./configure && make && make check inside a clean tree.
+          # GLPK_CFLAGS/GLPK_LIBS are already exported via $GITHUB_ENV
+          # in the Install dependencies step; no DISTCHECK_CONFIGURE_FLAGS needed.
+          make distcheck
+
+      - name: Locate tarball
+        id: tarball
+        run: |
+          TARBALL=$(ls dwsolver-*.tar.gz | head -1)
+          echo "path=$TARBALL"  >> $GITHUB_OUTPUT
+          echo "name=$TARBALL"  >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe  # v2
+        with:
+          files: ${{ steps.tarball.outputs.path }}
+          generate_release_notes: true
+          draft: false
