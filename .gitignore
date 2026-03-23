@@ -23,6 +23,7 @@ autom4te.cache/
 **/rs_sorted
 examples/four_sea/pre_master.cpxlp
 tmp/
+*.tar.gz
 **/out_obj.txt
 **/out.txt
 tests/test_blas
