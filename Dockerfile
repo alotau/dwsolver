@@ -8,6 +8,8 @@ FROM ubuntu:24.04 AS builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         automake \
+        pkg-config \
+        libglpk-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
@@ -24,12 +26,17 @@ RUN touch aclocal.m4 configure config.h.in build-aux/ltmain.sh \
 
 # --disable-shared produces a real linked binary at src/dwsolver rather than a
 # libtool wrapper script, so COPY in the runner stage works correctly.
-RUN ./configure --disable-shared && make
+# libglpk-dev on Ubuntu does not ship a glpk.pc file, so bypass pkg-config by
+# exporting the CFLAGS/LIBS variables that PKG_CHECK_MODULES checks first.
+RUN GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk ./configure --disable-shared && make
 
 # ---------------------------------------------------------------------------
 # Stage 2 – runtime (binary only)
 # ---------------------------------------------------------------------------
 FROM ubuntu:24.04 AS runner
+
+RUN apt-get update && apt-get install -y --no-install-recommends libglpk40 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /data
 COPY --from=builder /build/src/dwsolver /usr/local/bin/dwsolver

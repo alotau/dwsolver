@@ -647,13 +647,19 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  * able to use.  It parses a very specifically-formatted variable name.
  * Should be generalized somehow or excluded?
  */
-int parse_zero_var(double value, int index, glp_prob* lp, FILE* zero_file) {
+int parse_zero_var(double value, int index, char** col_names, FILE* zero_file) {
 	const char* var_name;
 	char* local_col_name;
 	char* sector_name;
 
 	if( value < TOLERANCE) {
-		var_name = glp_get_col_name(lp, index);
+		var_name = (col_names && col_names[index]) ? col_names[index] : NULL;
+		if (var_name == NULL) {
+			dw_printf(IMPORTANCE_DIAG,
+				"parse_zero_var: missing column name for index %d; skipping.\n",
+				index);
+			return 0;
+		}
 		local_col_name = malloc(sizeof(char)*BUFF_SIZE);
 		dw_oom_abort(local_col_name, "local_col_name");
 		sector_name = malloc(sizeof(char)*BUFF_SIZE);
@@ -754,7 +760,7 @@ void get_solution(subprob_struct* sub_data) {
 
 			for( j = 1; j < sub_data[subprob].num_cols_plus; j++ ) {
 				if( glp_get_col_prim(master_lp, i) != 1.0) {
-					dw_printf(IMPORTANCE_AVG, "%s:", glp_get_col_name(sub_data[subprob].lp, j));
+					dw_printf(IMPORTANCE_AVG, "%s:", sub_data[subprob].col_names[j]);
 					dw_printf(IMPORTANCE_AVG, "    %3.2f\n",
 							sub_data->globals->x[subprob][iteration][j]);
 				}
@@ -859,7 +865,16 @@ void free_sub_data(subprob_struct* sub_data, faux_globals* fg) {
 			if( fg->x[i][j] != NULL ) free(fg->x[i][j]);
 		}
 		free(fg->x[i]);
-		glp_delete_prob(sub_data[i].lp);
+		/* lp was freed by glp_delete_prob() inside subproblem_thread, with
+		 * my_data->lp set to NULL before thread exit.  Here we only
+		 * re-clear the pointer to guard against accidental reuse. */
+		sub_data[i].lp = NULL;
+		if (sub_data[i].col_names != NULL) {
+			int cn;
+			for (cn = 1; cn < sub_data[i].num_cols_plus; cn++)
+				free(sub_data[i].col_names[cn]);
+			free(sub_data[i].col_names);
+		}
 	}
 	free(sub_data);
 

@@ -77,6 +77,8 @@ typedef struct {
 
 	double* current_solution;
 
+	char** col_names;  /* column names cached before thread exits (GLPK TLS) */
+
 	int num_cols;
 	int num_cols_plus;
 	double r;

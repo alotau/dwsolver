@@ -19,6 +19,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-22
 - C (C99); shell for CI workflows + GNU Autotools (autoconf ≥ 2.60, automake ≥ 1.11), GLPK 4.44 (embedded) (009-repo-structure-cleanup)
 - C99 + GLPK 4.44 (thread-patched, embedded in `src/`); POSIX Threads (pthreads); GNU Autotools + libtool (010-callable-library)
 - File-based (LP problem files on disk; no database) (010-callable-library)
+- C99 + GLPK ≥ 4.65 (external, via `pkg-config`), POSIX pthreads (011-remove-embedded-glpk)
+- N/A (solver reads/writes LP files from disk) (011-remove-embedded-glpk)
 
 - C99 (POSIX; GCC 9+ and Clang 12+ are primary targets) + POSIX Threads (pthreads); GLPK 4.44 (embedded, thread-patched) (002-cross-platform-repair)
 
@@ -38,9 +40,9 @@ tests/
 C99 (POSIX; GCC 9+ and Clang 12+ are primary targets): Follow standard conventions
 
 ## Recent Changes
+- 011-remove-embedded-glpk: Added C99 + GLPK ≥ 4.65 (external, via `pkg-config`), POSIX pthreads
 - 010-callable-library: Added C99 + GLPK 4.44 (thread-patched, embedded in `src/`); POSIX Threads (pthreads); GNU Autotools + libtool
 - 009-repo-structure-cleanup: Added C (C99); shell for CI workflows + GNU Autotools (autoconf ≥ 2.60, automake ≥ 1.11), GLPK 4.44 (embedded)
-- 008-sei-cert-c-compliance: Added C99 (GCC/Clang on macOS/Linux; MinGW-w64 on Windows) + POSIX Threads (pthreads); embedded GLPK 4.44 (treated as a library boundary — `src/glp*.c` not modified)
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -19,6 +19,15 @@ jobs:
         # is not available on Ubuntu.
         run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglpk-dev
+          # libglpk-dev does not ship a glpk.pc file on Ubuntu; bypass pkg-config
+          # by exporting the CFLAGS/LIBS variables that PKG_CHECK_MODULES checks first.
+          echo "GLPK_CFLAGS=-I/usr/include" >> $GITHUB_ENV
+          echo "GLPK_LIBS=-lglpk" >> $GITHUB_ENV
+
       - name: Build
         run: ./configure && make
 
@@ -38,6 +47,13 @@ jobs:
       - name: Suppress automake regeneration
         run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglpk-dev
+          echo "GLPK_CFLAGS=-I/usr/include" >> $GITHUB_ENV
+          echo "GLPK_LIBS=-lglpk" >> $GITHUB_ENV
+
       - name: Build
         run: ./configure CFLAGS="-fsanitize=address,undefined -g -O1" && make
 
@@ -56,6 +72,13 @@ jobs:
 
       - name: Suppress automake regeneration
         run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in tests/Makefile.in
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglpk-dev
+          echo "GLPK_CFLAGS=-I/usr/include" >> $GITHUB_ENV
+          echo "GLPK_LIBS=-lglpk" >> $GITHUB_ENV
 
       - name: Build
         run: ./configure CFLAGS="-fsanitize=thread -g -O1" && make

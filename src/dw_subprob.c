@@ -100,7 +100,11 @@ void* subproblem_thread(void* arg) {
 
 	/* Read in assigned problem and solve to get initial feasible solution. */
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
-	lp = lpx_read_cpxlp(my_data->infile_name);
+	lp = glp_create_prob();
+	if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+		glp_delete_prob(lp);
+		lp = NULL;
+	}
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 	glp_iocp* int_parm = malloc(sizeof(glp_iocp));
 	dw_oom_abort(int_parm, "int_parm");
@@ -364,10 +368,30 @@ void* subproblem_thread(void* arg) {
 		/*fflush(stdout); Not a very thread safe function. */
 		pthread_mutex_unlock(&sub_data_mutex[id]); /* always succeeds: unlocking owned mutex */
 		if( signal_availability(my_data) ) break;
-		//snprintf(local_buffer, BUFF_SIZE, "sub_%d_%d.cpxlp", id, j);
-		//lpx_write_cpxlp(my_data->lp, local_buffer);
 
 	}
+
+	/* Cache column names before we free the GLPK prob below.  Post-join
+	 * solution-printing threads access my_data->col_names[j] instead of
+	 * calling glp_get_col_name(lp, j). */
+	{
+		int cn;
+		my_data->col_names = calloc(
+			(size_t)(my_data->num_cols_plus + 1), sizeof(char *));
+		dw_oom_abort(my_data->col_names, "col_names");
+		for (cn = 1; cn < my_data->num_cols_plus; cn++) {
+			const char *name = glp_get_col_name(my_data->lp, cn);
+			my_data->col_names[cn] = name ? strdup(name) : NULL;
+		}
+	}
+
+	/* Explicitly free the GLPK problem and environment while still in this
+	 * thread.  This keeps ownership clear and prevents LeakSanitizer from
+	 * reporting a leak (the TLS pthread_key destructor is not visible to
+	 * sanitizers as a valid free path). */
+	glp_delete_prob(my_data->lp);
+	my_data->lp = NULL;
+	glp_free_env();
 
 	/* Clean up after myself.  my_data will be freed by master. */
 	free(y);

@@ -158,6 +158,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		sub_data[i].phase_one        = 0;
 		sub_data[i].globals          = globals;
 		sub_data[i].md               = md;
+		sub_data[i].col_names        = NULL;
 
 		globals->x[i]           = malloc(sizeof(double*)*MAX_PHASE2_ITERATIONS);
 		dw_oom_abort(globals->x[i], "globals->x[i]");
@@ -181,7 +182,11 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
  *****************/
 	/* Open the file containing the original master problem. */
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
-	original_master_lp = lpx_read_cpxlp(globals->master_name);
+	original_master_lp = glp_create_prob();
+	if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+		glp_delete_prob(original_master_lp);
+		original_master_lp = NULL;
+	}
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 	if (original_master_lp == NULL) {
@@ -431,7 +436,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	 * side-effects in library mode. */
 	if( globals->write_intermediate_opt_files && glp_get_num_cols(master_lp) > 0 ) {
 		DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
-		lpx_write_cpxlp(master_lp, "pre_master.cpxlp");
+		glp_write_lp(master_lp, NULL, "pre_master.cpxlp");
 		pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 	}
 
@@ -474,7 +479,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 		if( globals->write_intermediate_opt_files ) {
 			snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp");
-			lpx_write_cpxlp(master_lp, local_buffer);
+			glp_write_lp(master_lp, NULL, local_buffer);
 		}
 
 		/* Actually perform the Dantzig-Wolfe algorithm now. */
@@ -490,7 +495,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 			if( globals->write_intermediate_opt_files ) {
 				snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", j+1);
-				lpx_write_cpxlp(master_lp, local_buffer);
+				glp_write_lp(master_lp, NULL, local_buffer);
 			}
 
 			if( -TOLERANCE < glp_get_obj_val(master_lp) &&
@@ -642,7 +647,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 		if( globals->write_intermediate_opt_files ) {
 			snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", j);
-			lpx_write_cpxlp(master_lp, local_buffer);
+			glp_write_lp(master_lp, NULL, local_buffer);
 		}
 
 		rc = phase_2_iteration(sub_data, globals, md);
@@ -794,7 +799,6 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		glp_init_iocp(int_parm);
 		int_parm->mip_gap = globals->mip_gap;
 		glp_intopt(master_lp, int_parm);
-		//lpx_intopt(master_lp);
 		dw_printf(IMPORTANCE_AVG, "Integer optimal solution: %3.1f\n",
 				glp_mip_obj_val(master_lp));
 		dw_printf(IMPORTANCE_AVG,

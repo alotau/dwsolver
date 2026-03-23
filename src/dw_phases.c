@@ -225,8 +225,8 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 	/* Based on the number of simplex iterations and columns added,
 	 * deduce if we need to go on, need to stop, or are cycling.
 	 */
-	if( simplex_iterations < lpx_get_int_parm(master_lp, LPX_K_ITCNT) ) {
-		simplex_iterations = lpx_get_int_parm(master_lp, LPX_K_ITCNT);
+	if( simplex_iterations < glp_get_it_cnt(master_lp) ) {
+		simplex_iterations = glp_get_it_cnt(master_lp);
 		if( fg->verbosity >= OUTPUT_VERBOSE)
 			printf("There have been %d simplex iterations thus far.\n",
 					simplex_iterations);
@@ -457,8 +457,8 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 	/* Based on the number of simplex iterations and columns added,
 	 * deduce if we need to go on, need to stop, or are cycling.
 	 */
-	if( simplex_iterations < lpx_get_int_parm(master_lp, LPX_K_ITCNT) ) {
-		simplex_iterations = lpx_get_int_parm(master_lp, LPX_K_ITCNT);
+	if( simplex_iterations < glp_get_it_cnt(master_lp) ) {
+		simplex_iterations = glp_get_it_cnt(master_lp);
 		if( fg->verbosity >= OUTPUT_VERBOSE )
 			printf("There have been %d simplex iterations thus far.\n", simplex_iterations);
 		if( rc <= 0 ) {
