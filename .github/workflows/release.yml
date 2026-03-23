@@ -14,7 +14,7 @@ jobs:
       contents: write   # required to create GitHub Releases
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
 
       - name: Install dependencies
         run: |
@@ -35,7 +35,9 @@ jobs:
         run: |
           # make distcheck builds the tarball, then unpacks and runs
           # ./configure && make && make check inside a clean tree.
-          make distcheck DISTCHECK_CONFIGURE_FLAGS="GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk"
+          # GLPK_CFLAGS/GLPK_LIBS are already exported via $GITHUB_ENV
+          # in the Install dependencies step; no DISTCHECK_CONFIGURE_FLAGS needed.
+          make distcheck
 
       - name: Locate tarball
         id: tarball
@@ -45,7 +47,8 @@ jobs:
           echo "name=$TARBALL"  >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe  # v2
         with:
           files: ${{ steps.tarball.outputs.path }}
           generate_release_notes: true
+          draft: false

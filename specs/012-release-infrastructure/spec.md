@@ -77,6 +77,7 @@ A contributor or new maintainer reads the project README and finds a concise "Ho
 - What happens when the release workflow runs but the GitHub token lacks permission to create releases?  The workflow fails at the release-creation step with an authentication error; the job exit code is non-zero.
 - What happens when `make distcheck` is run on a system that does not have GLPK installed?  The configure step inside the clean tree fails immediately with a descriptive error; `make distcheck` exits non-zero.
 - What happens when the version-info triple is not updated before a release that changes the public API?  The soname of the installed library is unchanged, causing silent ABI conflicts for programs that depend on the old interface.
+- What happens when a maintainer pushes the same `v*` tag a second time (e.g., to fix a botched release)?  The release workflow fails at the release-creation step because the GitHub Release already exists; no asset is overwritten.  The maintainer must manually delete the tag and the GitHub Release, then re-push the corrected tag.
 
 ## Requirements *(mandatory)*
 
@@ -86,12 +87,14 @@ A contributor or new maintainer reads the project README and finds a concise "Ho
 - **FR-002**: The source tarball MUST be self-contained: a user who unpacks it on a system with only GLPK available MUST be able to build the project and pass `make check` without any additional files.
 - **FR-003**: `EXTRA_DIST` in the top-level `Makefile.am` MUST include: `tests/`, `specs/`, `architecture/`, `Dockerfile`, `.github/workflows/`, and `README.md`.
 - **FR-004**: `EXTRA_DIST` in `src/Makefile.am` MUST include all non-installed header files that are part of the source distribution.
-- **FR-005**: A GitHub Actions release workflow MUST trigger on any tag push matching the pattern `v*` and MUST NOT trigger on branch pushes or pull requests.
+- **FR-005**: A GitHub Actions release workflow MUST trigger on any tag push matching the pattern `v*` and MUST NOT trigger on branch pushes or pull requests.  If the tag already has an associated GitHub Release, the workflow MUST fail (exit non-zero) rather than overwriting or silently skipping the release; no asset upload occurs in this case.
 - **FR-006**: The release workflow MUST run `make distcheck` on Linux (Ubuntu latest) before creating the GitHub Release; if `make distcheck` fails, no release is created.
 - **FR-007**: The release workflow MUST upload the `dwsolver-<version>.tar.gz` tarball as a release asset on the automatically created GitHub Release.
+- **FR-007a**: The GitHub Release MUST be published immediately (not as a draft) when the release workflow succeeds; no manual promotion step is required.
 - **FR-008**: The libtool version-info triple in `src/Makefile.am` MUST follow the standard update rules: increment REVISION on bug-fix releases, increment CURRENT and AGE (reset REVISION) when adding new public APIs, increment CURRENT and reset both AGE and REVISION when removing or changing public APIs.
 - **FR-009**: The README MUST contain a "How to cut a release" section that describes, at minimum: updating the version in `configure.ac`, updating the version-info triple when the API changes, running `make distcheck` as the release gate, and pushing a `v<major>.<minor>.<patch>` tag to trigger the automated release.
-- **FR-010**: The release workflow MUST install GLPK and any other build dependencies on the CI runner before executing `make distcheck`.
+- **FR-010**: The release workflow MUST install GLPK and any other build dependencies on the CI runner before executing `make distcheck`, and MUST export `GLPK_CFLAGS` and `GLPK_LIBS` as environment variables (not via `DISTCHECK_CONFIGURE_FLAGS`) so the configure invocation inside the clean distcheck tree picks them up correctly — consistent with the existing CI workflows.
+- **FR-011**: All GitHub Actions used in the release workflow (both first-party `actions/*` and third-party) MUST be pinned to a specific commit SHA (not a floating tag); each pinned reference MUST include a comment identifying the corresponding version tag.
 
 ### Key Entities
 
@@ -119,3 +122,13 @@ A contributor or new maintainer reads the project README and finds a concise "Ho
 - GitHub Actions permissions (`contents: write`) are granted to the `GITHUB_TOKEN` for the release workflow to create and upload releases; the repository settings permit this.
 - `make distcheck` may require the same `GLPK_CFLAGS`/`GLPK_LIBS` workaround used in the existing Linux CI workflow (since Ubuntu's libglpk-dev does not ship a `.pc` file).
 - `.github/` is a hidden directory; automake supports listing it in `EXTRA_DIST` and it will be included in the tarball when referenced explicitly.
+
+## Clarifications
+
+### Session 2026-03-22
+
+- Q: When a maintainer pushes the same version tag a second time, what should the release workflow do? → A: Fail the workflow — the release already exists; maintainer must manually delete it first
+- Q: Should the `softprops/action-gh-release` action version be pinned to a commit SHA or kept as a floating tag? → A: Pin to a commit SHA (supply-chain security); annotate with version tag comment
+- Q: Should action SHA-pinning apply to all actions (including first-party `actions/*`) or only third-party actions? → A: All actions including `actions/checkout`; consistent pinning eliminates the whole category of supply-chain risk
+- Q: Should the GitHub Release be published immediately or created as a draft for manual promotion? → A: Publish immediately — `make distcheck` is already the gate; no manual promotion step needed
+- Q: Should `GLPK_CFLAGS`/`GLPK_LIBS` be passed inside `DISTCHECK_CONFIGURE_FLAGS` or exported as environment variables? → A: Export as environment variables (consistent with `ci-linux.yml`; avoids word-splitting risk)
