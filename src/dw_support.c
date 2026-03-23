@@ -627,7 +627,10 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  		}
  		*/
  	}
- 	else fg->monolithic_name = NULL;
+ 	else {
+ 		free(fg->monolithic_name);
+ 		fg->monolithic_name = NULL;
+ 	}
 
  	/* Get the "shift" if it's included in the guide file. */
  	strcpy(buffer, "\0"); /* "Clear" the buffer. */
@@ -850,7 +853,11 @@ void print_timing( time_t start_time, clock_t start_clock ) {
 void print_timing_ts(struct timespec *ts0)
 {
 	struct timespec ts1;
-	clock_gettime(CLOCK_MONOTONIC, &ts1);
+	if (clock_gettime(CLOCK_MONOTONIC, &ts1) != 0) {
+		perror("clock_gettime");
+		printf("Unable to collect monotonic timing information.\n");
+		return;
+	}
 	long long elapsed_ns = (ts1.tv_sec - ts0->tv_sec) * 1000000000LL
 	                     + (ts1.tv_nsec - ts0->tv_nsec);
 	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");

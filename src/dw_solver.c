@@ -113,8 +113,9 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 	/* For clocking the program run time. */
 #ifdef HAVE_CLOCK_GETTIME
-	struct timespec dw_ts0;
-	clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+	struct timespec dw_ts0 = {0, 0};
+	if (clock_gettime(CLOCK_MONOTONIC, &dw_ts0) != 0)
+		perror("clock_gettime");
 #else
 	time_t  t0 = time(NULL);
 	clock_t c0 = clock();
@@ -726,7 +727,13 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	if( globals->print_timing_data ) {
 #ifdef HAVE_CLOCK_GETTIME
 		print_timing_ts(&dw_ts0);
-		clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+		{
+			struct timespec dw_ts_reset;
+			if (clock_gettime(CLOCK_MONOTONIC, &dw_ts_reset) == 0)
+				dw_ts0 = dw_ts_reset;
+			else
+				perror("clock_gettime");
+		}
 #else
 		print_timing(t0, c0 );
 		t0 = time(NULL);
@@ -794,7 +801,13 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		if( globals->print_timing_data ) {
 #ifdef HAVE_CLOCK_GETTIME
 			print_timing_ts(&dw_ts0);
-			clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+			{
+				struct timespec dw_ts_reset;
+				if (clock_gettime(CLOCK_MONOTONIC, &dw_ts_reset) == 0)
+					dw_ts0 = dw_ts_reset;
+				else
+					perror("clock_gettime");
+			}
 #else
 			print_timing(t0, c0 );
 			t0 = time(NULL);
@@ -839,7 +852,13 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		if( globals->print_timing_data ) {
 #ifdef HAVE_CLOCK_GETTIME
 			print_timing_ts(&dw_ts0);
-			clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+			{
+				struct timespec dw_ts_reset;
+				if (clock_gettime(CLOCK_MONOTONIC, &dw_ts_reset) == 0)
+					dw_ts0 = dw_ts_reset;
+				else
+					perror("clock_gettime");
+			}
 #else
 			print_timing(t0, c0 );
 			t0 = time(NULL);
