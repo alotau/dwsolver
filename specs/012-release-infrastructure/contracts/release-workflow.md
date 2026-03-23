@@ -39,7 +39,7 @@ No additional repository secrets are needed.
 | Package | Installed via | Purpose |
 |---------|--------------|---------|
 | `build-essential` | `apt-get` | GCC compilers for the build |
-| `automake` | `apt-get` | Regenerate `Makefile` from `Makefile.in` |
+| `automake` | `apt-get` | Regenerate `Makefile.in` from `Makefile.am` if Autotools regeneration is triggered |
 | `pkg-config` | `apt-get` | GLPK detection (partially — see env workaround) |
 | `libglpk-dev` | `apt-get` | GLPK headers and shared library |
 
