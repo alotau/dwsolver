@@ -626,7 +626,7 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  		}
  		*/
  	}
- 	else fg->monolithic_name = '\0';
+ 	else fg->monolithic_name = NULL;
 
  	/* Get the "shift" if it's included in the guide file. */
  	strcpy(buffer, "\0"); /* "Clear" the buffer. */
