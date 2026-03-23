@@ -6,9 +6,9 @@
 
 ## Content Quality
 
-- [x] No implementation details (languages, frameworks, APIs)
+- [ ] No implementation details (languages, frameworks, APIs) — **N/A**: this spec describes CI/release infrastructure; GitHub Actions, `apt` packages, `GLPK_CFLAGS`/`GLPK_LIBS`, and action SHA-pinning ARE the requirements, not incidental implementation choices
 - [x] Focused on user value and business needs
-- [x] Written for non-technical stakeholders
+- [ ] Written for non-technical stakeholders — **N/A**: the intended audience is the project maintainer; a degree of technical specificity (workflow triggers, env-var handling, libtool version-info rules) is required for the spec to be actionable
 - [x] All mandatory sections completed
 
 ## Requirement Completeness
@@ -16,7 +16,7 @@
 - [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
-- [x] Success criteria are technology-agnostic (no implementation details)
+- [ ] Success criteria are technology-agnostic (no implementation details) — **N/A**: see Content Quality note above; SC-002 names `tar tzf`, SC-003 names "GitHub Release", SC-004 names `make distcheck`, SC-005 names `src/Makefile.am` — these are precise and intentional
 - [x] All acceptance scenarios are defined
 - [x] Edge cases are identified
 - [x] Scope is clearly bounded
@@ -27,10 +27,9 @@
 - [x] All functional requirements have clear acceptance criteria
 - [x] User scenarios cover primary flows
 - [x] Feature meets measurable outcomes defined in Success Criteria
-- [x] No implementation details leak into specification
+- [x] Implementation-specific material is intentionally in spec.md because the technology is the requirement; deeper how-to detail (action SHAs, word-split workaround rationale) is duplicated in plan.md / research.md / contracts/ for traceability
 
 ## Notes
 
-- All items pass. Spec is ready for `/speckit.plan`.
-- FR-010 and the GLPK workaround assumption acknowledge a known Ubuntu CI quirk documented in existing CI workflows.
-- The version-info triple rules (FR-008) reference standard libtool conventions, not an implementation choice; they are technology-appropriate for this library-versioning requirement.
+- Items marked **N/A** are inapplicable to a CI/release infrastructure spec: the feature is inherently defined in terms of specific tools (GitHub Actions, Autotools, GLPK). The "technology-agnostic" and "non-technical stakeholders" criteria apply to user-facing feature specs, not to tooling/infrastructure specs where the tool choice is itself a first-class requirement.
+- Detailed rationale for each implementation choice (GLPK env-var approach, SHA-pinning, word-split avoidance) is documented in [research.md](../research.md) and [contracts/release-workflow.md](../contracts/release-workflow.md).
