@@ -29,11 +29,14 @@ time and at runtime.  Install it from your OS package manager before running
 | Windows (MSYS2/MINGW64) | `pacman -S mingw-w64-x86_64-glpk` |
 
 > **ABI note for libdwsolver callers**: programs that link against
-> `libdwsolver` must also link — directly or transitively — against the **same
-> build** of GLPK that dwsolver was compiled against.  Mismatched GLPK shared
-> libraries produce undefined behaviour at runtime.  When dynamically linking,
-> `libdwsolver` records its GLPK dependency via `DT_NEEDED`, so you normally do
-> not need to list `-lglpk` explicitly.  For static linking, use
+> `libdwsolver` must also link — directly or transitively — against a GLPK
+> shared library with the same **soname** as the one used at build time.
+> GLPK ≥ 4.60 through the current 5.x series all ship as `libglpk.so.40`
+> (Linux) / `libglpk.40.dylib` (macOS), so any GLPK ≥ 4.65 installation is
+> ABI-compatible with any other at runtime; an exact version match is **not**
+> required.  When dynamically linking, `libdwsolver` records this dependency
+> via `DT_NEEDED`/`LC_LOAD_DYLIB`, so you normally do not need to list
+> `-lglpk` explicitly.  For static linking, use
 > `pkg-config --libs --static dwsolver` to obtain all required libraries
 > including GLPK.
 
