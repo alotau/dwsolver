@@ -12,6 +12,15 @@ dw_rounding.c \
 dw_globals.c
 
 # -----------------------------------------------------------------------
+# noinst convenience library: exposes dw_blas symbols for tests.
+# Built without -fvisibility=hidden so test_blas can link against it
+# without needing symbols exported from the full shared library.
+# -----------------------------------------------------------------------
+noinst_LTLIBRARIES = libdwblas_internal.la
+libdwblas_internal_la_SOURCES = dw_blas.c
+libdwblas_internal_la_CFLAGS  = $(AM_CFLAGS) -I$(srcdir)
+
+# -----------------------------------------------------------------------
 # Shared library: libdwsolver
 # -----------------------------------------------------------------------
 lib_LTLIBRARIES = libdwsolver.la

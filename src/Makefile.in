@@ -138,7 +138,18 @@ am__uninstall_files_from_dir = { \
   || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
        $(am__cd) "$$dir" && echo $$files | $(am__xargs_n) 40 $(am__rm_f); }; \
   }
-LTLIBRARIES = $(lib_LTLIBRARIES)
+LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES)
+libdwblas_internal_la_LIBADD =
+am_libdwblas_internal_la_OBJECTS = libdwblas_internal_la-dw_blas.lo
+libdwblas_internal_la_OBJECTS = $(am_libdwblas_internal_la_OBJECTS)
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
+libdwblas_internal_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(libdwblas_internal_la_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am__DEPENDENCIES_1 =
 libdwsolver_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am__objects_1 = libdwsolver_la-dw_blas.lo libdwsolver_la-dw_support.lo \
@@ -147,10 +158,6 @@ am__objects_1 = libdwsolver_la-dw_blas.lo libdwsolver_la-dw_support.lo \
 am_libdwsolver_la_OBJECTS = $(am__objects_1) \
 	libdwsolver_la-dw_solver.lo
 libdwsolver_la_OBJECTS = $(am_libdwsolver_la_OBJECTS)
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-am__v_lt_1 = 
 libdwsolver_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
 	$(libdwsolver_la_CFLAGS) $(CFLAGS) $(libdwsolver_la_LDFLAGS) \
@@ -177,6 +184,7 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/dwsolver-dw_main.Po \
+	./$(DEPDIR)/libdwblas_internal_la-dw_blas.Plo \
 	./$(DEPDIR)/libdwsolver_la-dw_blas.Plo \
 	./$(DEPDIR)/libdwsolver_la-dw_globals.Plo \
 	./$(DEPDIR)/libdwsolver_la-dw_phases.Plo \
@@ -203,8 +211,10 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libdwsolver_la_SOURCES) $(dwsolver_SOURCES)
-DIST_SOURCES = $(libdwsolver_la_SOURCES) $(dwsolver_SOURCES)
+SOURCES = $(libdwblas_internal_la_SOURCES) $(libdwsolver_la_SOURCES) \
+	$(dwsolver_SOURCES)
+DIST_SOURCES = $(libdwblas_internal_la_SOURCES) \
+	$(libdwsolver_la_SOURCES) $(dwsolver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -369,6 +379,15 @@ dw_globals.c
 
 
 # -----------------------------------------------------------------------
+# noinst convenience library: exposes dw_blas symbols for tests.
+# Built without -fvisibility=hidden so test_blas can link against it
+# without needing symbols exported from the full shared library.
+# -----------------------------------------------------------------------
+noinst_LTLIBRARIES = libdwblas_internal.la
+libdwblas_internal_la_SOURCES = dw_blas.c
+libdwblas_internal_la_CFLAGS = $(AM_CFLAGS) -I$(srcdir)
+
+# -----------------------------------------------------------------------
 # Shared library: libdwsolver
 # -----------------------------------------------------------------------
 lib_LTLIBRARIES = libdwsolver.la
@@ -505,6 +524,18 @@ clean-libLTLIBRARIES:
 	echo rm -f $${locs}; \
 	$(am__rm_f) $${locs}
 
+clean-noinstLTLIBRARIES:
+	-$(am__rm_f) $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; \
+	locs=`for p in $$list; do echo $$p; done | \
+	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
+	      sort -u`; \
+	echo rm -f $${locs}; \
+	$(am__rm_f) $${locs}
+
+libdwblas_internal.la: $(libdwblas_internal_la_OBJECTS) $(libdwblas_internal_la_DEPENDENCIES) $(EXTRA_libdwblas_internal_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libdwblas_internal_la_LINK)  $(libdwblas_internal_la_OBJECTS) $(libdwblas_internal_la_LIBADD) $(LIBS)
+
 libdwsolver.la: $(libdwsolver_la_OBJECTS) $(libdwsolver_la_DEPENDENCIES) $(EXTRA_libdwsolver_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libdwsolver_la_LINK) -rpath $(libdir) $(libdwsolver_la_OBJECTS) $(libdwsolver_la_LIBADD) $(LIBS)
 
@@ -519,6 +550,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwsolver-dw_main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdwblas_internal_la-dw_blas.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdwsolver_la-dw_blas.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdwsolver_la-dw_globals.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdwsolver_la-dw_phases.Plo@am__quote@ # am--include-marker
@@ -553,6 +585,13 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
+
+libdwblas_internal_la-dw_blas.lo: dw_blas.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdwblas_internal_la_CFLAGS) $(CFLAGS) -MT libdwblas_internal_la-dw_blas.lo -MD -MP -MF $(DEPDIR)/libdwblas_internal_la-dw_blas.Tpo -c -o libdwblas_internal_la-dw_blas.lo `test -f 'dw_blas.c' || echo '$(srcdir)/'`dw_blas.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libdwblas_internal_la-dw_blas.Tpo $(DEPDIR)/libdwblas_internal_la-dw_blas.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dw_blas.c' object='libdwblas_internal_la-dw_blas.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdwblas_internal_la_CFLAGS) $(CFLAGS) -c -o libdwblas_internal_la-dw_blas.lo `test -f 'dw_blas.c' || echo '$(srcdir)/'`dw_blas.c
 
 libdwsolver_la-dw_blas.lo: dw_blas.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdwsolver_la_CPPFLAGS) $(CPPFLAGS) $(libdwsolver_la_CFLAGS) $(CFLAGS) -MT libdwsolver_la-dw_blas.lo -MD -MP -MF $(DEPDIR)/libdwsolver_la-dw_blas.Tpo -c -o libdwsolver_la-dw_blas.lo `test -f 'dw_blas.c' || echo '$(srcdir)/'`dw_blas.c
@@ -773,10 +812,11 @@ maintainer-clean-generic:
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool mostlyclean-am
+	clean-libtool clean-noinstLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 	-rm -f ./$(DEPDIR)/dwsolver-dw_main.Po
+	-rm -f ./$(DEPDIR)/libdwblas_internal_la-dw_blas.Plo
 	-rm -f ./$(DEPDIR)/libdwsolver_la-dw_blas.Plo
 	-rm -f ./$(DEPDIR)/libdwsolver_la-dw_globals.Plo
 	-rm -f ./$(DEPDIR)/libdwsolver_la-dw_phases.Plo
@@ -830,6 +870,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/dwsolver-dw_main.Po
+	-rm -f ./$(DEPDIR)/libdwblas_internal_la-dw_blas.Plo
 	-rm -f ./$(DEPDIR)/libdwsolver_la-dw_blas.Plo
 	-rm -f ./$(DEPDIR)/libdwsolver_la-dw_globals.Plo
 	-rm -f ./$(DEPDIR)/libdwsolver_la-dw_phases.Plo
@@ -860,16 +901,16 @@ uninstall-am: uninstall-binPROGRAMS uninstall-libLTLIBRARIES \
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
 	clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool cscopelist-am ctags ctags-am distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-binPROGRAMS install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-libLTLIBRARIES install-man \
-	install-nobase_includeHEADERS install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
+	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
+	ctags-am distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-libLTLIBRARIES \
+	install-man install-nobase_includeHEADERS install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS \

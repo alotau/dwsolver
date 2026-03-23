@@ -106,7 +106,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am_test_blas_OBJECTS = test_blas-test_blas.$(OBJEXT)
 test_blas_OBJECTS = $(am_test_blas_OBJECTS)
-test_blas_DEPENDENCIES = $(top_builddir)/src/libdwsolver.la
+test_blas_DEPENDENCIES = $(top_builddir)/src/libdwblas_internal.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -519,7 +519,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 test_blas_SOURCES = test_blas.c
 test_blas_CFLAGS = -I$(top_srcdir)/src
-test_blas_LDADD = $(top_builddir)/src/libdwsolver.la
+test_blas_LDADD = $(top_builddir)/src/libdwblas_internal.la
 test_lib_api_SOURCES = test_lib_api.c
 test_lib_api_CPPFLAGS = -I$(top_srcdir)/src -DEXAMPLE_DIR='"$(top_srcdir)/examples"' -DDWSOLVER_STATIC
 test_lib_api_LDADD = $(top_builddir)/src/libdwsolver.la
