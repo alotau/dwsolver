@@ -865,11 +865,10 @@ void free_sub_data(subprob_struct* sub_data, faux_globals* fg) {
 			if( fg->x[i][j] != NULL ) free(fg->x[i][j]);
 		}
 		free(fg->x[i]);
-		/* GLPK 5.0 uses _Thread_local storage: the subproblem's GLPK env
-		 * and all objects it owns (including lp) are freed automatically
-		 * when the subproblem thread exits via the pthread key destructor.
-		 * Calling glp_delete_prob() from the master thread would be a
-		 * cross-thread double-free.  Free the pre-cached col_names instead. */
+		/* lp was freed by glp_delete_prob() inside subproblem_thread, with
+		 * my_data->lp set to NULL before thread exit.  Here we only
+		 * re-clear the pointer to guard against accidental reuse. */
+		sub_data[i].lp = NULL;
 		if (sub_data[i].col_names != NULL) {
 			int cn;
 			for (cn = 1; cn < sub_data[i].num_cols_plus; cn++)
