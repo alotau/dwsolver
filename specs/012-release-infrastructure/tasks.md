@@ -80,7 +80,7 @@
 **Independent Test**: `grep version-info src/Makefile.am` shows `0:0:0`; `otool -L src/.libs/libdwsolver.dylib` (macOS) or `readelf -d src/.libs/libdwsolver.so` (Linux) confirms soname matches `CURRENT - AGE = 0`.
 
 - [x] T019 [US3] Confirm `src/Makefile.am` has `-version-info 0:0:0` in `libdwsolver_la_LDFLAGS`
-- [ ] T020 [US3] Verify soname of built shared library matches `libdwsolver.so.0` / `libdwsolver.0.dylib` using `otool -L` (macOS) or `readelf -d` (Linux) on `src/.libs/libdwsolver.*`
+- [x] T020 [US3] Verify soname of built shared library matches `libdwsolver.so.0` / `libdwsolver.0.dylib` using `otool -L` (macOS) or `readelf -d` (Linux) on `src/.libs/libdwsolver.*`
 
 **Checkpoint**: US3 complete — soname is correct and consistent with documented versioning rules.
 
@@ -112,7 +112,7 @@
 - [x] T029 [P] Commit `README.md` release section
 - [x] T030 [P] Commit `specs/012-release-infrastructure/spec.md` with clarifications
 - [x] T031 [P] Commit `specs/012-release-infrastructure/plan.md`, `research.md`, `data-model.md`, `contracts/`
-- [ ] T032 Push branch `012-release-infrastructure` to origin (already at `b9ec5aa` — confirm up to date)
+- [x] T032 Push branch `012-release-infrastructure` to origin (already at `b9ec5aa` — confirm up to date)
 - [ ] T033 Open pull request: `012-release-infrastructure` → `main`; title "feat(012): release infrastructure"; body references spec and SC-001–SC-006
 
 ---
@@ -170,7 +170,7 @@ Phase 2 done
 ## Success Criteria Checklist
 
 - [x] SC-001: `make distcheck` exits 0 in clean checkout
-- [ ] SC-002: Tarball verified to contain 100% of EXTRA_DIST files (`tar tzf` spot-check)
+- [x] SC-002: Tarball verified to contain 100% of EXTRA_DIST files (`tar tzf` spot-check)
 - [ ] SC-003: Pushing a `v*` tag produces a GitHub Release within 15 minutes with tarball attached *(verified on first real tag push)*
 - [x] SC-004: `make distcheck` step in workflow precedes release creation; logs show zero test failures *(verified via workflow structure)*
 - [x] SC-005: version-info `0:0:0` in `src/Makefile.am`; README documents update rules
