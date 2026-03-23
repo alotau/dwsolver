@@ -1,6 +1,6 @@
 # dwsolver-repaired Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-03-22
+Auto-generated from all feature plans. Last updated: 2026-03-23
 
 ## Active Technologies
 - File I/O — CPLEX LP format input, text output; no database (002-cross-platform-repair)
@@ -23,6 +23,7 @@ Auto-generated from all feature plans. Last updated: 2026-03-22
 - N/A (solver reads/writes LP files from disk) (011-remove-embedded-glpk)
 - C99 (no source changes); GNU Autotools (automake 1.16+, autoconf 2.71+, libtool 2.4+); GitHub Actions YAML + GLPK ≥ 4.65 (external); `softprops/action-gh-release` (SHA-pinned); `actions/checkout` (SHA-pinned) (012-release-infrastructure)
 - N/A — artifacts are source tarballs (`.tar.gz`) and GitHub Release assets (012-release-infrastructure)
+- C11 (GCC/Clang on macOS/Linux; MinGW-w64 on Windows via MSYS2) + POSIX.1-2008 (`pthreads`, `clock_gettime`); system GLPK ≥ 4.65; (013-strict-c-posix-compliance)
 
 - C99 (POSIX; GCC 9+ and Clang 12+ are primary targets) + POSIX Threads (pthreads); GLPK 4.44 (embedded, thread-patched) (002-cross-platform-repair)
 
@@ -42,9 +43,9 @@ tests/
 C99 (POSIX; GCC 9+ and Clang 12+ are primary targets): Follow standard conventions
 
 ## Recent Changes
+- 013-strict-c-posix-compliance: Added C11 (GCC/Clang on macOS/Linux; MinGW-w64 on Windows via MSYS2) + POSIX.1-2008 (`pthreads`, `clock_gettime`); system GLPK ≥ 4.65;
 - 012-release-infrastructure: Added C99 (no source changes); GNU Autotools (automake 1.16+, autoconf 2.71+, libtool 2.4+); GitHub Actions YAML + GLPK ≥ 4.65 (external); `softprops/action-gh-release` (SHA-pinned); `actions/checkout` (SHA-pinned)
 - 011-remove-embedded-glpk: Added C99 + GLPK ≥ 4.65 (external, via `pkg-config`), POSIX pthreads
-- 010-callable-library: Added C99 + GLPK 4.44 (thread-patched, embedded in `src/`); POSIX Threads (pthreads); GNU Autotools + libtool
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -41,6 +41,9 @@
 #ifndef SUPPORT_FUNCTIONS_H_
 #define SUPPORT_FUNCTIONS_H_
 
+#include <time.h>
+#include <config.h>
+
 //struct faux_globals;
 
 void solve(glp_prob *prob, glp_smcp *params, const char* solution_file);
@@ -53,8 +56,11 @@ void dw_printf(int,char*,...);
 void test_matrix_math(void);
 void get_solution(subprob_struct* sub_data);
 void print_timing( time_t start_time, clock_t start_clock ) ;
+#ifdef HAVE_CLOCK_GETTIME
+void print_timing_ts(struct timespec *ts0);
+#endif
 void free_sub_data(subprob_struct* sub_data, faux_globals*) ;
-int check_col_integrality() ;
+int check_col_integrality(void) ;
 void check_aux_vars(void);
 void write_basis(int);
 void check_degeneracy(void);

@@ -1,5 +1,8 @@
 ## Process this file with automake to produce Makefile.in ##
 
+AM_CFLAGS   = -std=c11 -pedantic-errors
+AM_CPPFLAGS = -D_POSIX_C_SOURCE=200809L
+
 #INCLUDES = -I$(srcdir)/../include
 
 # DW core files (everything except the CLI entry point and the new solver API).

@@ -1,9 +1,9 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.0.0 → 1.0.1
-Changed: Technology Stack — LP Backend updated from embedded GLPK 4.44 to system GLPK ≥ 4.65;
-         removed "No external runtime dependencies" (now has one: GLPK ≥ 4.65)
+Version change: 1.0.1 → 1.0.2
+Changed: Technology Stack — Language target updated from C99 to C11 (strict superset;
+         all existing C99-conforming code is valid C11; no behavioural changes).
 Added sections: N/A
 Removed sections: N/A
 Templates reviewed:
@@ -66,7 +66,7 @@ function boundaries.
 
 ## Technology Stack
 
-- **Language**: C (targeting C99 for portability across platforms and compilers)
+- **Language**: C (targeting C11 for portability across platforms and compilers; C11 is a strict superset of C99 — all existing code remains valid)
 - **Parallelism**: POSIX Threads (`pthreads`); on Windows via a pthreads-win32
   compatibility layer
 - **LP Backend**: System GLPK ≥ 4.65 (external shared library, detected via
@@ -114,4 +114,4 @@ All feature specifications and implementation plans MUST include a
 "Constitution Check" gate that explicitly verifies compliance with the five
 Core Principles before implementation begins.
 
-**Version**: 1.0.1 | **Ratified**: 2026-03-19 | **Last Amended**: 2026-03-22
+**Version**: 1.0.2 | **Ratified**: 2026-03-19 | **Last Amended**: 2026-03-23

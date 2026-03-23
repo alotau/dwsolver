@@ -48,6 +48,7 @@
 #include <pthread.h>
 #include <config.h>
 #include <glpk.h>
+#include <time.h>
 
 int dw_verbosity = OUTPUT_NORMAL;
 
@@ -626,7 +627,10 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  		}
  		*/
  	}
- 	else fg->monolithic_name = '\0';
+ 	else {
+ 		free(fg->monolithic_name);
+ 		fg->monolithic_name = NULL;
+ 	}
 
  	/* Get the "shift" if it's included in the guide file. */
  	strcpy(buffer, "\0"); /* "Clear" the buffer. */
@@ -704,7 +708,7 @@ void write_basis(int iteration) {
  * not.  Useful information if you are applying Dantzig-Wolfe to an integer
  * program and are enforcing integrality in the subproblems.
  */
-int check_col_integrality() {
+int check_col_integrality(void) {
 	int i;
 	int rc = 0;
 	for( i = 1; i <= glp_get_num_cols(master_lp); i++ ) {
@@ -842,6 +846,27 @@ void print_timing( time_t start_time, clock_t start_clock ) {
 
 	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n\n");
 }
+
+#ifdef HAVE_CLOCK_GETTIME
+/* Collect runtime information using POSIX clock_gettime(CLOCK_MONOTONIC)
+ * and print it out. Only compiled when HAVE_CLOCK_GETTIME is defined. */
+void print_timing_ts(struct timespec *ts0)
+{
+	struct timespec ts1;
+	if (clock_gettime(CLOCK_MONOTONIC, &ts1) != 0) {
+		perror("clock_gettime");
+		printf("Unable to collect monotonic timing information.\n");
+		return;
+	}
+	long long elapsed_ns = (ts1.tv_sec - ts0->tv_sec) * 1000000000LL
+	                     + (ts1.tv_nsec - ts0->tv_nsec);
+	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+	printf("\n TIMING INFORMATION (monotonic clock):\n\n");
+	printf("\t elapsed wall clock time: %.6f s\n",
+	       (double)elapsed_ns / 1.0e9);
+	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n\n");
+}
+#endif /* HAVE_CLOCK_GETTIME */
 
 /* Frees all memory associated with the subprob_struct data. */
 void free_sub_data(subprob_struct* sub_data, faux_globals* fg) {
