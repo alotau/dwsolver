@@ -25,9 +25,18 @@ jobs:
           install: >-
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-winpthreads-git
+            mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-glpk
             make
             automake
             diffutils
+
+      - name: Export GLPK build variables
+        run: |
+          # MSYS2's glpk package ships a .pc file, but export CFLAGS/LIBS
+          # explicitly so PKG_CHECK_MODULES succeeds even if pkg-config fails.
+          echo "GLPK_CFLAGS=-I/mingw64/include" >> $GITHUB_ENV
+          echo "GLPK_LIBS=-L/mingw64/lib -lglpk" >> $GITHUB_ENV
 
       - name: Suppress automake regeneration and refresh config scripts
         run: |
