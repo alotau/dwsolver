@@ -113,7 +113,7 @@
 - [x] T030 [P] Commit `specs/012-release-infrastructure/spec.md` with clarifications
 - [x] T031 [P] Commit `specs/012-release-infrastructure/plan.md`, `research.md`, `data-model.md`, `contracts/`
 - [x] T032 Push branch `012-release-infrastructure` to origin (already at `b9ec5aa` — confirm up to date)
-- [ ] T033 Open pull request: `012-release-infrastructure` → `main`; title "feat(012): release infrastructure"; body references spec and SC-001–SC-006
+- [X] T033 Open pull request: `012-release-infrastructure` → `main`; title "feat(012): release infrastructure"; body references spec and SC-001–SC-006
 
 ---
 
