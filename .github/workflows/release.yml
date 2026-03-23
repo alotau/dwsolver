@@ -31,6 +31,9 @@ jobs:
           touch aclocal.m4 configure config.h.in build-aux/ltmain.sh \
                 Makefile.in src/Makefile.in tests/Makefile.in
 
+      - name: Configure
+        run: ./configure
+
       - name: Run make distcheck
         run: |
           # make distcheck builds the tarball, then unpacks and runs
