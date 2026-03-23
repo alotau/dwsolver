@@ -44,18 +44,15 @@ dnl Check for math library
 AC_CHECK_LIB([m], [exp])
 AC_CHECK_LIB([pthread], [sem_wait])
 
+dnl Check for clock_gettime (may require -lrt on older glibc systems)
+AC_SEARCH_LIBS([clock_gettime], [rt])
+AC_CHECK_FUNC([clock_gettime],
+   [AC_DEFINE([HAVE_CLOCK_GETTIME], [1], [Define if clock_gettime is available.])])
+
 dnl Require system GLPK >= 4.65
 PKG_CHECK_MODULES([GLPK], [glpk >= 4.65],
   [],
   [AC_MSG_ERROR([GLPK >= 4.65 is required. Install libglpk-dev (Debian/Ubuntu), glpk-devel (Fedora/RHEL), or brew install glpk (macOS).])])
-
-dnl Check for <sys/time.h> header
-AC_CHECK_HEADER([sys/time.h],
-   AC_DEFINE([HAVE_SYS_TIME_H], [1], [N/A]))
-
-dnl Check for gettimeofday function
-AC_CHECK_FUNC([gettimeofday],
-   AC_DEFINE([HAVE_GETTIMEOFDAY], [1], [N/A]))
    
 dnl Check if we should use named semaphores.  Can do this based on OS name?
 AC_MSG_CHECKING([whether to use named semaphores])

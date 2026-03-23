@@ -112,8 +112,13 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	dw_oom_abort(md, "md");
 
 	/* For clocking the program run time. */
+#ifdef HAVE_CLOCK_GETTIME
+	struct timespec dw_ts0;
+	clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+#else
 	time_t  t0 = time(NULL);
 	clock_t c0 = clock();
+#endif
 
 	num_clients   = globals->num_clients; /* Doesn't change. Make local copy.*/
 	globals->x    = malloc(sizeof(double**)*num_clients);
@@ -719,9 +724,14 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	/* Print timing before trying integer optimization. */
 	dw_printf(IMPORTANCE_AVG,"Done with solving the relaxation...\n");
 	if( globals->print_timing_data ) {
+#ifdef HAVE_CLOCK_GETTIME
+		print_timing_ts(&dw_ts0);
+		clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+#else
 		print_timing(t0, c0 );
 		t0 = time(NULL);
 		c0 = clock();
+#endif
 	}
 
 	/* Print out the final version of the master problem. Solving this on its
@@ -782,9 +792,14 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		dw_printf(IMPORTANCE_AVG, "%-40s ", "Calculating rounded solution...");
 		process_solution(sub_data, ROUNDED_ZEROS_FILE, DW_MODE_ROUND_SOL);
 		if( globals->print_timing_data ) {
+#ifdef HAVE_CLOCK_GETTIME
+			print_timing_ts(&dw_ts0);
+			clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+#else
 			print_timing(t0, c0 );
 			t0 = time(NULL);
 			c0 = clock();
+#endif
 		}
 		dw_printf(IMPORTANCE_AVG, "DONE!\n");
 	}
@@ -822,9 +837,14 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		dw_printf(IMPORTANCE_AVG,
 				"Done with solving the integer optimization...\n");
 		if( globals->print_timing_data ) {
+#ifdef HAVE_CLOCK_GETTIME
+			print_timing_ts(&dw_ts0);
+			clock_gettime(CLOCK_MONOTONIC, &dw_ts0);
+#else
 			print_timing(t0, c0 );
 			t0 = time(NULL);
 			c0 = clock();
+#endif
 		}
 	}
 

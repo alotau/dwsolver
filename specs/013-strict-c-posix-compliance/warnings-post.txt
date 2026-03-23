@@ -1,0 +1,21 @@
+src/dw_blas.c:104:41: warning: unused parameter 'k' [-Wunused-parameter]
+  104 | void dw_dcoogemv(const int m, const int k, const double *val,
+      |                                         ^
+1 warning generated.
+In file included from src/dw_globals.c:34:
+      |          ^~~~~~~~
+1 error generated.
+In file included from src/dw_phases.c:47:
+      |          ^~~~~~~~
+1 error generated.
+In file included from src/dw_rounding.c:54:
+      |          ^~~~~~~~
+1 error generated.
+In file included from src/dw_solver.c:42:
+      |          ^~~~~~~~
+1 error generated.
+      |          ^~~~~~~~
+1 error generated.
+In file included from src/dw_support.c:40:
+      |          ^~~~~~~~
+1 error generated.

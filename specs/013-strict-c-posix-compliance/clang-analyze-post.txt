@@ -1,0 +1,1381 @@
+src/dw_main.c:111:5: warning: Opened stream never closed. Potential resource leak [unix.Stream]
+  111 |                                 fprintf(stderr, "Option %s requires a guide file name.\n", argv[i]);
+      |                                 ^~~~~~~
+src/dw_main.c:108:14: note: Assuming 'i' is < 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is true.  Entering loop body
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:109:34: note: Left side of '||' is true
+  109 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0 ) {
+      |                                                ^
+src/dw_main.c:110:8: note: Assuming the condition is false
+  110 |                         if( i + 1 >= argc ) {
+      |                             ^~~~~~~~~~~~~
+src/dw_main.c:110:4: note: Taking false branch
+  110 |                         if( i + 1 >= argc ) {
+      |                         ^
+src/dw_main.c:116:9: note: Stream opened here
+  116 |                         gf = fopen(argv[i], "r");
+      |                              ^~~~~~~~~~~~~~~~~~~
+src/dw_main.c:116:9: note: Assuming that 'fopen' is successful
+  116 |                         gf = fopen(argv[i], "r");
+      |                              ^~~~~~~~~~~~~~~~~~~
+src/dw_main.c:117:9: note: 'gf' is non-null
+  117 |                         if( !gf ) {
+      |                              ^~
+src/dw_main.c:117:4: note: Taking false branch
+  117 |                         if( !gf ) {
+      |                         ^
+src/dw_main.c:108:14: note: Assuming 'i' is < 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is true.  Entering loop body
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:109:34: note: Left side of '||' is true
+  109 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0 ) {
+      |                                                ^
+src/dw_main.c:110:8: note: Assuming the condition is true
+  110 |                         if( i + 1 >= argc ) {
+      |                             ^~~~~~~~~~~~~
+src/dw_main.c:110:4: note: Taking true branch
+  110 |                         if( i + 1 >= argc ) {
+      |                         ^
+src/dw_main.c:111:5: note: Opened stream never closed. Potential resource leak
+  111 |                                 fprintf(stderr, "Option %s requires a guide file name.\n", argv[i]);
+      |                                 ^~~~~~~
+src/dw_main.c:211:20: warning: Potential leak of memory pointed to by 'subs' [unix.Malloc]
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                                  ^
+src/dw_main.c:108:14: note: Assuming 'i' is < 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is true.  Entering loop body
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:109:34: note: Left side of '||' is true
+  109 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0 ) {
+      |                                                ^
+src/dw_main.c:110:8: note: Assuming the condition is false
+  110 |                         if( i + 1 >= argc ) {
+      |                             ^~~~~~~~~~~~~
+src/dw_main.c:110:4: note: Taking false branch
+  110 |                         if( i + 1 >= argc ) {
+      |                         ^
+src/dw_main.c:117:9: note: 'gf' is non-null
+  117 |                         if( !gf ) {
+      |                              ^~
+src/dw_main.c:117:4: note: Taking false branch
+  117 |                         if( !gf ) {
+      |                         ^
+src/dw_main.c:108:14: note: Assuming 'i' is >= 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is false. Execution continues on line 191
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:191:7: note: 'opened_guide' is 1
+  191 |         if( !opened_guide ) {
+      |              ^~~~~~~~~~~~
+src/dw_main.c:191:2: note: Taking false branch
+  191 |         if( !opened_guide ) {
+      |         ^
+src/dw_main.c:197:2: note: Taking false branch
+  197 |         if( !fgets(buf, CLI_BUFF_SIZE, gf) ) {
+      |         ^
+src/dw_main.c:201:6: note: Assuming 'n' is >= 1
+  201 |         if( n < 1 || n > 26000 ) {
+      |             ^~~~~
+src/dw_main.c:201:6: note: Left side of '||' is false
+src/dw_main.c:201:15: note: Assuming 'n' is <= 26000
+  201 |         if( n < 1 || n > 26000 ) {
+      |                      ^~~~~~~~~
+src/dw_main.c:201:2: note: Taking false branch
+  201 |         if( n < 1 || n > 26000 ) {
+      |         ^
+src/dw_main.c:205:9: note: Memory is allocated
+  205 |         subs = malloc(sizeof(char*) * (size_t)n);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_main.c:206:6: note: Assuming 'subs' is non-null
+  206 |         if( !subs ) { fclose(gf); return 1; }
+      |             ^~~~~
+src/dw_main.c:206:2: note: Taking false branch
+  206 |         if( !subs ) { fclose(gf); return 1; }
+      |         ^
+src/dw_main.c:209:14: note: 'i' is < 'n'
+  209 |         for( i = 0; i < n; i++ ) {
+      |                     ^
+src/dw_main.c:209:2: note: Loop condition is true.  Entering loop body
+  209 |         for( i = 0; i < n; i++ ) {
+      |         ^
+src/dw_main.c:211:7: note: Assuming the condition is true
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                     ^~~~~~~~
+src/dw_main.c:211:3: note: Taking true branch
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                 ^
+src/dw_main.c:211:20: note: Potential leak of memory pointed to by 'subs'
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                                  ^
+src/dw_main.c:235:6: warning: File position of the stream might be 'indeterminate' after a failed operation. Can cause undefined behavior [unix.Stream]
+  235 |         if( fgets(buf, CLI_BUFF_SIZE, gf) && buf[0] != '\0' ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_main.c:108:14: note: Assuming 'i' is < 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is true.  Entering loop body
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:109:34: note: Left side of '||' is true
+  109 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0 ) {
+      |                                                ^
+src/dw_main.c:110:8: note: Assuming the condition is false
+  110 |                         if( i + 1 >= argc ) {
+      |                             ^~~~~~~~~~~~~
+src/dw_main.c:110:4: note: Taking false branch
+  110 |                         if( i + 1 >= argc ) {
+      |                         ^
+src/dw_main.c:117:9: note: 'gf' is non-null
+  117 |                         if( !gf ) {
+      |                              ^~
+src/dw_main.c:117:4: note: Taking false branch
+  117 |                         if( !gf ) {
+      |                         ^
+src/dw_main.c:108:14: note: Assuming 'i' is >= 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is false. Execution continues on line 191
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:191:7: note: 'opened_guide' is 1
+  191 |         if( !opened_guide ) {
+      |              ^~~~~~~~~~~~
+src/dw_main.c:191:2: note: Taking false branch
+  191 |         if( !opened_guide ) {
+      |         ^
+src/dw_main.c:197:2: note: Taking false branch
+  197 |         if( !fgets(buf, CLI_BUFF_SIZE, gf) ) {
+      |         ^
+src/dw_main.c:201:6: note: Assuming 'n' is >= 1
+  201 |         if( n < 1 || n > 26000 ) {
+      |             ^~~~~
+src/dw_main.c:201:6: note: Left side of '||' is false
+src/dw_main.c:201:15: note: Assuming 'n' is <= 26000
+  201 |         if( n < 1 || n > 26000 ) {
+      |                      ^~~~~~~~~
+src/dw_main.c:201:2: note: Taking false branch
+  201 |         if( n < 1 || n > 26000 ) {
+      |         ^
+src/dw_main.c:206:6: note: Assuming 'subs' is non-null
+  206 |         if( !subs ) { fclose(gf); return 1; }
+      |             ^~~~~
+src/dw_main.c:206:2: note: Taking false branch
+  206 |         if( !subs ) { fclose(gf); return 1; }
+      |         ^
+src/dw_main.c:209:14: note: 'i' is < 'n'
+  209 |         for( i = 0; i < n; i++ ) {
+      |                     ^
+src/dw_main.c:209:2: note: Loop condition is true.  Entering loop body
+  209 |         for( i = 0; i < n; i++ ) {
+      |         ^
+src/dw_main.c:211:7: note: Assuming the condition is false
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                     ^~~~~~~~
+src/dw_main.c:211:3: note: Taking false branch
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                 ^
+src/dw_main.c:212:3: note: Taking false branch
+  212 |                 if( !fgets(subs[i], CLI_BUFF_SIZE, gf) ) {
+      |                 ^
+src/dw_main.c:209:14: note: Assuming 'i' is >= 'n'
+  209 |         for( i = 0; i < n; i++ ) {
+      |                     ^~~~~
+src/dw_main.c:209:2: note: Loop condition is false. Execution continues on line 220
+  209 |         for( i = 0; i < n; i++ ) {
+      |         ^
+src/dw_main.c:221:6: note: Assuming the condition is false
+  221 |         if( !*master_out ) { fclose(gf); return 1; }
+      |             ^~~~~~~~~~~~
+src/dw_main.c:221:2: note: Taking false branch
+  221 |         if( !*master_out ) { fclose(gf); return 1; }
+      |         ^
+src/dw_main.c:222:2: note: Taking false branch
+  222 |         if( !fgets(*master_out, CLI_BUFF_SIZE, gf) ) {
+      |         ^
+src/dw_main.c:229:7: note: 'skip_mono' is 0
+  229 |         if( !skip_mono ) {
+      |              ^~~~~~~~~
+src/dw_main.c:229:2: note: Taking true branch
+  229 |         if( !skip_mono ) {
+      |         ^
+src/dw_main.c:230:7: note: Assuming this stream operation fails
+  230 |                 if( fgets(buf, CLI_BUFF_SIZE, gf) ) { /* consume line, ignore */ }
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_main.c:230:3: note: Taking false branch
+  230 |                 if( fgets(buf, CLI_BUFF_SIZE, gf) ) { /* consume line, ignore */ }
+      |                 ^
+src/dw_main.c:235:6: note: File position of the stream might be 'indeterminate' after a failed operation. Can cause undefined behavior
+  235 |         if( fgets(buf, CLI_BUFF_SIZE, gf) && buf[0] != '\0' ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_main.c:235:6: warning: Read function called when stream is in EOF state. Function has no effect [unix.Stream]
+  235 |         if( fgets(buf, CLI_BUFF_SIZE, gf) && buf[0] != '\0' ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_main.c:108:14: note: Assuming 'i' is < 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is true.  Entering loop body
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:109:34: note: Left side of '||' is true
+  109 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0 ) {
+      |                                                ^
+src/dw_main.c:110:8: note: Assuming the condition is false
+  110 |                         if( i + 1 >= argc ) {
+      |                             ^~~~~~~~~~~~~
+src/dw_main.c:110:4: note: Taking false branch
+  110 |                         if( i + 1 >= argc ) {
+      |                         ^
+src/dw_main.c:117:9: note: 'gf' is non-null
+  117 |                         if( !gf ) {
+      |                              ^~
+src/dw_main.c:117:4: note: Taking false branch
+  117 |                         if( !gf ) {
+      |                         ^
+src/dw_main.c:108:14: note: Assuming 'i' is >= 'argc'
+  108 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_main.c:108:2: note: Loop condition is false. Execution continues on line 191
+  108 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_main.c:191:7: note: 'opened_guide' is 1
+  191 |         if( !opened_guide ) {
+      |              ^~~~~~~~~~~~
+src/dw_main.c:191:2: note: Taking false branch
+  191 |         if( !opened_guide ) {
+      |         ^
+src/dw_main.c:197:2: note: Taking false branch
+  197 |         if( !fgets(buf, CLI_BUFF_SIZE, gf) ) {
+      |         ^
+src/dw_main.c:201:6: note: Assuming 'n' is >= 1
+  201 |         if( n < 1 || n > 26000 ) {
+      |             ^~~~~
+src/dw_main.c:201:6: note: Left side of '||' is false
+src/dw_main.c:201:15: note: Assuming 'n' is <= 26000
+  201 |         if( n < 1 || n > 26000 ) {
+      |                      ^~~~~~~~~
+src/dw_main.c:201:2: note: Taking false branch
+  201 |         if( n < 1 || n > 26000 ) {
+      |         ^
+src/dw_main.c:206:6: note: Assuming 'subs' is non-null
+  206 |         if( !subs ) { fclose(gf); return 1; }
+      |             ^~~~~
+src/dw_main.c:206:2: note: Taking false branch
+  206 |         if( !subs ) { fclose(gf); return 1; }
+      |         ^
+src/dw_main.c:209:14: note: 'i' is < 'n'
+  209 |         for( i = 0; i < n; i++ ) {
+      |                     ^
+src/dw_main.c:209:2: note: Loop condition is true.  Entering loop body
+  209 |         for( i = 0; i < n; i++ ) {
+      |         ^
+src/dw_main.c:211:7: note: Assuming the condition is false
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                     ^~~~~~~~
+src/dw_main.c:211:3: note: Taking false branch
+  211 |                 if( !subs[i] ) { fclose(gf); return 1; }
+      |                 ^
+src/dw_main.c:212:3: note: Taking false branch
+  212 |                 if( !fgets(subs[i], CLI_BUFF_SIZE, gf) ) {
+      |                 ^
+src/dw_main.c:209:14: note: Assuming 'i' is >= 'n'
+  209 |         for( i = 0; i < n; i++ ) {
+      |                     ^~~~~
+src/dw_main.c:209:2: note: Loop condition is false. Execution continues on line 220
+  209 |         for( i = 0; i < n; i++ ) {
+      |         ^
+src/dw_main.c:221:6: note: Assuming the condition is false
+  221 |         if( !*master_out ) { fclose(gf); return 1; }
+      |             ^~~~~~~~~~~~
+src/dw_main.c:221:2: note: Taking false branch
+  221 |         if( !*master_out ) { fclose(gf); return 1; }
+      |         ^
+src/dw_main.c:222:2: note: Taking false branch
+  222 |         if( !fgets(*master_out, CLI_BUFF_SIZE, gf) ) {
+      |         ^
+src/dw_main.c:229:7: note: 'skip_mono' is 0
+  229 |         if( !skip_mono ) {
+      |              ^~~~~~~~~
+src/dw_main.c:229:2: note: Taking true branch
+  229 |         if( !skip_mono ) {
+      |         ^
+src/dw_main.c:230:7: note: Assuming stream reaches end-of-file here
+  230 |                 if( fgets(buf, CLI_BUFF_SIZE, gf) ) { /* consume line, ignore */ }
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_main.c:230:3: note: Taking false branch
+  230 |                 if( fgets(buf, CLI_BUFF_SIZE, gf) ) { /* consume line, ignore */ }
+      |                 ^
+src/dw_main.c:235:6: note: Read function called when stream is in EOF state. Function has no effect
+  235 |         if( fgets(buf, CLI_BUFF_SIZE, gf) && buf[0] != '\0' ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+4 warnings generated.
+src/dw_phases.c:159:37: warning: Call to blocking function 'getc' inside of critical section [unix.BlockInCriticalSection]
+  159 |                         if( sub_data[index].ind[1] < 1 ) getc(stdin);
+      |                                                          ^~~~~~~~~~~
+src/dw_phases.c:71:6: note: Assuming 'first_run' is 0
+   71 |         if( first_run ) {
+      |             ^~~~~~~~~
+src/dw_phases.c:71:2: note: Taking false branch
+   71 |         if( first_run ) {
+      |         ^
+src/dw_phases.c:85:8: note: Assuming 'count' is < 'num_clients'
+   85 |         while(count < num_clients) {
+      |               ^~~~~~~~~~~~~~~~~~~
+src/dw_phases.c:85:2: note: Loop condition is true.  Entering loop body
+   85 |         while(count < num_clients) {
+      |         ^
+src/dw_phases.c:101:20: note: Entering critical section here
+  101 |                 DW_PTHREAD_CHECK(pthread_mutex_lock(&sub_data_mutex[index]), "pthread_mutex_lock(sub_data_mutex[index])");
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:209:54: note: expanded from macro 'DW_PTHREAD_CHECK'
+  209 | #define DW_PTHREAD_CHECK(rc, name) dw_pthread_check((rc), (name))
+      |                                                      ^~
+src/dw_phases.c:104:5: note: Assuming field 'unbounded' is equal to GLP_UNBND
+  104 |                                 sub_data[index].unbounded == GLP_UNBND ? "GLP_UNBOUND" : "not GLP_UNBND");
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_phases.c:104:5: note: '?' condition is true
+src/dw_phases.c:106:7: note: Assuming the condition is true
+  106 |                 if( sub_data[index].r - sub_data[index].obj > TOLERANCE || sub_data[index].unbounded == GLP_UNBND) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_phases.c:106:59: note: Left side of '||' is true
+  106 |                 if( sub_data[index].r - sub_data[index].obj > TOLERANCE || sub_data[index].unbounded == GLP_UNBND) {
+      |                                                                         ^
+src/dw_phases.c:109:24: note: Field 'unbounded' is equal to GLP_UNBND
+  109 |                         if( sub_data[index].unbounded == GLP_UNBND ) {
+      |                                             ^
+src/dw_phases.c:109:4: note: Taking true branch
+  109 |                         if( sub_data[index].unbounded == GLP_UNBND ) {
+      |                         ^
+src/dw_phases.c:123:24: note: Field 'unbounded' is equal to GLP_UNBND
+  123 |                         if( sub_data[index].unbounded != GLP_UNBND )
+      |                                             ^
+src/dw_phases.c:123:4: note: Taking false branch
+  123 |                         if( sub_data[index].unbounded != GLP_UNBND )
+      |                         ^
+src/dw_phases.c:145:24: note: Field 'unbounded' is equal to GLP_UNBND
+  145 |                         if( sub_data[index].unbounded != GLP_UNBND ) {
+      |                                             ^
+src/dw_phases.c:145:4: note: Taking false branch
+  145 |                         if( sub_data[index].unbounded != GLP_UNBND ) {
+      |                         ^
+src/dw_phases.c:159:8: note: Assuming the condition is true
+  159 |                         if( sub_data[index].ind[1] < 1 ) getc(stdin);
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_phases.c:159:4: note: Taking true branch
+  159 |                         if( sub_data[index].ind[1] < 1 ) getc(stdin);
+      |                         ^
+src/dw_phases.c:159:37: note: Call to blocking function 'getc' inside of critical section
+  159 |                         if( sub_data[index].ind[1] < 1 ) getc(stdin);
+      |                                                          ^~~~~~~~~~~
+1 warning generated.
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'num_infos' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:76:19: note: Memory is allocated
+   76 |         int* num_infos = malloc(sizeof(int)*num_clients);
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:77:2: note: Calling 'dw_oom_abort'
+   77 |         dw_oom_abort(num_infos, "num_infos");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_rounding.c:77:2: note: Returning from 'dw_oom_abort'
+   77 |         dw_oom_abort(num_infos, "num_infos");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:106:14: note: Assuming 'i' is >= 'num_clients'
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_rounding.c:106:2: note: Loop condition is false. Execution continues on line 116
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |         ^
+src/dw_rounding.c:118:20: note: Assuming the condition is false
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:118:2: note: Loop condition is false. Execution continues on line 164
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |         ^
+src/dw_rounding.c:164:2: note: Taking true branch
+  164 |         if( (out_file = fopen(out_file_name, "w")) == NULL ) {
+      |         ^
+src/dw_rounding.c:165:3: note: Potential leak of memory pointed to by 'num_infos'
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'local_col_name' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:79:25: note: Memory is allocated
+   79 |         char* local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:80:2: note: Calling 'dw_oom_abort'
+   80 |         dw_oom_abort(local_col_name, "local_col_name");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_rounding.c:80:2: note: Returning from 'dw_oom_abort'
+   80 |         dw_oom_abort(local_col_name, "local_col_name");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:106:14: note: Assuming 'i' is >= 'num_clients'
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_rounding.c:106:2: note: Loop condition is false. Execution continues on line 116
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |         ^
+src/dw_rounding.c:118:20: note: Assuming the condition is false
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:118:2: note: Loop condition is false. Execution continues on line 164
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |         ^
+src/dw_rounding.c:164:2: note: Taking true branch
+  164 |         if( (out_file = fopen(out_file_name, "w")) == NULL ) {
+      |         ^
+src/dw_rounding.c:165:3: note: Potential leak of memory pointed to by 'local_col_name'
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'solution_organization' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:89:37: note: Memory is allocated
+   89 |         sol_info** solution_organization = malloc(sizeof(sol_info*)*num_clients);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:90:2: note: Calling 'dw_oom_abort'
+   90 |         dw_oom_abort(solution_organization, "solution_organization");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_rounding.c:90:2: note: Returning from 'dw_oom_abort'
+   90 |         dw_oom_abort(solution_organization, "solution_organization");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:106:14: note: Assuming 'i' is >= 'num_clients'
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_rounding.c:106:2: note: Loop condition is false. Execution continues on line 116
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |         ^
+src/dw_rounding.c:118:20: note: Assuming the condition is false
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:118:2: note: Loop condition is false. Execution continues on line 164
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |         ^
+src/dw_rounding.c:164:2: note: Taking true branch
+  164 |         if( (out_file = fopen(out_file_name, "w")) == NULL ) {
+      |         ^
+src/dw_rounding.c:165:3: note: Potential leak of memory pointed to by 'solution_organization'
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 't_data' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:91:28: note: Memory is allocated
+   91 |         int_thread_data* t_data = malloc(sizeof(int_thread_data)*num_clients);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:92:2: note: Calling 'dw_oom_abort'
+   92 |         dw_oom_abort(t_data, "t_data");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_rounding.c:92:2: note: Returning from 'dw_oom_abort'
+   92 |         dw_oom_abort(t_data, "t_data");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:106:14: note: Assuming 'i' is >= 'num_clients'
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_rounding.c:106:2: note: Loop condition is false. Execution continues on line 116
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |         ^
+src/dw_rounding.c:118:20: note: Assuming the condition is false
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:118:2: note: Loop condition is false. Execution continues on line 164
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |         ^
+src/dw_rounding.c:164:2: note: Taking true branch
+  164 |         if( (out_file = fopen(out_file_name, "w")) == NULL ) {
+      |         ^
+src/dw_rounding.c:165:3: note: Potential leak of memory pointed to by 't_data'
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:165:3: warning: Potential leak of memory pointed to by 'threads' [unix.Malloc]
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+src/dw_rounding.c:93:36: note: Memory is allocated
+   93 |         pthread_t* threads = (pthread_t*) malloc(sizeof(pthread_t)*num_clients);
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:94:2: note: Calling 'dw_oom_abort'
+   94 |         dw_oom_abort(threads, "threads");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_rounding.c:94:2: note: Returning from 'dw_oom_abort'
+   94 |         dw_oom_abort(threads, "threads");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:106:14: note: Assuming 'i' is >= 'num_clients'
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_rounding.c:106:2: note: Loop condition is false. Execution continues on line 116
+  106 |         for( i = 0; i < num_clients; i++ ) {
+      |         ^
+src/dw_rounding.c:118:20: note: Assuming the condition is false
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_rounding.c:118:2: note: Loop condition is false. Execution continues on line 164
+  118 |         for( i = D->rows; i <= glp_get_num_cols(master_lp); i++ ) {
+      |         ^
+src/dw_rounding.c:164:2: note: Taking true branch
+  164 |         if( (out_file = fopen(out_file_name, "w")) == NULL ) {
+      |         ^
+src/dw_rounding.c:165:3: note: Potential leak of memory pointed to by 'threads'
+  165 |                 dw_printf(IMPORTANCE_VITAL,"Problem opening file: %s\n", out_file_name);
+      |                 ^
+5 warnings generated.
+src/dw_solver.c:198:3: warning: Potential leak of memory pointed to by 'local_buffer' [unix.Malloc]
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:102:31: note: Memory is allocated
+  102 |         char* local_buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:103:2: note: Calling 'dw_oom_abort'
+  103 |         dw_oom_abort(local_buffer, "local_buffer");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_solver.c:103:2: note: Returning from 'dw_oom_abort'
+  103 |         dw_oom_abort(local_buffer, "local_buffer");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:141:6: note: 'opt_outfile' is equal to NULL
+  141 |         if (opt_outfile != NULL)
+      |             ^~~~~~~~~~~
+src/dw_solver.c:141:2: note: Taking false branch
+  141 |         if (opt_outfile != NULL)
+      |         ^
+src/dw_solver.c:151:14: note: Assuming 'i' is >= 'num_clients'
+  151 |         for( i = 0; i < num_clients; i++) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_solver.c:151:2: note: Loop condition is false. Execution continues on line 189
+  151 |         for( i = 0; i < num_clients; i++) {
+      |         ^
+src/dw_solver.c:191:6: note: Assuming the condition is false
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:191:2: note: Taking false branch
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |         ^
+src/dw_solver.c:197:6: note: Assuming 'original_master_lp' is equal to NULL
+  197 |         if (original_master_lp == NULL) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:197:2: note: Taking true branch
+  197 |         if (original_master_lp == NULL) {
+      |         ^
+src/dw_solver.c:198:3: note: Potential leak of memory pointed to by 'local_buffer'
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:198:3: warning: Potential leak of memory pointed to by 'md' [unix.Malloc]
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:111:26: note: Memory is allocated
+  111 |         master_data*  md      = malloc(sizeof(master_data));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:112:2: note: Calling 'dw_oom_abort'
+  112 |         dw_oom_abort(md, "md");
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_solver.c:112:2: note: Returning from 'dw_oom_abort'
+  112 |         dw_oom_abort(md, "md");
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:141:6: note: 'opt_outfile' is equal to NULL
+  141 |         if (opt_outfile != NULL)
+      |             ^~~~~~~~~~~
+src/dw_solver.c:141:2: note: Taking false branch
+  141 |         if (opt_outfile != NULL)
+      |         ^
+src/dw_solver.c:151:14: note: Assuming 'i' is >= 'num_clients'
+  151 |         for( i = 0; i < num_clients; i++) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_solver.c:151:2: note: Loop condition is false. Execution continues on line 189
+  151 |         for( i = 0; i < num_clients; i++) {
+      |         ^
+src/dw_solver.c:191:6: note: Assuming the condition is false
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:191:2: note: Taking false branch
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |         ^
+src/dw_solver.c:197:6: note: Assuming 'original_master_lp' is equal to NULL
+  197 |         if (original_master_lp == NULL) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:197:2: note: Taking true branch
+  197 |         if (original_master_lp == NULL) {
+      |         ^
+src/dw_solver.c:198:3: note: Potential leak of memory pointed to by 'md'
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:198:3: warning: Potential leak of memory pointed to by 'threads' [unix.Malloc]
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:126:18: note: Memory is allocated
+  126 |         threads       = malloc(sizeof(pthread_t)*num_clients);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:127:2: note: Calling 'dw_oom_abort'
+  127 |         dw_oom_abort(threads, "threads");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_solver.c:127:2: note: Returning from 'dw_oom_abort'
+  127 |         dw_oom_abort(threads, "threads");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:141:6: note: 'opt_outfile' is equal to NULL
+  141 |         if (opt_outfile != NULL)
+      |             ^~~~~~~~~~~
+src/dw_solver.c:141:2: note: Taking false branch
+  141 |         if (opt_outfile != NULL)
+      |         ^
+src/dw_solver.c:151:14: note: Assuming 'i' is >= 'num_clients'
+  151 |         for( i = 0; i < num_clients; i++) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_solver.c:151:2: note: Loop condition is false. Execution continues on line 189
+  151 |         for( i = 0; i < num_clients; i++) {
+      |         ^
+src/dw_solver.c:191:6: note: Assuming the condition is false
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:191:2: note: Taking false branch
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |         ^
+src/dw_solver.c:197:6: note: Assuming 'original_master_lp' is equal to NULL
+  197 |         if (original_master_lp == NULL) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:197:2: note: Taking true branch
+  197 |         if (original_master_lp == NULL) {
+      |         ^
+src/dw_solver.c:198:3: note: Potential leak of memory pointed to by 'threads'
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:198:3: warning: Potential leak of memory pointed to by 'sub_data' [unix.Malloc]
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:128:18: note: Memory is allocated
+  128 |         sub_data      = malloc(sizeof(subprob_struct)*num_clients);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:129:2: note: Calling 'dw_oom_abort'
+  129 |         dw_oom_abort(sub_data, "sub_data");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_solver.c:129:2: note: Returning from 'dw_oom_abort'
+  129 |         dw_oom_abort(sub_data, "sub_data");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:141:6: note: 'opt_outfile' is equal to NULL
+  141 |         if (opt_outfile != NULL)
+      |             ^~~~~~~~~~~
+src/dw_solver.c:141:2: note: Taking false branch
+  141 |         if (opt_outfile != NULL)
+      |         ^
+src/dw_solver.c:151:14: note: Assuming 'i' is >= 'num_clients'
+  151 |         for( i = 0; i < num_clients; i++) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_solver.c:151:2: note: Loop condition is false. Execution continues on line 189
+  151 |         for( i = 0; i < num_clients; i++) {
+      |         ^
+src/dw_solver.c:191:6: note: Assuming the condition is false
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:191:2: note: Taking false branch
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |         ^
+src/dw_solver.c:197:6: note: Assuming 'original_master_lp' is equal to NULL
+  197 |         if (original_master_lp == NULL) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:197:2: note: Taking true branch
+  197 |         if (original_master_lp == NULL) {
+      |         ^
+src/dw_solver.c:198:3: note: Potential leak of memory pointed to by 'sub_data'
+  198 |                 fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+      |                 ^
+src/dw_solver.c:829:8: warning: Although the value stored to 'integerization_zero_file' is used in the enclosing expression, the value is never actually read from 'integerization_zero_file' [deadcode.DeadStores]
+  829 |                 if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+      |                      ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:829:8: note: Although the value stored to 'integerization_zero_file' is used in the enclosing expression, the value is never actually read from 'integerization_zero_file'
+  829 |                 if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+      |                      ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:833:4: warning: Opened stream never closed. Potential resource leak [unix.Stream]
+  833 |                         process_solution(sub_data, INTEGERIZED_ZEROS_FILE, DW_MODE_PRINT_RELAXED);
+      |                         ^~~~~~~~~~~~~~~~
+src/dw_solver.c:141:6: note: 'opt_outfile' is equal to NULL
+  141 |         if (opt_outfile != NULL)
+      |             ^~~~~~~~~~~
+src/dw_solver.c:141:2: note: Taking false branch
+  141 |         if (opt_outfile != NULL)
+      |         ^
+src/dw_solver.c:151:14: note: Assuming 'i' is >= 'num_clients'
+  151 |         for( i = 0; i < num_clients; i++) {
+      |                     ^~~~~~~~~~~~~~~
+src/dw_solver.c:151:2: note: Loop condition is false. Execution continues on line 189
+  151 |         for( i = 0; i < num_clients; i++) {
+      |         ^
+src/dw_solver.c:191:6: note: Assuming the condition is false
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:191:2: note: Taking false branch
+  191 |         if (glp_read_lp(original_master_lp, NULL, globals->master_name) != 0) {
+      |         ^
+src/dw_solver.c:197:6: note: Assuming 'original_master_lp' is not equal to NULL
+  197 |         if (original_master_lp == NULL) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:197:2: note: Taking false branch
+  197 |         if (original_master_lp == NULL) {
+      |         ^
+src/dw_solver.c:259:26: note: Assuming the condition is false
+  259 |         for( i = (D->rows + 1); i <= (D->rows + num_clients); i++ ) {
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:259:2: note: Loop condition is false. Execution continues on line 277
+  259 |         for( i = (D->rows + 1); i <= (D->rows + num_clients); i++ ) {
+      |         ^
+src/dw_solver.c:277:14: note: Assuming 'i' is > field 'rows'
+  277 |         for( i = 1; i <= D->rows; i++ ) {
+      |                     ^~~~~~~~~~~~
+src/dw_solver.c:277:2: note: Loop condition is false. Execution continues on line 286
+  277 |         for( i = 1; i <= D->rows; i++ ) {
+      |         ^
+src/dw_solver.c:305:18: note: Assuming the condition is false
+  305 |         for( i = count; i < (D->rows + count); i++ ) {
+      |                         ^~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:305:2: note: Loop condition is false. Execution continues on line 437
+  305 |         for( i = count; i < (D->rows + count); i++ ) {
+      |         ^
+src/dw_solver.c:442:6: note: Assuming field 'write_intermediate_opt_files' is 0
+  442 |         if( globals->write_intermediate_opt_files && glp_get_num_cols(master_lp) > 0 ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:442:44: note: Left side of '&&' is false
+  442 |         if( globals->write_intermediate_opt_files && glp_get_num_cols(master_lp) > 0 ) {
+      |                                                   ^
+src/dw_solver.c:458:6: note: 'need_phase_one' is 0
+  458 |         if( need_phase_one ) {
+      |             ^~~~~~~~~~~~~~
+src/dw_solver.c:458:2: note: Taking false branch
+  458 |         if( need_phase_one ) {
+      |         ^
+src/dw_solver.c:646:14: note: Assuming 'j' is >= field 'max_phase2_iterations'
+  646 |         for( j = 0; j < globals->max_phase2_iterations; j++ ) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:646:2: note: Loop condition is false. Execution continues on line 698
+  646 |         for( j = 0; j < globals->max_phase2_iterations; j++ ) {
+      |         ^
+src/dw_solver.c:698:6: note: Assuming field 'perturb' is 0
+  698 |         if( globals->perturb ) {
+      |             ^~~~~~~~~~~~~~~~
+src/dw_solver.c:698:2: note: Taking false branch
+  698 |         if( globals->perturb ) {
+      |         ^
+src/dw_solver.c:726:6: note: Assuming field 'print_timing_data' is 0
+  726 |         if( globals->print_timing_data ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:726:2: note: Taking false branch
+  726 |         if( globals->print_timing_data ) {
+      |         ^
+src/dw_solver.c:740:6: note: Assuming field 'print_final_master' is 0
+  740 |         if( globals->print_final_master ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:740:2: note: Taking false branch
+  740 |         if( globals->print_final_master ) {
+      |         ^
+src/dw_solver.c:748:11: note: 'i' is >= 'num_clients'
+  748 |         for(i=0; i<num_clients; i++) {
+      |                  ^
+src/dw_solver.c:748:2: note: Loop condition is false. Execution continues on line 764
+  748 |         for(i=0; i<num_clients; i++) {
+      |         ^
+src/dw_solver.c:771:6: note: Assuming field 'verbosity' is < OUTPUT_ALL
+  771 |         if( globals->verbosity >= OUTPUT_ALL )
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:771:2: note: Taking false branch
+  771 |         if( globals->verbosity >= OUTPUT_ALL )
+      |         ^
+src/dw_solver.c:779:6: note: Assuming field 'print_relaxed_sol' is 0
+  779 |         if( globals->print_relaxed_sol ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:779:2: note: Taking false branch
+  779 |         if( globals->print_relaxed_sol ) {
+      |         ^
+src/dw_solver.c:791:6: note: Assuming field 'rounding_flag' is 0
+  791 |         if( globals->rounding_flag ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:791:2: note: Taking false branch
+  791 |         if( globals->rounding_flag ) {
+      |         ^
+src/dw_solver.c:808:6: note: Assuming field 'integerize_flag' is not equal to 0
+  808 |         if( globals->integerize_flag ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:808:2: note: Taking true branch
+  808 |         if( globals->integerize_flag ) {
+      |         ^
+src/dw_solver.c:821:15: note: Assuming the condition is false
+  821 |                 for( i = 1; i <= glp_get_num_cols(master_lp); i++ ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:821:3: note: Loop condition is false. Execution continues on line 825
+  821 |                 for( i = 1; i <= glp_get_num_cols(master_lp); i++ ) {
+      |                 ^
+src/dw_solver.c:829:35: note: Stream opened here
+  829 |                 if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+      |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:829:35: note: Assuming that 'fopen' is successful
+  829 |                 if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+      |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_solver.c:829:3: note: Taking false branch
+  829 |                 if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+      |                 ^
+src/dw_solver.c:833:4: note: Opened stream never closed. Potential resource leak
+  833 |                         process_solution(sub_data, INTEGERIZED_ZEROS_FILE, DW_MODE_PRINT_RELAXED);
+      |                         ^~~~~~~~~~~~~~~~
+6 warnings generated.
+src/dw_subprob.c:118:2: warning: Value stored to 'ret' is never read [deadcode.DeadStores]
+  118 |         ret = glp_simplex(lp, simplex_control_params);
+      |         ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:118:2: note: Value stored to 'ret' is never read
+  118 |         ret = glp_simplex(lp, simplex_control_params);
+      |         ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:245:51: warning: Array access (via field 'D_row_coords') results in a null pointer dereference [core.NullDereference]
+  245 |                                 my_data->D_row_coords[my_data->D_nnz + j - 1] = temp_ind[j]-1;
+      |                                          ~~~~~~~~~~~~                         ^
+src/dw_subprob.c:104:6: note: Assuming the condition is false
+  104 |         if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:104:2: note: Taking false branch
+  104 |         if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+      |         ^
+src/dw_subprob.c:113:14: note: Assuming the condition is false
+  113 |         for( i = 1; i <= glp_get_num_cols(lp); i++ ) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:113:2: note: Loop condition is false. Execution continues on line 118
+  113 |         for( i = 1; i <= glp_get_num_cols(lp); i++ ) {
+      |         ^
+src/dw_subprob.c:120:6: note: Assuming field 'enforce_sub_integrality' is 0
+  120 |         if( my_data->globals->enforce_sub_integrality ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:120:2: note: Taking false branch
+  120 |         if( my_data->globals->enforce_sub_integrality ) {
+      |         ^
+src/dw_subprob.c:138:9: note: Assuming field 'master_lp_ready' is not equal to 0
+  138 |         while (!signals->master_lp_ready) {
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:138:2: note: Loop condition is false. Execution continues on line 145
+  138 |         while (!signals->master_lp_ready) {
+      |         ^
+src/dw_subprob.c:201:14: note: Assuming 'i' is < 'my_col'
+  201 |         for( i = 1; i < my_col; i++ ) {
+      |                     ^~~~~~~~~~
+src/dw_subprob.c:201:2: note: Loop condition is true.  Entering loop body
+  201 |         for( i = 1; i < my_col; i++ ) {
+      |         ^
+src/dw_subprob.c:203:7: note: Assuming field 'verbosity' is < OUTPUT_ALL
+  203 |                 if( my_data->globals->verbosity >= OUTPUT_ALL && id >= 0 ) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:203:49: note: Left side of '&&' is false
+  203 |                 if( my_data->globals->verbosity >= OUTPUT_ALL && id >= 0 ) {
+      |                                                               ^
+src/dw_subprob.c:214:7: note: Assuming 'temp' is not equal to 0
+  214 |                 if( temp == 0 ) {
+      |                     ^~~~~~~~~
+src/dw_subprob.c:214:3: note: Taking false branch
+  214 |                 if( temp == 0 ) {
+      |                 ^
+src/dw_subprob.c:228:7: note: Assuming 'len' is > 0
+  228 |                 if( len > 0 ) {
+      |                     ^~~~~~~
+src/dw_subprob.c:228:3: note: Taking true branch
+  228 |                 if( len > 0 ) {
+      |                 ^
+src/dw_subprob.c:230:8: note: Assuming field 'D_col_coords' is not equal to NULL
+  230 |                         if( my_data->D_col_coords == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:230:4: note: Taking false branch
+  230 |                         if( my_data->D_col_coords == NULL ) {
+      |                         ^
+src/dw_subprob.c:234:4: note: Value assigned to field 'D_row_coords'
+  234 |                         my_data->D_row_coords = realloc(my_data->D_row_coords, sizeof(int)*(my_data->D_nnz+len));
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:235:8: note: Assuming field 'D_row_coords' is equal to NULL
+  235 |                         if( my_data->D_row_coords == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:235:4: note: Taking true branch
+  235 |                         if( my_data->D_row_coords == NULL ) {
+      |                         ^
+src/dw_subprob.c:240:8: note: Assuming field 'D_vals' is not equal to NULL
+  240 |                         if( my_data->D_vals == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:240:4: note: Taking false branch
+  240 |                         if( my_data->D_vals == NULL ) {
+      |                         ^
+src/dw_subprob.c:244:16: note: 'j' is <= 'len'
+  244 |                         for( j = 1; j <= len; j++  ) {
+      |                                     ^
+src/dw_subprob.c:244:4: note: Loop condition is true.  Entering loop body
+  244 |                         for( j = 1; j <= len; j++  ) {
+      |                         ^
+src/dw_subprob.c:245:51: note: Array access (via field 'D_row_coords') results in a null pointer dereference
+  245 |                                 my_data->D_row_coords[my_data->D_nnz + j - 1] = temp_ind[j]-1;
+      |                                          ~~~~~~~~~~~~                         ^
+src/dw_subprob.c:246:51: warning: Array access (via field 'D_col_coords') results in a null pointer dereference [core.NullDereference]
+  246 |                                 my_data->D_col_coords[my_data->D_nnz + j - 1] = i-1;
+      |                                          ~~~~~~~~~~~~                         ^
+src/dw_subprob.c:104:6: note: Assuming the condition is false
+  104 |         if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:104:2: note: Taking false branch
+  104 |         if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+      |         ^
+src/dw_subprob.c:113:14: note: Assuming the condition is false
+  113 |         for( i = 1; i <= glp_get_num_cols(lp); i++ ) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:113:2: note: Loop condition is false. Execution continues on line 118
+  113 |         for( i = 1; i <= glp_get_num_cols(lp); i++ ) {
+      |         ^
+src/dw_subprob.c:120:6: note: Assuming field 'enforce_sub_integrality' is 0
+  120 |         if( my_data->globals->enforce_sub_integrality ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:120:2: note: Taking false branch
+  120 |         if( my_data->globals->enforce_sub_integrality ) {
+      |         ^
+src/dw_subprob.c:138:9: note: Assuming field 'master_lp_ready' is not equal to 0
+  138 |         while (!signals->master_lp_ready) {
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:138:2: note: Loop condition is false. Execution continues on line 145
+  138 |         while (!signals->master_lp_ready) {
+      |         ^
+src/dw_subprob.c:201:14: note: Assuming 'i' is < 'my_col'
+  201 |         for( i = 1; i < my_col; i++ ) {
+      |                     ^~~~~~~~~~
+src/dw_subprob.c:201:2: note: Loop condition is true.  Entering loop body
+  201 |         for( i = 1; i < my_col; i++ ) {
+      |         ^
+src/dw_subprob.c:203:7: note: Assuming field 'verbosity' is < OUTPUT_ALL
+  203 |                 if( my_data->globals->verbosity >= OUTPUT_ALL && id >= 0 ) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:203:49: note: Left side of '&&' is false
+  203 |                 if( my_data->globals->verbosity >= OUTPUT_ALL && id >= 0 ) {
+      |                                                               ^
+src/dw_subprob.c:214:7: note: Assuming 'temp' is not equal to 0
+  214 |                 if( temp == 0 ) {
+      |                     ^~~~~~~~~
+src/dw_subprob.c:214:3: note: Taking false branch
+  214 |                 if( temp == 0 ) {
+      |                 ^
+src/dw_subprob.c:228:7: note: Assuming 'len' is > 0
+  228 |                 if( len > 0 ) {
+      |                     ^~~~~~~
+src/dw_subprob.c:228:3: note: Taking true branch
+  228 |                 if( len > 0 ) {
+      |                 ^
+src/dw_subprob.c:229:4: note: Value assigned to field 'D_col_coords'
+  229 |                         my_data->D_col_coords = realloc(my_data->D_col_coords, sizeof(int)*(my_data->D_nnz+len));
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:230:8: note: Assuming field 'D_col_coords' is equal to NULL
+  230 |                         if( my_data->D_col_coords == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:230:4: note: Taking true branch
+  230 |                         if( my_data->D_col_coords == NULL ) {
+      |                         ^
+src/dw_subprob.c:235:8: note: Assuming field 'D_row_coords' is not equal to NULL
+  235 |                         if( my_data->D_row_coords == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:235:4: note: Taking false branch
+  235 |                         if( my_data->D_row_coords == NULL ) {
+      |                         ^
+src/dw_subprob.c:240:8: note: Assuming field 'D_vals' is not equal to NULL
+  240 |                         if( my_data->D_vals == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:240:4: note: Taking false branch
+  240 |                         if( my_data->D_vals == NULL ) {
+      |                         ^
+src/dw_subprob.c:244:16: note: 'j' is <= 'len'
+  244 |                         for( j = 1; j <= len; j++  ) {
+      |                                     ^
+src/dw_subprob.c:244:4: note: Loop condition is true.  Entering loop body
+  244 |                         for( j = 1; j <= len; j++  ) {
+      |                         ^
+src/dw_subprob.c:246:51: note: Array access (via field 'D_col_coords') results in a null pointer dereference
+  246 |                                 my_data->D_col_coords[my_data->D_nnz + j - 1] = i-1;
+      |                                          ~~~~~~~~~~~~                         ^
+src/dw_subprob.c:247:45: warning: Array access (via field 'D_vals') results in a null pointer dereference [core.NullDereference]
+  247 |                                 my_data->D_vals[my_data->D_nnz + j - 1] = temp_val[j];
+      |                                          ~~~~~~                         ^
+src/dw_subprob.c:104:6: note: Assuming the condition is false
+  104 |         if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:104:2: note: Taking false branch
+  104 |         if (glp_read_lp(lp, NULL, my_data->infile_name) != 0) {
+      |         ^
+src/dw_subprob.c:113:14: note: Assuming the condition is false
+  113 |         for( i = 1; i <= glp_get_num_cols(lp); i++ ) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:113:2: note: Loop condition is false. Execution continues on line 118
+  113 |         for( i = 1; i <= glp_get_num_cols(lp); i++ ) {
+      |         ^
+src/dw_subprob.c:120:6: note: Assuming field 'enforce_sub_integrality' is 0
+  120 |         if( my_data->globals->enforce_sub_integrality ) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:120:2: note: Taking false branch
+  120 |         if( my_data->globals->enforce_sub_integrality ) {
+      |         ^
+src/dw_subprob.c:138:9: note: Assuming field 'master_lp_ready' is not equal to 0
+  138 |         while (!signals->master_lp_ready) {
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:138:2: note: Loop condition is false. Execution continues on line 145
+  138 |         while (!signals->master_lp_ready) {
+      |         ^
+src/dw_subprob.c:201:14: note: Assuming 'i' is < 'my_col'
+  201 |         for( i = 1; i < my_col; i++ ) {
+      |                     ^~~~~~~~~~
+src/dw_subprob.c:201:2: note: Loop condition is true.  Entering loop body
+  201 |         for( i = 1; i < my_col; i++ ) {
+      |         ^
+src/dw_subprob.c:203:7: note: Assuming field 'verbosity' is < OUTPUT_ALL
+  203 |                 if( my_data->globals->verbosity >= OUTPUT_ALL && id >= 0 ) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:203:49: note: Left side of '&&' is false
+  203 |                 if( my_data->globals->verbosity >= OUTPUT_ALL && id >= 0 ) {
+      |                                                               ^
+src/dw_subprob.c:214:7: note: Assuming 'temp' is not equal to 0
+  214 |                 if( temp == 0 ) {
+      |                     ^~~~~~~~~
+src/dw_subprob.c:214:3: note: Taking false branch
+  214 |                 if( temp == 0 ) {
+      |                 ^
+src/dw_subprob.c:228:7: note: Assuming 'len' is > 0
+  228 |                 if( len > 0 ) {
+      |                     ^~~~~~~
+src/dw_subprob.c:228:3: note: Taking true branch
+  228 |                 if( len > 0 ) {
+      |                 ^
+src/dw_subprob.c:230:8: note: Assuming field 'D_col_coords' is not equal to NULL
+  230 |                         if( my_data->D_col_coords == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:230:4: note: Taking false branch
+  230 |                         if( my_data->D_col_coords == NULL ) {
+      |                         ^
+src/dw_subprob.c:235:8: note: Assuming field 'D_row_coords' is not equal to NULL
+  235 |                         if( my_data->D_row_coords == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:235:4: note: Taking false branch
+  235 |                         if( my_data->D_row_coords == NULL ) {
+      |                         ^
+src/dw_subprob.c:239:4: note: Value assigned to field 'D_vals'
+  239 |                         my_data->D_vals = realloc(my_data->D_vals, sizeof(double)*(my_data->D_nnz+len));
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:240:8: note: Assuming field 'D_vals' is equal to NULL
+  240 |                         if( my_data->D_vals == NULL ) {
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~
+src/dw_subprob.c:240:4: note: Taking true branch
+  240 |                         if( my_data->D_vals == NULL ) {
+      |                         ^
+src/dw_subprob.c:244:16: note: 'j' is <= 'len'
+  244 |                         for( j = 1; j <= len; j++  ) {
+      |                                     ^
+src/dw_subprob.c:244:4: note: Loop condition is true.  Entering loop body
+  244 |                         for( j = 1; j <= len; j++  ) {
+      |                         ^
+src/dw_subprob.c:247:45: note: Array access (via field 'D_vals') results in a null pointer dereference
+  247 |                                 my_data->D_vals[my_data->D_nnz + j - 1] = temp_val[j];
+      |                                          ~~~~~~                         ^
+4 warnings generated.
+src/dw_support.c:537:4: warning: Potential leak of memory pointed to by 'buffer' [unix.Malloc]
+  537 |                 print_usage(argc, argv);
+      |                 ^
+src/dw_support.c:429:26: note: Memory is allocated
+  429 |         char* buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:431:15: note: Assuming 'i' is >= 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is false. Execution continues on line 536
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:536:8: note: 'opened_guide_file' is 0
+  536 |         if( !opened_guide_file ) {
+      |              ^~~~~~~~~~~~~~~~~
+src/dw_support.c:536:3: note: Taking true branch
+  536 |         if( !opened_guide_file ) {
+      |         ^
+src/dw_support.c:537:4: note: Potential leak of memory pointed to by 'buffer'
+  537 |                 print_usage(argc, argv);
+      |                 ^
+src/dw_support.c:544:4: warning: Opened stream never closed. Potential resource leak [unix.Stream]
+  544 |                 dw_printf(IMPORTANCE_VITAL,
+      |                 ^~~~~~~~~
+src/dw_support.c:431:15: note: Assuming 'i' is < 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is true.  Entering loop body
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:433:35: note: Left side of '||' is true
+  433 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0) {
+      |                                                ^
+src/dw_support.c:435:23: note: Stream opened here
+  435 |                         if( (input_file = fopen(argv[i], "r")) == NULL ) {
+      |                                           ^~~~~~~~~~~~~~~~~~~
+src/dw_support.c:435:23: note: Assuming that 'fopen' is successful
+  435 |                         if( (input_file = fopen(argv[i], "r")) == NULL ) {
+      |                                           ^~~~~~~~~~~~~~~~~~~
+src/dw_support.c:435:5: note: Taking false branch
+  435 |                         if( (input_file = fopen(argv[i], "r")) == NULL ) {
+      |                         ^
+src/dw_support.c:431:15: note: Assuming 'i' is >= 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is false. Execution continues on line 536
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:536:8: note: 'opened_guide_file' is 1
+  536 |         if( !opened_guide_file ) {
+      |              ^~~~~~~~~~~~~~~~~
+src/dw_support.c:536:3: note: Taking false branch
+  536 |         if( !opened_guide_file ) {
+      |         ^
+src/dw_support.c:543:7: note: Assuming field 'num_clients' is < 1
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |             ^~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:27: note: Left side of '||' is true
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |                                 ^
+src/dw_support.c:544:4: note: Opened stream never closed. Potential resource leak
+  544 |                 dw_printf(IMPORTANCE_VITAL,
+      |                 ^~~~~~~~~
+src/dw_support.c:567:8: warning: File position of the stream might be 'indeterminate' after a failed operation. Can cause undefined behavior [unix.Stream]
+  567 |                 if (fgets(fg->subproblem_names[i], BUFF_SIZE, input_file) == NULL) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:431:15: note: Assuming 'i' is < 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is true.  Entering loop body
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:433:35: note: Left side of '||' is true
+  433 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0) {
+      |                                                ^
+src/dw_support.c:435:5: note: Taking false branch
+  435 |                         if( (input_file = fopen(argv[i], "r")) == NULL ) {
+      |                         ^
+src/dw_support.c:431:15: note: Assuming 'i' is >= 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is false. Execution continues on line 536
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:536:8: note: 'opened_guide_file' is 1
+  536 |         if( !opened_guide_file ) {
+      |              ^~~~~~~~~~~~~~~~~
+src/dw_support.c:536:3: note: Taking false branch
+  536 |         if( !opened_guide_file ) {
+      |         ^
+src/dw_support.c:541:3: note: Assuming this stream operation fails
+  541 |         fgets(buffer, BUFF_SIZE, input_file);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:7: note: Assuming field 'num_clients' is >= 1
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |             ^~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:7: note: Left side of '||' is false
+src/dw_support.c:543:30: note: Assuming field 'num_clients' is <= 26000
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:3: note: Taking false branch
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |         ^
+src/dw_support.c:564:15: note: 'i' is < field 'num_clients'
+  564 |         for( i = 0; i < fg->num_clients; i++ ) {
+      |                     ^
+src/dw_support.c:564:3: note: Loop condition is true.  Entering loop body
+  564 |         for( i = 0; i < fg->num_clients; i++ ) {
+      |         ^
+src/dw_support.c:567:8: note: File position of the stream might be 'indeterminate' after a failed operation. Can cause undefined behavior
+  567 |                 if (fgets(fg->subproblem_names[i], BUFF_SIZE, input_file) == NULL) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:567:8: warning: Read function called when stream is in EOF state. Function has no effect [unix.Stream]
+  567 |                 if (fgets(fg->subproblem_names[i], BUFF_SIZE, input_file) == NULL) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:431:15: note: Assuming 'i' is < 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is true.  Entering loop body
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:433:35: note: Left side of '||' is true
+  433 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0) {
+      |                                                ^
+src/dw_support.c:435:5: note: Taking false branch
+  435 |                         if( (input_file = fopen(argv[i], "r")) == NULL ) {
+      |                         ^
+src/dw_support.c:431:15: note: Assuming 'i' is >= 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is false. Execution continues on line 536
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:536:8: note: 'opened_guide_file' is 1
+  536 |         if( !opened_guide_file ) {
+      |              ^~~~~~~~~~~~~~~~~
+src/dw_support.c:536:3: note: Taking false branch
+  536 |         if( !opened_guide_file ) {
+      |         ^
+src/dw_support.c:541:3: note: Assuming stream reaches end-of-file here
+  541 |         fgets(buffer, BUFF_SIZE, input_file);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:7: note: Assuming field 'num_clients' is >= 1
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |             ^~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:7: note: Left side of '||' is false
+src/dw_support.c:543:30: note: Assuming field 'num_clients' is <= 26000
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:3: note: Taking false branch
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |         ^
+src/dw_support.c:564:15: note: 'i' is < field 'num_clients'
+  564 |         for( i = 0; i < fg->num_clients; i++ ) {
+      |                     ^
+src/dw_support.c:564:3: note: Loop condition is true.  Entering loop body
+  564 |         for( i = 0; i < fg->num_clients; i++ ) {
+      |         ^
+src/dw_support.c:567:8: note: Read function called when stream is in EOF state. Function has no effect
+  567 |                 if (fgets(fg->subproblem_names[i], BUFF_SIZE, input_file) == NULL) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:568:4: warning: Potential leak of memory pointed to by 'subproblem_files' [unix.Malloc]
+  568 |                         dw_printf(IMPORTANCE_VITAL, "Exiting: guidefile truncated reading subproblem %d\n", i);
+      |                         ^
+src/dw_support.c:431:15: note: Assuming 'i' is < 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is true.  Entering loop body
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:433:35: note: Left side of '||' is true
+  433 |                 if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0) {
+      |                                                ^
+src/dw_support.c:435:5: note: Taking false branch
+  435 |                         if( (input_file = fopen(argv[i], "r")) == NULL ) {
+      |                         ^
+src/dw_support.c:431:15: note: Assuming 'i' is >= 'argc'
+  431 |         for( i = 1; i < argc; i++ ) {
+      |                     ^~~~~~~~
+src/dw_support.c:431:3: note: Loop condition is false. Execution continues on line 536
+  431 |         for( i = 1; i < argc; i++ ) {
+      |         ^
+src/dw_support.c:536:8: note: 'opened_guide_file' is 1
+  536 |         if( !opened_guide_file ) {
+      |              ^~~~~~~~~~~~~~~~~
+src/dw_support.c:536:3: note: Taking false branch
+  536 |         if( !opened_guide_file ) {
+      |         ^
+src/dw_support.c:543:7: note: Assuming field 'num_clients' is >= 1
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |             ^~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:7: note: Left side of '||' is false
+src/dw_support.c:543:30: note: Assuming field 'num_clients' is <= 26000
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:543:3: note: Taking false branch
+  543 |         if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
+      |         ^
+src/dw_support.c:556:26: note: Memory is allocated
+  556 |         subproblem_files     = malloc(sizeof(FILE*)*fg->num_clients);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:557:3: note: Calling 'dw_oom_abort'
+  557 |         dw_oom_abort(subproblem_files, "subproblem_files");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_support.c:557:3: note: Returning from 'dw_oom_abort'
+  557 |         dw_oom_abort(subproblem_files, "subproblem_files");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:564:15: note: 'i' is < field 'num_clients'
+  564 |         for( i = 0; i < fg->num_clients; i++ ) {
+      |                     ^
+src/dw_support.c:564:3: note: Loop condition is true.  Entering loop body
+  564 |         for( i = 0; i < fg->num_clients; i++ ) {
+      |         ^
+src/dw_support.c:567:4: note: Taking true branch
+  567 |                 if (fgets(fg->subproblem_names[i], BUFF_SIZE, input_file) == NULL) {
+      |                 ^
+src/dw_support.c:568:4: note: Potential leak of memory pointed to by 'subproblem_files'
+  568 |                         dw_printf(IMPORTANCE_VITAL, "Exiting: guidefile truncated reading subproblem %d\n", i);
+      |                         ^
+src/dw_support.c:813:6: warning: Potential leak of memory pointed to by 'row_coef' [unix.Malloc]
+  813 |         if( bad > 0 ) printf("This problem is infeasible.\n");
+      |             ^
+src/dw_support.c:784:21: note: Memory is allocated
+  784 |         double* row_coef = malloc(sizeof(double)*glp_get_num_cols(original_master_lp));
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:785:2: note: Calling 'dw_oom_abort'
+  785 |         dw_oom_abort(row_coef, "row_coef");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw.h:197:9: note: Assuming 'ptr' is non-null
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |         ^~~~
+src/dw.h:197:5: note: Taking false branch
+  197 |     if (!ptr) { fprintf(stderr, "dwsolver: out of memory in %s\n", ctx); exit(EXIT_FAILURE); }
+      |     ^
+src/dw_support.c:785:2: note: Returning from 'dw_oom_abort'
+  785 |         dw_oom_abort(row_coef, "row_coef");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:786:14: note: Assuming the condition is false
+  786 |         for( i = 1; i <= glp_get_num_rows(original_master_lp); i++) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/dw_support.c:786:2: note: Loop condition is false. Execution continues on line 813
+  786 |         for( i = 1; i <= glp_get_num_rows(original_master_lp); i++) {
+      |         ^
+src/dw_support.c:813:6: note: Potential leak of memory pointed to by 'row_coef'
+  813 |         if( bad > 0 ) printf("This problem is infeasible.\n");
+      |             ^
+6 warnings generated.

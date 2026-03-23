@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-#INCLUDES = -I$(srcdir)/../include
-
 
 
 VPATH = @srcdir@
@@ -367,6 +365,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+AM_CFLAGS = -std=c11 -pedantic-errors
+AM_CPPFLAGS = -D_POSIX_C_SOURCE=200809L
+
+#INCLUDES = -I$(srcdir)/../include
 
 # DW core files (everything except the CLI entry point and the new solver API).
 DW_CORE_SOURCES = \
