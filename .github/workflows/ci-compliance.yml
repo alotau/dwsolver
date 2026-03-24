@@ -77,21 +77,28 @@ jobs:
       # ------------------------------------------------------------------ #
       - name: Locate cert.py addon
         run: |
-          addons_dir=$(dpkg -L cppcheck | grep '/addons$' | head -1)
+          cert_py=/tmp/cert.py
           if dpkg -L cppcheck | grep -q 'cert\.py'; then
-            echo "cert.py bundled — using package copy"
+            cert_py=$(dpkg -L cppcheck | grep 'cert\.py' | head -1)
+            echo "cert.py bundled at $cert_py"
           else
             ver_full=$(cppcheck --version | sed 's/Cppcheck //')
-            ver_short=$(echo "$ver_full" | sed 's/\.[0-9]*$//')
-            echo "Downloading cert.py (trying $ver_full, fallback $ver_short)..."
+            # Build candidate tags: exact version, major.minor only, then main
+            ver_minor=$(echo "$ver_full" | cut -d. -f1,2)
+            echo "Downloading cert.py (trying $ver_full, $ver_minor, main)..."
             curl -fsSL \
               "https://raw.githubusercontent.com/danmar/cppcheck/${ver_full}/addons/cert.py" \
-              -o "${addons_dir}/cert.py" 2>/dev/null || \
-            curl -fsSL \
-              "https://raw.githubusercontent.com/danmar/cppcheck/${ver_short}/addons/cert.py" \
-              -o "${addons_dir}/cert.py"
-            echo "Downloaded cert.py to ${addons_dir}/cert.py"
+              -o "$cert_py" 2>/dev/null \
+            || curl -fsSL \
+              "https://raw.githubusercontent.com/danmar/cppcheck/${ver_minor}/addons/cert.py" \
+              -o "$cert_py" 2>/dev/null \
+            || curl -fsSL \
+              "https://raw.githubusercontent.com/danmar/cppcheck/main/addons/cert.py" \
+              -o "$cert_py" 2>/dev/null \
+            || { echo "WARNING: cert.py unavailable; cppcheck cert addon will be skipped"; cert_py=""; }
+            [ -n "$cert_py" ] && echo "Downloaded cert.py to $cert_py"
           fi
+          echo "CERT_PY_PATH=$cert_py" >> "$GITHUB_ENV"
 
       # ------------------------------------------------------------------ #
       #  cppcheck — ISO/IEC TS 17961 cert addon scan                       #
@@ -104,8 +111,10 @@ jobs:
             specs/014-iso-ts-17961-compliance/audit/cppcheck-na-suppressions.txt \
             | grep -v '^[[:space:]]*$' \
             > /tmp/cppcheck-suppressions.txt
+          addon_arg="cert"
+          [ -n "$CERT_PY_PATH" ] && addon_arg="$CERT_PY_PATH"
           cppcheck \
-            --addon=cert \
+            --addon="$addon_arg" \
             --suppressions-list=/tmp/cppcheck-suppressions.txt \
             --error-exitcode=1 \
             --std=c11 \
