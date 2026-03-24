@@ -69,15 +69,25 @@ jobs:
 
       # ------------------------------------------------------------------ #
       #  Locate the cert addon shipped with cppcheck                        #
+      # ------------------------------------------------------------------  #
+      # On Ubuntu the addons are bundled with the cppcheck package.         #
+      # Use dpkg to find the exact installed path; fall back to find.       #
+      # If not bundled (unusual), download from cppcheck GitHub to match    #
+      # the installed version.                                              #
       # ------------------------------------------------------------------ #
       - name: Locate cert.py addon
         run: |
-          cert_path=$(find /usr/share/cppcheck /usr/lib/cppcheck 2>/dev/null \
-                      -name "cert.py" | head -1 || true)
+          cert_path=$(dpkg -L cppcheck 2>/dev/null | grep "cert\.py" | head -1 || true)
           if [ -z "$cert_path" ]; then
-            echo "ERROR: cert.py addon not found in cppcheck installation." >&2
-            echo "       Ensure the cppcheck package includes addons (cppcheck >= 2.12)." >&2
-            exit 1
+            cert_path=$(find /usr -name "cert.py" 2>/dev/null | head -1 || true)
+          fi
+          if [ -z "$cert_path" ]; then
+            echo "cert.py not bundled with apt package — downloading from cppcheck GitHub..."
+            cppcheck_version=$(cppcheck --version | sed 's/Cppcheck //')
+            curl -fsSL \
+              "https://raw.githubusercontent.com/danmar/cppcheck/${cppcheck_version}/addons/cert.py" \
+              -o /tmp/cert.py
+            cert_path=/tmp/cert.py
           fi
           echo "cert_addon=$cert_path" >> $GITHUB_ENV
           echo "Found cert addon: $cert_path"
@@ -88,7 +98,7 @@ jobs:
       - name: cppcheck (cert addon) — src/dw_*.c
         run: |
           cppcheck \
-            --addon=cert \
+            --addon="$cert_addon" \
             --enable=warning,style,performance,portability \
             --suppressions-list=specs/014-iso-ts-17961-compliance/audit/cppcheck-na-suppressions.txt \
             --error-exitcode=1 \
