@@ -422,10 +422,27 @@ void print_zeros(int_thread_data* my_data) {
 				dw_printf(IMPORTANCE_DIAG, "Returned null (subprob %d, col %d), continuing...\n", subprob, j);
 				continue;
 			}
-			strcpy(local_col_name, var_name);
+			/* TS17961-ga-buffer: strncpy caps at BUFF_SIZE-1 (verified=199); GLPK name limit is 255 > 199 */
+			strncpy(local_col_name, var_name, BUFF_SIZE - 1);
+			local_col_name[BUFF_SIZE - 1] = '\0';
 			if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
-			strcpy( curr_flight, strtok(NULL, ",") );
-			strcpy( curr_sector, strtok(NULL, ",") );
+			/* TS17961-nonnullptr: strtok may return NULL; guard before copy */
+			{
+				const char *tok_flight = strtok(NULL, ",");
+				if (tok_flight == NULL) {
+					dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing flight token in col %d, skipping\n", j);
+					continue;
+				}
+				strncpy(curr_flight, tok_flight, BUFF_SIZE - 1);
+				curr_flight[BUFF_SIZE - 1] = '\0';
+				const char *tok_sector = strtok(NULL, ",");
+				if (tok_sector == NULL) {
+					dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing sector token in col %d, skipping\n", j);
+					continue;
+				}
+				strncpy(curr_sector, tok_sector, BUFF_SIZE - 1);
+				curr_sector[BUFF_SIZE - 1] = '\0';
+			}
 			(void)strtok(NULL, ")") /* advance tokenizer past time field */;
 			//printf("%s ( %s, %s ) = %3.2f\n", var_name, curr_flight, curr_sector, x[subprob][curr_iter][j]);
 
@@ -442,10 +459,27 @@ void print_zeros(int_thread_data* my_data) {
 				if( var_name == NULL ) {
 					dw_printf(IMPORTANCE_DIAG, "NULL col name at j-1=%d, skipping prev-flight check\n", j-1);
 				} else {
-					strcpy(local_col_name, var_name);
-					if( strtok(local_col_name, "(") == NULL ) printf("NULL 2");
-					strcpy( temp_flight, strtok(NULL, ",") );
-					strcpy( prev_sector, strtok(NULL, ",") );
+						/* TS17961-ga-buffer: strncpy caps at BUFF_SIZE-1 (verified=199); GLPK name limit is 255 > 199 */
+						strncpy(local_col_name, var_name, BUFF_SIZE - 1);
+						local_col_name[BUFF_SIZE - 1] = '\0';
+						if( strtok(local_col_name, "(") == NULL ) printf("NULL 2");
+						/* TS17961-nonnullptr: strtok may return NULL; guard before copy */
+						{
+							const char *tok_tmp = strtok(NULL, ",");
+							if (tok_tmp == NULL) {
+								dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing flight token at j-1=%d, skipping\n", j-1);
+								continue;
+							}
+							strncpy(temp_flight, tok_tmp, BUFF_SIZE - 1);
+							temp_flight[BUFF_SIZE - 1] = '\0';
+							const char *tok_prev_sec = strtok(NULL, ",");
+							if (tok_prev_sec == NULL) {
+								dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing sector token at j-1=%d, skipping\n", j-1);
+								continue;
+							}
+							strncpy(prev_sector, tok_prev_sec, BUFF_SIZE - 1);
+							prev_sector[BUFF_SIZE - 1] = '\0';
+						}
 				} /* var_name != NULL */
 				}
 				else { /* First variable in subproblem.  No previous variable. */

@@ -1,0 +1,28 @@
+# clang-tidy Pre-Remediation Baseline
+# Generated: 2026-03-23
+# Branch: 014-iso-ts-17961-compliance
+# Target: src/dw_blas.c src/dw_globals.c src/dw_main.c src/dw_phases.c
+#         src/dw_rounding.c src/dw_solver.c src/dw_subprob.c src/dw_support.c
+#
+# NOTE: clang-tidy ≥ 17 is not installed on the local macOS development
+# environment. This baseline will be populated by the CI workflow
+# (.github/workflows/ci-compliance.yml) on ubuntu-latest where clang-tidy
+# is installed via apt-get.
+#
+# Command to reproduce (Linux):
+#   clang-tidy -checks='cert-*' \
+#     --extra-arg=-std=c11 \
+#     --extra-arg=-I./src \
+#     src/dw_blas.c src/dw_globals.c src/dw_main.c src/dw_phases.c \
+#     src/dw_rounding.c src/dw_solver.c src/dw_subprob.c src/dw_support.c \
+#     -- -I/usr/include -DHAVE_CONFIG_H 2>&1
+#
+# Expected pre-remediation findings (from research.md):
+#   - cert-EXP34-C (nonnullptr): strtok return values passed to strcpy
+#     without NULL check in src/dw_rounding.c and src/dw_support.c
+#   - cert-STR31-C (ga-buffer): unbounded strcpy from glp_get_col_name()
+#     return in src/dw_rounding.c and src/dw_support.c
+#
+# Post-remediation: run the same command after applying T007/T008 fixes
+# and save output to clang-tidy-post-remediation.txt. Expected: zero
+# cert-STR31-C and cert-EXP34-C findings in dw_rounding.c / dw_support.c.

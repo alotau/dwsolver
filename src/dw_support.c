@@ -668,9 +668,22 @@ int parse_zero_var(double value, int index, char** col_names, FILE* zero_file) {
 		dw_oom_abort(local_col_name, "local_col_name");
 		sector_name = malloc(sizeof(char)*BUFF_SIZE);
 		dw_oom_abort(sector_name, "sector_name");
-		strcpy(local_col_name, var_name);
+		/* TS17961-ga-buffer: strncpy caps at BUFF_SIZE-1 (verified=199); GLPK name limit is 255 > 199 */
+		strncpy(local_col_name, var_name, BUFF_SIZE - 1);
+		local_col_name[BUFF_SIZE - 1] = '\0';
 		if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
-		strcpy( sector_name, strtok(NULL, ",") );
+		/* TS17961-nonnullptr: strtok may return NULL; guard before copy */
+		{
+			const char *tok_sector_name = strtok(NULL, ",");
+			if (tok_sector_name == NULL) {
+				dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing sector token in parse_zero_var index %d; skipping\n", index);
+				free(sector_name);
+				free(local_col_name);
+				return 0;
+			}
+			strncpy(sector_name, tok_sector_name, BUFF_SIZE - 1);
+			sector_name[BUFF_SIZE - 1] = '\0';
+		}
 		fprintf(zero_file, "%s %s\n", sector_name, strtok(NULL, ","));
 		free(sector_name);
 		free(local_col_name);
