@@ -254,7 +254,6 @@ Certifies against TS 17961. Relevant checker categories:
 cov-build --dir cov-int make
 cov-analyze --dir cov-int \
   --all \
-  --checker-option SOCIAL_SECURITY_NUMBER:enabled:true \
   --strip-path $(pwd) \
   --exclude-regex "third-party/glpk/.*"
 cov-format-errors --dir cov-int --html-output covhtml

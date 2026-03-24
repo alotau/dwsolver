@@ -6,12 +6,14 @@ on:
     paths:
       - 'src/**'
       - 'specs/014-iso-ts-17961-compliance/**'
+      - 'tests/test_ts17961_enforcement.sh'
       - '.github/workflows/ci-compliance.yml'
   pull_request:
     branches: [main]
     paths:
       - 'src/**'
       - 'specs/014-iso-ts-17961-compliance/**'
+      - 'tests/test_ts17961_enforcement.sh'
       - '.github/workflows/ci-compliance.yml'
 
 jobs:
@@ -55,6 +57,17 @@ jobs:
           fi
 
       # ------------------------------------------------------------------ #
+      #  configure — produce config.h before static analysis               #
+      # ------------------------------------------------------------------ #
+      - name: Suppress automake regeneration
+        run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
+
+      - name: Run ./configure to produce config.h
+        run: |
+          GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk \
+            ./configure
+
+      # ------------------------------------------------------------------ #
       #  Locate the cert addon shipped with cppcheck                        #
       # ------------------------------------------------------------------ #
       - name: Locate cert.py addon
@@ -82,6 +95,7 @@ jobs:
             --std=c11 \
             --platform=unix64 \
             -I src \
+            -I . \
             src/dw_blas.c \
             src/dw_globals.c \
             src/dw_main.c \
@@ -98,7 +112,7 @@ jobs:
         run: |
           sudo apt-get install -y bear
           GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk \
-            bear -- make -B > /dev/null 2>&1 || true
+            bear -- make -B > /dev/null 2>&1
 
       - name: clang-tidy (cert-*) — src/dw_*.c
         run: |
@@ -113,7 +127,7 @@ jobs:
             src/dw_solver.c \
             src/dw_subprob.c \
             src/dw_support.c \
-            -- -std=c11 -I src -I /usr/include
+            -- -std=c11 -I src -I . -I /usr/include
 
       # ------------------------------------------------------------------ #
       #  SC-003 Enforcement gate                                            #
@@ -124,13 +138,8 @@ jobs:
       # ------------------------------------------------------------------ #
       #  Regression test suite                                              #
       # ------------------------------------------------------------------ #
-      - name: Suppress automake regeneration
-        run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
-
       - name: Build
-        run: |
-          GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk \
-            ./configure && make
+        run: make
 
       - name: Add dwsolver to PATH
         run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH

@@ -30,6 +30,7 @@ fi
 # function expecting non-null (strcpy). This is the exact pattern remediated
 # in T007/T008.
 tmpfile=$(mktemp /tmp/ts17961_violation_XXXXXX.c)
+trap 'rm -f "$tmpfile"' EXIT
 
 cat > "$tmpfile" << 'CVIOLATION'
 #include <string.h>
@@ -62,9 +63,6 @@ has_cert_finding=0
 if echo "$cppcheck_output" | grep -qi "cert\|nullPointer\|strcpy\|warning.*null"; then
     has_cert_finding=1
 fi
-
-# ---- Cleanup ----
-rm -f "$tmpfile"
 
 # ---- Assert enforcement is functional ----
 if [ "$result" -ne 0 ] || [ "$has_cert_finding" -eq 1 ]; then

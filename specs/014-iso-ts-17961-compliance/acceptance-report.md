@@ -42,7 +42,7 @@ MUST be a grep-based absence proof.
   memiograph, accfree, dblfree, nonnullptr, nullref, diverr, exceptbits, liberr,
   datarace, asyncsig, toinit.
 - Every row has a PASS or N-A verdict; zero entries contain "TBD" or are empty
-  (verified: `grep -c "TBD" ts17961-compliance-matrix.md` → 0).
+  (verified: `grep -c '\*\*Verdict\*\*: \*\*FAIL' ts17961-compliance-matrix.md` → 0).
 - All 6 N-A rows contain the exact grep command and its zero-result output (inline
   absence proof: constructing that command returned empty for all N-A mnemonics).
 - All PASS rows cite either a specific spec 008/013 FR, a grep-based proof, or a
@@ -62,8 +62,12 @@ that correspondence was addressed by spec 008 or spec 013.
 
 - Every row in the compliance matrix includes a "SEI CERT C" column.
 - Rules with a prior-work correspondence reference `spec-008` or `spec-013`
-  (e.g., ga-buffer ↔ STR31-C via spec 013; nonnullptr ↔ EXP34-C via spec 008;
-  memiograph ↔ MEM31-C via spec 008; datarace ↔ CON34-C via spec 008).
+  (e.g., memiograph ↔ MEM31-C via spec 008; accfree ↔ MEM31-C via spec 008;
+  dblfree ↔ MEM31-C via spec 008; liberr ↔ ERR33-C via spec 008;
+  datarace ↔ CON34-C / POS54-C via spec 008; toinit ↔ uninitvar via spec 013;
+  wraparound ↔ INT30-C via spec 013).
+- ga-buffer (STR31-C) and nonnullptr (EXP34-C) had no prior-work coverage and
+  were newly remediated in T007/T008 for this feature (014).
 - Rules with no direct CERT mapping are noted as "No direct mapping" in the
   SEI CERT C column (e.g., trstcmp, argcomp, ioilecc).
 
@@ -124,7 +128,7 @@ Final matrix status: **COMPLETE — 0 FAIL, 16 PASS, 6 N-A**
 
 Verification command:
 ```
-grep -c "TBD\|FAIL" specs/014-iso-ts-17961-compliance/audit/ts17961-compliance-matrix.md
+grep -c 'TBD\|\*\*Verdict\*\*: \*\*FAIL' specs/014-iso-ts-17961-compliance/audit/ts17961-compliance-matrix.md
 ```
 Result: 0
 

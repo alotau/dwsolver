@@ -182,7 +182,8 @@ int arguments respectively.
 **Rule name**: Do not form or use out-of-bounds pointers or data
 **SEI CERT C correspondence**: ARR30-C / STR31-C
 **Prior work**: None (not covered by spec 008 or spec 013 checks)
-**Verdict**: **FAIL → remediated (see FR-003)**
+**Initial finding**: FAIL (remediated in T007 — see FR-003)
+**Verdict**: **PASS**
 
 **Finding**: `strcpy(local_col_name, var_name)` at three call sites copies
 from `glp_get_col_name(sub_lp, j)` into a `BUFF_SIZE`-sized (200-byte) heap
@@ -274,7 +275,8 @@ paths for the same pointer.
 **Rule name**: Do not pass a null pointer to a library function that expects a non-null argument
 **SEI CERT C correspondence**: EXP34-C
 **Prior work**: None (not addressed by spec 008 or spec 013)
-**Verdict**: **FAIL → remediated (see FR-003)**
+**Initial finding**: FAIL (remediated in T008 — see FR-003)
+**Verdict**: **PASS**
 
 **Finding**: `strtok(NULL, ",")` return value passed directly to `strcpy()`
 without a NULL check at five call sites:

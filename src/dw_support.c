@@ -684,7 +684,17 @@ int parse_zero_var(double value, int index, char** col_names, FILE* zero_file) {
 			strncpy(sector_name, tok_sector_name, BUFF_SIZE - 1);
 			sector_name[BUFF_SIZE - 1] = '\0';
 		}
-		fprintf(zero_file, "%s %s\n", sector_name, strtok(NULL, ","));
+		/* TS17961-nonnullptr: strtok may return NULL; guard before passing to fprintf */
+		{
+			const char *tok_var_name = strtok(NULL, ",");
+			if (tok_var_name == NULL) {
+				dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing variable token in parse_zero_var index %d; skipping\n", index);
+				free(sector_name);
+				free(local_col_name);
+				return 0;
+			}
+			fprintf(zero_file, "%s %s\n", sector_name, tok_var_name);
+		}
 		free(sector_name);
 		free(local_col_name);
 	}
