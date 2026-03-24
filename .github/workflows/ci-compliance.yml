@@ -122,13 +122,9 @@ jobs:
 
       # ------------------------------------------------------------------ #
       #  clang-tidy — cert-* checks                                         #
+      # clang-tidy uses explicit -- flags below; no compile_commands.json  #
+      # is required and bear is not needed.                                 #
       # ------------------------------------------------------------------ #
-      - name: Build compile_commands.json for clang-tidy
-        run: |
-          sudo apt-get install -y bear
-          GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk \
-            bear -- make -B > /dev/null 2>&1
-
       - name: clang-tidy (cert-*) — src/dw_*.c
         run: |
           clang-tidy \
