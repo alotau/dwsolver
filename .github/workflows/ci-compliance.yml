@@ -97,10 +97,16 @@ jobs:
       # ------------------------------------------------------------------ #
       - name: cppcheck (cert addon) — src/dw_*.c
         run: |
+          # Strip comments and blank lines — cppcheck --suppressions-list
+          # does not support '#' comment syntax and errors with "No id."
+          grep -v '^[[:space:]]*#' \
+            specs/014-iso-ts-17961-compliance/audit/cppcheck-na-suppressions.txt \
+            | grep -v '^[[:space:]]*$' \
+            > /tmp/cppcheck-suppressions.txt
           cppcheck \
             --addon="$cert_addon" \
             --enable=warning,style,performance,portability \
-            --suppressions-list=specs/014-iso-ts-17961-compliance/audit/cppcheck-na-suppressions.txt \
+            --suppressions-list=/tmp/cppcheck-suppressions.txt \
             --error-exitcode=1 \
             --std=c11 \
             --platform=unix64 \
