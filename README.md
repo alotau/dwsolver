@@ -128,7 +128,7 @@ Key rules addressed:
 
 | Rule | Description | Status |
 |------|-------------|--------|
-| POS54-C | Detect and handle POSIX errors | ✅ All `pthread_*` and `sem_*` call sites checked via `DW_PTHREAD_CHECK` / `DW_SEM_CHECK` |
+| POS54-C | Detect and handle POSIX errors | ✅ Fallible `pthread_*` and `sem_*` returns checked via `DW_PTHREAD_CHECK` / `DW_SEM_CHECK`; unlock and broadcast calls (documented always-succeed) are excepted |
 | MEM35-C | Allocate sufficient memory | ✅ `malloc` operator-precedence bugs corrected |
 | CON31-C / CON43-C | Thread and lock safety | ✅ Mutex acquisition order documented and enforced; no lock inversions |
 | EXP12-C | Do not ignore operands in expressions | ✅ `errno` snapshotted before `strerror()` / `fprintf()` calls |
@@ -147,13 +147,13 @@ Key rules addressed:
 
 The specification defines 22 analyzable rules covering initialization, integer safety, string/memory operations, arithmetic and I/O, and concurrency. All 22 rules have been audited against the dwsolver source; those not already covered by the SEI CERT C work have been explicitly remediated.
 
-Enforcement is automated in CI via `clang-tidy -checks='cert-*' --warnings-as-errors='cert-*'` and `cppcheck --addon=cert`, running against every commit on the compliance branch.
+The primary enforcement gate in CI is `clang-tidy -checks='cert-*' --warnings-as-errors='cert-*'`; a supplementary `cppcheck` pass uses the SEI CERT `cert.py` addon when it can be located or downloaded, and is skipped rather than blocking the build if the addon is unavailable. The workflow triggers on pushes and pull requests to `main` (subject to path filters on `src/` and compliance spec files).
 
 **Artifacts**:
 - [Compliance matrix](specs/014-iso-ts-17961-compliance/audit/ts17961-compliance-matrix.md) — all 22 rules with PASS / N-A / FAIL verdicts and evidence citations
 - [Acceptance report](specs/014-iso-ts-17961-compliance/acceptance-report.md) — functional requirement evidence
 - [Compliance spec](specs/014-iso-ts-17961-compliance/spec.md) — scope, audit methodology, and CI integration details
-- [CI workflow](.github/workflows/ci-compliance.yml) — automated enforcement on every push
+- [CI workflow](.github/workflows/ci-compliance.yml) — automated enforcement on pushes and pull requests to `main`
 
 ---
 
@@ -162,7 +162,7 @@ Enforcement is automated in CI via `clang-tidy -checks='cert-*' --warnings-as-er
 The source compiles under `-std=c11 -pedantic-errors` with zero warnings or errors, and declares `_POSIX_C_SOURCE=200809L` globally so every translation unit uses a consistent, documented POSIX API surface.
 
 - **ISO C11** ([ISO/IEC 9899:2011](https://www.iso.org/standard/57853.html)): enforced via `-std=c11 -pedantic-errors` in `CFLAGS`; no compiler-specific GNU extensions are used in authored source.
-- **POSIX.1-2008** ([IEEE Std 1003.1-2008](https://pubs.opengroup.org/onlinepubs/9699919799/)): `_POSIX_C_SOURCE=200809L` is set project-wide; `gettimeofday` replaced by `clock_gettime(CLOCK_MONOTONIC, ...)` with autoconf detection and a backward-compatible fallback.
+- **POSIX.1-2008** ([IEEE Std 1003.1-2008](https://pubs.opengroup.org/onlinepubs/9699919799/)): `_POSIX_C_SOURCE=200809L` is set project-wide; when available, a monotonic `clock_gettime(CLOCK_MONOTONIC, ...)` path (guarded by `HAVE_CLOCK_GETTIME`) is used, with a portable ISO C `time()` / `clock()` fallback on platforms lacking `clock_gettime`.
 
 **Artifacts**:
 - [Acceptance report](specs/013-strict-c-posix-compliance/acceptance-report.md) — evidence for each functional requirement
