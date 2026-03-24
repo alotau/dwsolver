@@ -114,9 +114,17 @@ files live there; mount the directory that holds your problem files.
 > increment `CURRENT` for any interface change, reset `REVISION` to 0,
 > and increment `AGE` only if the change is backward-compatible (otherwise set `AGE=0`).
 
-## SEI CERT C Compliance
+## Compliance
 
-The solver's C source code has been audited and remediated against the [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard), focusing on the concurrency and POSIX rules most relevant to a multi-threaded solver:
+The solver's authored C source (`src/dw_*.c`, `src/dw_*.h`) has been audited and remediated against three complementary standards. Each is independently verifiable via the artifacts linked below.
+
+---
+
+### SEI CERT C Coding Standard
+
+The [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard) is a set of rules and recommendations for safe, secure, and reliable C code published by Carnegie Mellon University's Software Engineering Institute. It is the de-facto reference for secure C in government, defense, and embedded software contexts.
+
+Key rules addressed:
 
 | Rule | Description | Status |
 |------|-------------|--------|
@@ -130,6 +138,35 @@ The solver's C source code has been audited and remediated against the [SEI CERT
 - [Acceptance report](specs/008-sei-cert-c-compliance/acceptance-report.md) — all 10 functional requirements with evidence
 - [Compliance spec](specs/008-sei-cert-c-compliance/spec.md) — full rule set and rationale
 - [Static analysis baseline](specs/008-sei-cert-c-compliance/baseline-warnings.txt) — zero new warnings from remediation
+
+---
+
+### ISO/IEC TS 17961:2013 — C Secure Coding Rules
+
+[ISO/IEC TS 17961:2013](https://www.iso.org/standard/61134.html) is the ISO Technical Specification that formalizes secure C coding requirements as normative rules with defined diagnostic obligations. Commercial static analysis tools (Coverity, Klocwork, CodeSonar, LDRA) certify against TS 17961, making it the standard referenced in defense, aerospace, automotive (ISO 26262), and medical device (IEC 62443) procurement requirements.
+
+The specification defines 22 analyzable rules covering initialization, integer safety, string/memory operations, arithmetic and I/O, and concurrency. All 22 rules have been audited against the dwsolver source; those not already covered by the SEI CERT C work have been explicitly remediated.
+
+Enforcement is automated in CI via `clang-tidy -checks='cert-*' --warnings-as-errors='cert-*'` and `cppcheck --addon=cert`, running against every commit on the compliance branch.
+
+**Artifacts**:
+- [Compliance matrix](specs/014-iso-ts-17961-compliance/audit/ts17961-compliance-matrix.md) — all 22 rules with PASS / N-A / FAIL verdicts and evidence citations
+- [Acceptance report](specs/014-iso-ts-17961-compliance/acceptance-report.md) — functional requirement evidence
+- [Compliance spec](specs/014-iso-ts-17961-compliance/spec.md) — scope, audit methodology, and CI integration details
+- [CI workflow](.github/workflows/ci-compliance.yml) — automated enforcement on every push
+
+---
+
+### Strict ISO C11 and POSIX.1-2008 Compliance
+
+The source compiles under `-std=c11 -pedantic-errors` with zero warnings or errors, and declares `_POSIX_C_SOURCE=200809L` globally so every translation unit uses a consistent, documented POSIX API surface.
+
+- **ISO C11** ([ISO/IEC 9899:2011](https://www.iso.org/standard/57853.html)): enforced via `-std=c11 -pedantic-errors` in `CFLAGS`; no compiler-specific GNU extensions are used in authored source.
+- **POSIX.1-2008** ([IEEE Std 1003.1-2008](https://pubs.opengroup.org/onlinepubs/9699919799/)): `_POSIX_C_SOURCE=200809L` is set project-wide; `gettimeofday` replaced by `clock_gettime(CLOCK_MONOTONIC, ...)` with autoconf detection and a backward-compatible fallback.
+
+**Artifacts**:
+- [Acceptance report](specs/013-strict-c-posix-compliance/acceptance-report.md) — evidence for each functional requirement
+- [Compliance spec](specs/013-strict-c-posix-compliance/spec.md) — standard selection rationale and scope
 
 ## Architecture
 
