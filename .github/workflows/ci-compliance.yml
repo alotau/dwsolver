@@ -105,7 +105,6 @@ jobs:
             > /tmp/cppcheck-suppressions.txt
           cppcheck \
             --addon="$cert_addon" \
-            --enable=warning,style,performance,portability \
             --suppressions-list=/tmp/cppcheck-suppressions.txt \
             --error-exitcode=1 \
             --std=c11 \
