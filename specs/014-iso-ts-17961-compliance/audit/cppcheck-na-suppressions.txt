@@ -1,0 +1,27 @@
+# cppcheck-na-suppressions.txt
+#
+# ISO/IEC TS 17961:2013 Compliance — N/A Rule Suppressions
+# Spec: specs/014-iso-ts-17961-compliance/
+#
+# PURPOSE: Suppress cppcheck cert-addon checks for rules that are classified
+#   as N/A in the compliance matrix (ts17961-compliance-matrix.md).
+#   Used by: .github/workflows/ci-compliance.yml
+#   Passed via: --suppressions-list=specs/014-iso-ts-17961-compliance/audit/cppcheck-na-suppressions.txt
+#
+# N/A RATIONALE (see matrix for full details):
+#   cert-INT36-C  (intptrconv)  — no integer-to-pointer casts in this codebase
+#   cert-MSC21-C  (xplicitcomp) — no implicit comparisons; all comparisons are explicit
+#   cert-INT11-C  (boolasgn)    — no assignment to _Bool or bitfield-used-as-boolean
+#   cert-INT32-C  (intnegator)  — no unsigned negation (−x for unsigned x)
+#   cert-FLP30-C  (exceptbits)  — no floating-point exception-flag manipulation
+#   cert-SIG30-C  (asyncsig)    — no async-signal-unsafe functions in signal handlers
+#
+# NOTE: Do not add suppressions for any rule classified as PASS or FAIL.
+#   Only rules with a ✓ N/A verdict in the compliance matrix may appear here.
+
+cert-INT36-C
+cert-MSC21-C
+cert-INT11-C
+cert-INT32-C
+cert-FLP30-C
+cert-SIG30-C

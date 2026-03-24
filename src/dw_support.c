@@ -498,7 +498,13 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  		}
  		else if( strcmp(argv[i], "--mip_gap") == 0 ||
  				 strcmp(argv[i], "--mip-gap") == 0) {
- 			if( ((fg->mip_gap = atof (argv[++i]))) <= 0 )	{
+ 		{
+ 			char *_ep;
+ 			char *_arg = argv[++i];
+ 			fg->mip_gap = strtod(_arg, &_ep);
+ 			if (_ep == _arg || *_ep != '\0') fg->mip_gap = -1.0;
+ 		}
+ 		if (fg->mip_gap <= 0) {
  				dw_printf(IMPORTANCE_VITAL,
  						"%s is not a valid number for mip_gap. Ignoring.\n", argv[i]);
  				fg->mip_gap = DEFAULT_MIP_GAP;
@@ -518,14 +524,26 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  			fg->get_monolithic_file = 0;
  		}
  		else if( strcmp(argv[i], "--phase1_max") == 0 ) {
- 		 	if( ((fg->max_phase1_iterations = atoi (argv[++i]))) <= 0 )	{
+ 	 	{
+ 	 		char *_ep;
+ 	 		char *_arg = argv[++i];
+ 	 		long _v = strtol(_arg, &_ep, 10);
+ 	 		fg->max_phase1_iterations = (_ep == _arg || *_ep != '\0') ? 0 : (int)_v;
+ 	 	}
+ 	 	if (fg->max_phase1_iterations <= 0) {
  		 		dw_printf(IMPORTANCE_VITAL,
  		 					"%s is not a valid number of iterations. Ignoring.\n", argv[i]);
  		 		fg->max_phase1_iterations = MAX_PHASE1_ITERATIONS;
  		 	}
  		}
  		else if( strcmp(argv[i], "--phase2_max") == 0 ) {
- 			if( ((fg->max_phase2_iterations = atoi (argv[++i]))) <= 0 )	{
+ 		{
+ 			char *_ep;
+ 			char *_arg = argv[++i];
+ 			long _v = strtol(_arg, &_ep, 10);
+ 			fg->max_phase2_iterations = (_ep == _arg || *_ep != '\0') ? 0 : (int)_v;
+ 		}
+ 		if (fg->max_phase2_iterations <= 0) {
  				dw_printf(IMPORTANCE_VITAL,
  							"%s is not a valid number of iterations. Ignoring.\n", argv[i]);
  				fg->max_phase2_iterations = MAX_PHASE2_ITERATIONS;
@@ -538,8 +556,12 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  		return 1;
  	}
 
- 	fgets(buffer, BUFF_SIZE, input_file);
- 	fg->num_clients = atoi(buffer);
+ 	(void)fgets(buffer, BUFF_SIZE, input_file);
+ 	{
+ 		char *_ep;
+ 		long _v = strtol(buffer, &_ep, 10);
+ 		fg->num_clients = (int)_v;
+ 	}
  	if( fg->num_clients < 1 || fg->num_clients > 26000 ) {
  		dw_printf(IMPORTANCE_VITAL,
  				"Exiting: There is an strange number of subproblems: %d\n",
@@ -579,7 +601,7 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  						"Opened %s for reading.\n", fg->subproblem_names[i]);
  				dw_printf(IMPORTANCE_DIAG, "Now closing it...\n");
  			}
- 			fclose(subproblem_files[i]);
+ 			(void)fclose(subproblem_files[i]);
  		}
  	}
 
@@ -596,8 +618,8 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
  	else {
  		dw_printf(IMPORTANCE_DIAG, "Opened %s for reading.\n", fg->master_name);
  		dw_printf(IMPORTANCE_DIAG, "Now closing it.\n");
- 		fclose(master_file);
- 	}
+		(void)fclose(master_file);
+	}
 
  	/* Get monolithic file's name. */
  	/* This code is vestigial.  Leaving it in for backward compatibility with
@@ -634,9 +656,10 @@ int process_cmdline(int argc, char* argv[], faux_globals* fg) {
 
  	/* Get the "shift" if it's included in the guide file. */
  	strcpy(buffer, "\0"); /* "Clear" the buffer. */
- 	fgets(buffer, BUFF_SIZE, input_file);
+ 	(void)fgets(buffer, BUFF_SIZE, input_file);
  	if( buffer != NULL ) {
- 		fg->shift = atof(buffer);
+ 		char *_ep;
+ 		fg->shift = strtod(buffer, &_ep);
  	}
  	/* else fg->shift stays set to 0.0 as initialized. */
 
@@ -668,10 +691,33 @@ int parse_zero_var(double value, int index, char** col_names, FILE* zero_file) {
 		dw_oom_abort(local_col_name, "local_col_name");
 		sector_name = malloc(sizeof(char)*BUFF_SIZE);
 		dw_oom_abort(sector_name, "sector_name");
-		strcpy(local_col_name, var_name);
+		/* TS17961-ga-buffer: strncpy caps at BUFF_SIZE-1 (verified=199); GLPK name limit is 255 > 199 */
+		strncpy(local_col_name, var_name, BUFF_SIZE - 1);
+		local_col_name[BUFF_SIZE - 1] = '\0';
 		if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
-		strcpy( sector_name, strtok(NULL, ",") );
-		fprintf(zero_file, "%s %s\n", sector_name, strtok(NULL, ","));
+		/* TS17961-nonnullptr: strtok may return NULL; guard before copy */
+		{
+			const char *tok_sector_name = strtok(NULL, ",");
+			if (tok_sector_name == NULL) {
+				dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing sector token in parse_zero_var index %d; skipping\n", index);
+				free(sector_name);
+				free(local_col_name);
+				return 0;
+			}
+			strncpy(sector_name, tok_sector_name, BUFF_SIZE - 1);
+			sector_name[BUFF_SIZE - 1] = '\0';
+		}
+		/* TS17961-nonnullptr: strtok may return NULL; guard before passing to fprintf */
+		{
+			const char *tok_var_name = strtok(NULL, ",");
+			if (tok_var_name == NULL) {
+				dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing variable token in parse_zero_var index %d; skipping\n", index);
+				free(sector_name);
+				free(local_col_name);
+				return 0;
+			}
+			(void)fprintf(zero_file, "%s %s\n", sector_name, tok_var_name);
+		}
 		free(sector_name);
 		free(local_col_name);
 	}
@@ -685,7 +731,7 @@ void write_basis(int iteration) {
 	char* filename = malloc(sizeof(char)*BUFF_SIZE);
 	dw_oom_abort(filename, "filename");
 	FILE* basis_file;
-	snprintf(filename, BUFF_SIZE, "basis_iteration_%d", iteration);
+	(void)snprintf(filename, BUFF_SIZE, "basis_iteration_%d", iteration);
 	if( (basis_file = fopen(filename, "w")) == NULL 	) {
 		dw_printf(IMPORTANCE_VITAL, "Problem opening %s for writing.\n",
 				filename);
@@ -694,14 +740,14 @@ void write_basis(int iteration) {
 
 	for( i = 1; i <= glp_get_num_cols(master_lp); i++ ) {
 		if( glp_get_col_stat(master_lp, i) == GLP_BS ) {
-			fprintf(basis_file, "%s value %.8e\n", glp_get_col_name(master_lp, i), glp_get_col_prim(master_lp, i));
+			(void)fprintf(basis_file, "%s value %.8e\n", glp_get_col_name(master_lp, i), glp_get_col_prim(master_lp, i));
 			basic_var_count++;
 		}
 	}
-	fprintf(basis_file, "Num basics: %d\n", basic_var_count);
-	fprintf(basis_file, "Num cols  : %d\n", glp_get_num_cols(master_lp));
+	(void)fprintf(basis_file, "Num basics: %d\n", basic_var_count);
+	(void)fprintf(basis_file, "Num cols  : %d\n", glp_get_num_cols(master_lp));
 	free(filename);
-	fclose(basis_file);
+	(void)fclose(basis_file);
 }
 
 /* Checks to see if the reduced master's variables are integral (binary) or
@@ -751,11 +797,16 @@ void get_solution(subprob_struct* sub_data) {
 			col_name = glp_get_col_name(master_lp, i);
 			strcpy(local_col_name, col_name);
 			/* Tease out the subprob number and the iteration. */
-			strtok(local_col_name, "_");
-			/* Would probably make sense to do safety checks in here,
-			 * but for now just take the chance. */
-			subprob = atoi(strtok(NULL, "_"));
-			iteration = atoi(strtok(NULL, "_"));
+			{
+				char *_ep, *_tok;
+				(void)strtok(local_col_name, "_");
+				/* Would probably make sense to do safety checks in here,
+				 * but for now just take the chance. */
+				_tok = strtok(NULL, "_");
+				subprob = _tok ? (int)strtol(_tok, &_ep, 10) : 0;
+				_tok = strtok(NULL, "_");
+				iteration = _tok ? (int)strtol(_tok, &_ep, 10) : 0;
+			}
 			/* This is actually would be "IMPORTANCE_DIAG" information, but
 			 * we assume the user wouldn't have called this function if he/she
 			 * didn't want to see it printed.

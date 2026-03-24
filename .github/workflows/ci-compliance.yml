@@ -1,0 +1,175 @@
+name: ISO/IEC TS 17961 Compliance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'specs/014-iso-ts-17961-compliance/**'
+      - 'tests/test_ts17961_enforcement.sh'
+      - '.github/workflows/ci-compliance.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'specs/014-iso-ts-17961-compliance/**'
+      - 'tests/test_ts17961_enforcement.sh'
+      - '.github/workflows/ci-compliance.yml'
+
+jobs:
+  ts17961-compliance:
+    name: ISO/IEC TS 17961 Compliance (cppcheck + clang-tidy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------ #
+      #  Install tooling                                                     #
+      # ------------------------------------------------------------------ #
+      - name: Install cppcheck and clang-tidy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck clang-tidy libglpk-dev
+
+      # ------------------------------------------------------------------ #
+      #  Version gate — fail early if versions are too old                  #
+      # ------------------------------------------------------------------ #
+      - name: Verify cppcheck version (>= 2.12 required for cert addon)
+        run: |
+          version=$(cppcheck --version | sed 's/Cppcheck //')
+          major=$(echo "$version" | cut -d. -f1)
+          minor=$(echo "$version" | cut -d. -f2)
+          echo "cppcheck version: $version"
+          if [ "$major" -lt 2 ] || { [ "$major" -eq 2 ] && [ "$minor" -lt 12 ]; }; then
+            echo "ERROR: cppcheck $version is too old; >= 2.12 required for cert addon." >&2
+            exit 1
+          fi
+
+      - name: Verify clang-tidy version (>= 17 required for cert-* checks)
+        run: |
+          version=$(clang-tidy --version | grep -oP '(?<=version )\d+' | head -1)
+          echo "clang-tidy major version: $version"
+          if [ "$version" -lt 17 ]; then
+            echo "ERROR: clang-tidy $version is too old; >= 17 required for cert-* checks." >&2
+            exit 1
+          fi
+
+      # ------------------------------------------------------------------ #
+      #  configure — produce config.h before static analysis               #
+      # ------------------------------------------------------------------ #
+      - name: Suppress automake regeneration
+        run: touch aclocal.m4 configure config.h.in build-aux/ltmain.sh Makefile.in src/Makefile.in
+
+      - name: Run ./configure to produce config.h
+        run: |
+          GLPK_CFLAGS=-I/usr/include GLPK_LIBS=-lglpk \
+            ./configure
+
+      # ------------------------------------------------------------------ #
+      #  Locate the cert addon shipped with cppcheck                        #
+      # ------------------------------------------------------------------  #
+      # On Ubuntu the addons are bundled with the cppcheck package.         #
+      # Use dpkg to find the exact installed path; fall back to find.       #
+      # If not bundled (unusual), download from cppcheck GitHub to match    #
+      # the installed version.                                              #
+      # ------------------------------------------------------------------ #
+      - name: Locate cert.py addon
+        run: |
+          cert_py=/tmp/cert.py
+          if dpkg -L cppcheck | grep -q 'cert\.py'; then
+            cert_py=$(dpkg -L cppcheck | grep 'cert\.py' | head -1)
+            echo "cert.py bundled at $cert_py"
+          else
+            ver_full=$(cppcheck --version | sed 's/Cppcheck //')
+            # Build candidate tags: exact version, major.minor only, then main
+            ver_minor=$(echo "$ver_full" | cut -d. -f1,2)
+            echo "Downloading cert.py (trying $ver_full, $ver_minor, main)..."
+            curl -fsSL \
+              "https://raw.githubusercontent.com/danmar/cppcheck/${ver_full}/addons/cert.py" \
+              -o "$cert_py" 2>/dev/null \
+            || curl -fsSL \
+              "https://raw.githubusercontent.com/danmar/cppcheck/${ver_minor}/addons/cert.py" \
+              -o "$cert_py" 2>/dev/null \
+            || curl -fsSL \
+              "https://raw.githubusercontent.com/danmar/cppcheck/main/addons/cert.py" \
+              -o "$cert_py" 2>/dev/null \
+            || { echo "WARNING: cert.py unavailable; cppcheck cert addon will be skipped"; cert_py=""; }
+            [ -n "$cert_py" ] && echo "Downloaded cert.py to $cert_py"
+          fi
+          echo "CERT_PY_PATH=$cert_py" >> "$GITHUB_ENV"
+
+      # ------------------------------------------------------------------ #
+      #  cppcheck — ISO/IEC TS 17961 cert addon scan                       #
+      # ------------------------------------------------------------------ #
+      - name: cppcheck (cert addon) — src/dw_*.c
+        run: |
+          # Strip comments and blank lines — cppcheck --suppressions-list
+          # does not support '#' comment syntax and errors with "No id."
+          grep -v '^[[:space:]]*#' \
+            specs/014-iso-ts-17961-compliance/audit/cppcheck-na-suppressions.txt \
+            | grep -v '^[[:space:]]*$' \
+            > /tmp/cppcheck-suppressions.txt
+
+          # cert.py availability is environment-dependent; skip the addon
+          # gracefully when unavailable — clang-tidy cert-* is the hard gate.
+          if [ -z "$CERT_PY_PATH" ]; then
+            echo "WARNING: cert.py not available; skipping cppcheck cert addon (clang-tidy is the enforcement gate)"
+            exit 0
+          fi
+
+          cppcheck \
+            --addon="$CERT_PY_PATH" \
+            --suppressions-list=/tmp/cppcheck-suppressions.txt \
+            --error-exitcode=1 \
+            --std=c11 \
+            --platform=unix64 \
+            -I src \
+            -I . \
+            src/dw_blas.c \
+            src/dw_globals.c \
+            src/dw_main.c \
+            src/dw_phases.c \
+            src/dw_rounding.c \
+            src/dw_solver.c \
+            src/dw_subprob.c \
+            src/dw_support.c
+
+      # ------------------------------------------------------------------ #
+      #  clang-tidy — cert-* checks                                         #
+      # clang-tidy uses explicit -- flags below; no compile_commands.json  #
+      # is required and bear is not needed.                                 #
+      # ------------------------------------------------------------------ #
+      - name: clang-tidy (cert-*) — src/dw_*.c
+        run: |
+          clang-tidy \
+            -checks='cert-*' \
+            --warnings-as-errors='cert-*' \
+            src/dw_blas.c \
+            src/dw_globals.c \
+            src/dw_main.c \
+            src/dw_phases.c \
+            src/dw_rounding.c \
+            src/dw_solver.c \
+            src/dw_subprob.c \
+            src/dw_support.c \
+            -- -std=c11 -D_POSIX_C_SOURCE=200809L -I src -I . -I /usr/include
+
+      # ------------------------------------------------------------------ #
+      #  SC-003 Enforcement gate                                            #
+      # ------------------------------------------------------------------ #
+      - name: SC-003 synthetic violation gate
+        run: bash tests/test_ts17961_enforcement.sh
+
+      # ------------------------------------------------------------------ #
+      #  Regression test suite                                              #
+      # ------------------------------------------------------------------ #
+      - name: Build
+        run: make
+
+      - name: Add dwsolver to PATH
+        run: echo "$GITHUB_WORKSPACE/src" >> $GITHUB_PATH
+
+      - name: Regression tests
+        run: cd tests && bash dw-tests.sh

@@ -129,10 +129,15 @@ int process_solution(subprob_struct* sub_data, char* out_file_name, int mode) {
 			//dw_printf(IMPORTANCE_DIAG, "Col = %d (%s).\n", i, col_name);
 			strcpy(local_col_name, col_name);
 			/* Tease out the subprob number and the iteration. */
-			strtok(local_col_name, "_");
+			(void)strtok(local_col_name, "_");
 			/* Would probably make sense to do safety checks in here. */
-			subprob   = atoi(strtok(NULL, "_"));
-			iteration = atoi(strtok(NULL, "_"));
+			{
+				char *_tok, *_ep;
+				_tok = strtok(NULL, "_");
+				subprob   = _tok ? (int)strtol(_tok, &_ep, 10) : 0;
+				_tok = strtok(NULL, "_");
+				iteration = _tok ? (int)strtol(_tok, &_ep, 10) : 0;
+			}
 			/* Have we encountered a lambda from this subproblem before? */
 			if( num_infos[subprob] == 0 ) {
 				/* Begin linked list of non-zero vars for this subproblem. */
@@ -240,7 +245,7 @@ int process_solution(subprob_struct* sub_data, char* out_file_name, int mode) {
 		}
 	}
 
-	fclose(out_file);
+	(void)fclose(out_file);
 	//free(local_col_name);
 
 
@@ -422,10 +427,27 @@ void print_zeros(int_thread_data* my_data) {
 				dw_printf(IMPORTANCE_DIAG, "Returned null (subprob %d, col %d), continuing...\n", subprob, j);
 				continue;
 			}
-			strcpy(local_col_name, var_name);
+			/* TS17961-ga-buffer: strncpy caps at BUFF_SIZE-1 (verified=199); GLPK name limit is 255 > 199 */
+			strncpy(local_col_name, var_name, BUFF_SIZE - 1);
+			local_col_name[BUFF_SIZE - 1] = '\0';
 			if( strtok(local_col_name, "(") == NULL ) printf("NULL 1");
-			strcpy( curr_flight, strtok(NULL, ",") );
-			strcpy( curr_sector, strtok(NULL, ",") );
+			/* TS17961-nonnullptr: strtok may return NULL; guard before copy */
+			{
+				const char *tok_flight = strtok(NULL, ",");
+				if (tok_flight == NULL) {
+					dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing flight token in col %d, skipping\n", j);
+					continue;
+				}
+				strncpy(curr_flight, tok_flight, BUFF_SIZE - 1);
+				curr_flight[BUFF_SIZE - 1] = '\0';
+				const char *tok_sector = strtok(NULL, ",");
+				if (tok_sector == NULL) {
+					dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing sector token in col %d, skipping\n", j);
+					continue;
+				}
+				strncpy(curr_sector, tok_sector, BUFF_SIZE - 1);
+				curr_sector[BUFF_SIZE - 1] = '\0';
+			}
 			(void)strtok(NULL, ")") /* advance tokenizer past time field */;
 			//printf("%s ( %s, %s ) = %3.2f\n", var_name, curr_flight, curr_sector, x[subprob][curr_iter][j]);
 
@@ -442,10 +464,27 @@ void print_zeros(int_thread_data* my_data) {
 				if( var_name == NULL ) {
 					dw_printf(IMPORTANCE_DIAG, "NULL col name at j-1=%d, skipping prev-flight check\n", j-1);
 				} else {
-					strcpy(local_col_name, var_name);
-					if( strtok(local_col_name, "(") == NULL ) printf("NULL 2");
-					strcpy( temp_flight, strtok(NULL, ",") );
-					strcpy( prev_sector, strtok(NULL, ",") );
+						/* TS17961-ga-buffer: strncpy caps at BUFF_SIZE-1 (verified=199); GLPK name limit is 255 > 199 */
+						strncpy(local_col_name, var_name, BUFF_SIZE - 1);
+						local_col_name[BUFF_SIZE - 1] = '\0';
+						if( strtok(local_col_name, "(") == NULL ) printf("NULL 2");
+						/* TS17961-nonnullptr: strtok may return NULL; guard before copy */
+						{
+							const char *tok_tmp = strtok(NULL, ",");
+							if (tok_tmp == NULL) {
+								dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing flight token at j-1=%d, skipping\n", j-1);
+								continue;
+							}
+							strncpy(temp_flight, tok_tmp, BUFF_SIZE - 1);
+							temp_flight[BUFF_SIZE - 1] = '\0';
+							const char *tok_prev_sec = strtok(NULL, ",");
+							if (tok_prev_sec == NULL) {
+								dw_printf(IMPORTANCE_DIAG, "nonnullptr: missing sector token at j-1=%d, skipping\n", j-1);
+								continue;
+							}
+							strncpy(prev_sector, tok_prev_sec, BUFF_SIZE - 1);
+							prev_sector[BUFF_SIZE - 1] = '\0';
+						}
 				} /* var_name != NULL */
 				}
 				else { /* First variable in subproblem.  No previous variable. */
@@ -479,7 +518,7 @@ void print_zeros(int_thread_data* my_data) {
 						//printf("NEW DELAY: Flight %s, Sector %s, %d minutes.\n", curr_flight, old_sector, new_delay);
 						//printf("%s %s %d\n", curr_flight, old_sector, new_delay);
 						//printf("%s %s %d\n", curr_flight, old_sector, new_delay);
-						fprintf(my_data->zero_file,"%s %s %d\n", curr_flight, old_sector, new_delay);
+						(void)fprintf(my_data->zero_file,"%s %s %d\n", curr_flight, old_sector, new_delay);
 					}
 					else { /* No new delay. */
 						prev_delay = curr_delay;
@@ -489,7 +528,7 @@ void print_zeros(int_thread_data* my_data) {
 						ground_delay = 0;
 						//printf("NEW_DELAY: Flight %s, Sector %s, %d minutes.\n", curr_flight, prev_sector, curr_delay);
 						//printf("%s %s %d\n", curr_flight, prev_sector, curr_delay);
-						fprintf(my_data->zero_file,"%s %s %d\n", curr_flight, prev_sector, curr_delay);
+						(void)fprintf(my_data->zero_file,"%s %s %d\n", curr_flight, prev_sector, curr_delay);
 					}
 
 					strcpy(old_sector,  prev_sector);
@@ -505,7 +544,7 @@ void print_zeros(int_thread_data* my_data) {
 	}
 	//if( globals->dw_verbosity >= OUTPUT_NORMAL )
 		//printf("leaving print_zeros...\n");
-	fflush(stdout);
+	(void)fflush(stdout);
 	if( num_zeros > 0 )
 		printf("num_zeros %d\n", num_zeros);
 	free(local_col_name);
@@ -545,7 +584,7 @@ void* solution_printing_thread(void* arg) {
 	}
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
 	for( j = 1; j < (my_data->sub_data).num_cols_plus; j++ ) {
-		fprintf(my_data->zero_file, "%s\t%f\n",
+		(void)fprintf(my_data->zero_file, "%s\t%f\n",
 				my_data->sub_data.col_names[j] ? my_data->sub_data.col_names[j] : "(unnamed)",
 				my_data->sub_data.globals->x[subprob][curr_iter][j]);
 	}
@@ -682,7 +721,7 @@ void* rounding_thread(void* arg) {
 	}
 
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&glpk_mutex), "pthread_mutex_lock(&glpk_mutex)");
-	fflush(stdout);
+	(void)fflush(stdout);
 	print_zeros_simple(my_data);
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 

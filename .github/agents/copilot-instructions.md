@@ -24,6 +24,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-23
 - C99 (no source changes); GNU Autotools (automake 1.16+, autoconf 2.71+, libtool 2.4+); GitHub Actions YAML + GLPK ≥ 4.65 (external); `softprops/action-gh-release` (SHA-pinned); `actions/checkout` (SHA-pinned) (012-release-infrastructure)
 - N/A — artifacts are source tarballs (`.tar.gz`) and GitHub Release assets (012-release-infrastructure)
 - C11 (GCC/Clang on macOS/Linux; MinGW-w64 on Windows via MSYS2) + POSIX.1-2008 (`pthreads`, `clock_gettime`); system GLPK ≥ 4.65; (013-strict-c-posix-compliance)
+- C11 (`-std=c11 -pedantic-errors`) + GLPK ≥ 4.65, pthreads; cppcheck ≥ 2.12 (CI tool), clang-tidy ≥ 17 (CI tool) (014-iso-ts-17961-compliance)
+- Markdown documents in `specs/014-iso-ts-17961-compliance/audit/` (014-iso-ts-17961-compliance)
 
 - C99 (POSIX; GCC 9+ and Clang 12+ are primary targets) + POSIX Threads (pthreads); GLPK 4.44 (embedded, thread-patched) (002-cross-platform-repair)
 
@@ -43,9 +45,9 @@ tests/
 C99 (POSIX; GCC 9+ and Clang 12+ are primary targets): Follow standard conventions
 
 ## Recent Changes
+- 014-iso-ts-17961-compliance: Added C11 (`-std=c11 -pedantic-errors`) + GLPK ≥ 4.65, pthreads; cppcheck ≥ 2.12 (CI tool), clang-tidy ≥ 17 (CI tool)
 - 013-strict-c-posix-compliance: Added C11 (GCC/Clang on macOS/Linux; MinGW-w64 on Windows via MSYS2) + POSIX.1-2008 (`pthreads`, `clock_gettime`); system GLPK ≥ 4.65;
 - 012-release-infrastructure: Added C99 (no source changes); GNU Autotools (automake 1.16+, autoconf 2.71+, libtool 2.4+); GitHub Actions YAML + GLPK ≥ 4.65 (external); `softprops/action-gh-release` (SHA-pinned); `actions/checkout` (SHA-pinned)
-- 011-remove-embedded-glpk: Added C99 + GLPK ≥ 4.65 (external, via `pkg-config`), POSIX pthreads
 
 
 <!-- MANUAL ADDITIONS START -->

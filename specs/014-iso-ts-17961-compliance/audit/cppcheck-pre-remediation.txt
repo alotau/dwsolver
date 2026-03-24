@@ -1,0 +1,835 @@
+Checking src/dw_blas.c ...
+1/8 files checked 2% done
+Checking src/dw_globals.c ...
+Checking src/dw_globals.c: DWSOLVER_BUILDING_LIB=DWSOLVER_BUILDING_LIB;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_globals.c: DWSOLVER_STATIC=DWSOLVER_STATIC;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_globals.c: USE_NAMED_SEMAPHORES=USE_NAMED_SEMAPHORES...
+Checking src/dw_globals.c: _WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_globals.c: __GNUC__=__GNUC__;__clang__=__clang__...
+2/8 files checked 3% done
+Checking src/dw_main.c ...
+src/dw_main.c:56:41: style: Parameter 'argv' can be declared as const array [constParameter]
+static void print_usage(int argc, char *argv[]) {
+                                        ^
+Checking src/dw_main.c: DWSOLVER_BUILDING_LIB=DWSOLVER_BUILDING_LIB;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_main.c: DWSOLVER_STATIC=DWSOLVER_STATIC;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_main.c: _WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_main.c: __GNUC__=__GNUC__;__clang__=__clang__...
+3/8 files checked 10% done
+Checking src/dw_phases.c ...
+src/dw_phases.c:321:12: style: Variable 'index' is assigned a value that is never used. [unreadVariable]
+ int index = -1;
+           ^
+Checking src/dw_phases.c: DWSOLVER_BUILDING_LIB=DWSOLVER_BUILDING_LIB;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_phases.c: DWSOLVER_STATIC=DWSOLVER_STATIC;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_phases.c: HAVE_CLOCK_GETTIME=HAVE_CLOCK_GETTIME...
+Checking src/dw_phases.c: USE_NAMED_SEMAPHORES=USE_NAMED_SEMAPHORES...
+Checking src/dw_phases.c: VERBOSE=VERBOSE...
+Checking src/dw_phases.c: _WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_phases.c: __GNUC__=__GNUC__;__clang__=__clang__...
+4/8 files checked 25% done
+Checking src/dw_rounding.c ...
+src/dw_rounding.c:107:3: warning: If memory allocation fails, then there is a possible null pointer dereference: num_infos [nullPointerOutOfMemory]
+  num_infos[i] = 0;
+  ^
+src/dw_rounding.c:76:25: note: Assuming allocation function fails
+ int* num_infos = malloc(sizeof(int)*num_clients);
+                        ^
+src/dw_rounding.c:76:25: note: Assignment 'num_infos=malloc(sizeof(int)*num_clients)', assigned value is 0
+ int* num_infos = malloc(sizeof(int)*num_clients);
+                        ^
+src/dw_rounding.c:107:3: note: Null pointer dereference
+  num_infos[i] = 0;
+  ^
+src/dw_rounding.c:108:3: warning: If memory allocation fails, then there is a possible null pointer dereference: solution_organization [nullPointerOutOfMemory]
+  solution_organization[i] = NULL;
+  ^
+src/dw_rounding.c:89:43: note: Assuming allocation function fails
+ sol_info** solution_organization = malloc(sizeof(sol_info*)*num_clients);
+                                          ^
+src/dw_rounding.c:89:43: note: Assignment 'solution_organization=malloc(sizeof(struct sol_info*)*num_clients)', assigned value is 0
+ sol_info** solution_organization = malloc(sizeof(sol_info*)*num_clients);
+                                          ^
+src/dw_rounding.c:108:3: note: Null pointer dereference
+  solution_organization[i] = NULL;
+  ^
+src/dw_rounding.c:286:2: warning: If memory allocation fails, then there is a possible null pointer dereference: val [nullPointerOutOfMemory]
+ val[0] = 0.0;
+ ^
+src/dw_rounding.c:284:22: note: Assuming allocation function fails
+ double* val = malloc(sizeof(double) * (D->cols + 1));
+                     ^
+src/dw_rounding.c:284:22: note: Assignment 'val=malloc(sizeof(double)*(D->cols+1))', assigned value is 0
+ double* val = malloc(sizeof(double) * (D->cols + 1));
+                     ^
+src/dw_rounding.c:286:2: note: Null pointer dereference
+ val[0] = 0.0;
+ ^
+src/dw_rounding.c:287:2: warning: If memory allocation fails, then there is a possible null pointer dereference: ind [nullPointerOutOfMemory]
+ ind[0] = 0;
+ ^
+src/dw_rounding.c:282:22: note: Assuming allocation function fails
+ int*    ind = malloc(sizeof(int) * (D->cols + 1));
+                     ^
+src/dw_rounding.c:282:22: note: Assignment 'ind=malloc(sizeof(int)*(D->cols+1))', assigned value is 0
+ int*    ind = malloc(sizeof(int) * (D->cols + 1));
+                     ^
+src/dw_rounding.c:287:2: note: Null pointer dereference
+ ind[0] = 0;
+ ^
+src/dw_rounding.c:353:9: warning: If memory allocation fails, then there is a possible null pointer dereference: curr_flight [nullPointerOutOfMemory]
+ strcpy(curr_flight, "COOTIE1");
+        ^
+src/dw_rounding.c:346:28: note: Assuming allocation function fails
+ char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:346:28: note: Assignment 'curr_flight=malloc(sizeof(char)*200)', assigned value is 0
+ char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:353:9: note: Null pointer dereference
+ strcpy(curr_flight, "COOTIE1");
+        ^
+src/dw_rounding.c:354:9: warning: If memory allocation fails, then there is a possible null pointer dereference: curr_sector [nullPointerOutOfMemory]
+ strcpy(curr_sector, "COOTIE2");
+        ^
+src/dw_rounding.c:348:28: note: Assuming allocation function fails
+ char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:348:28: note: Assignment 'curr_sector=malloc(sizeof(char)*200)', assigned value is 0
+ char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:354:9: note: Null pointer dereference
+ strcpy(curr_sector, "COOTIE2");
+        ^
+src/dw_rounding.c:410:9: warning: If memory allocation fails, then there is a possible null pointer dereference: curr_flight [nullPointerOutOfMemory]
+ strcpy(curr_flight, "COOTIE1");
+        ^
+src/dw_rounding.c:395:28: note: Assuming allocation function fails
+ char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:395:28: note: Assignment 'curr_flight=malloc(sizeof(char)*200)', assigned value is 0
+ char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:410:9: note: Null pointer dereference
+ strcpy(curr_flight, "COOTIE1");
+        ^
+src/dw_rounding.c:411:9: warning: If memory allocation fails, then there is a possible null pointer dereference: curr_sector [nullPointerOutOfMemory]
+ strcpy(curr_sector, "COOTIE2");
+        ^
+src/dw_rounding.c:401:28: note: Assuming allocation function fails
+ char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:401:28: note: Assignment 'curr_sector=malloc(sizeof(char)*200)', assigned value is 0
+ char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:411:9: note: Null pointer dereference
+ strcpy(curr_sector, "COOTIE2");
+        ^
+src/dw_rounding.c:412:9: warning: If memory allocation fails, then there is a possible null pointer dereference: prev_flight [nullPointerOutOfMemory]
+ strcpy(prev_flight, "COOTIE3");
+        ^
+src/dw_rounding.c:399:28: note: Assuming allocation function fails
+ char* prev_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:399:28: note: Assignment 'prev_flight=malloc(sizeof(char)*200)', assigned value is 0
+ char* prev_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:412:9: note: Null pointer dereference
+ strcpy(prev_flight, "COOTIE3");
+        ^
+src/dw_rounding.c:413:9: warning: If memory allocation fails, then there is a possible null pointer dereference: prev_sector [nullPointerOutOfMemory]
+ strcpy(prev_sector, "COOTIE4");
+        ^
+src/dw_rounding.c:403:28: note: Assuming allocation function fails
+ char* prev_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:403:28: note: Assignment 'prev_sector=malloc(sizeof(char)*200)', assigned value is 0
+ char* prev_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:413:9: note: Null pointer dereference
+ strcpy(prev_sector, "COOTIE4");
+        ^
+src/dw_rounding.c:414:9: warning: If memory allocation fails, then there is a possible null pointer dereference: old_sector [nullPointerOutOfMemory]
+ strcpy(old_sector,  "COOTIE5");
+        ^
+src/dw_rounding.c:405:28: note: Assuming allocation function fails
+ char* old_sector  = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:405:28: note: Assignment 'old_sector=malloc(sizeof(char)*200)', assigned value is 0
+ char* old_sector  = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:414:9: note: Null pointer dereference
+ strcpy(old_sector,  "COOTIE5");
+        ^
+src/dw_rounding.c:575:9: warning: If memory allocation fails, then there is a possible null pointer dereference: curr_flight [nullPointerOutOfMemory]
+ strcpy(curr_flight, "COOTIE");
+        ^
+src/dw_rounding.c:566:28: note: Assuming allocation function fails
+ char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:566:28: note: Assignment 'curr_flight=malloc(sizeof(char)*200)', assigned value is 0
+ char* curr_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:575:9: note: Null pointer dereference
+ strcpy(curr_flight, "COOTIE");
+        ^
+src/dw_rounding.c:576:9: warning: If memory allocation fails, then there is a possible null pointer dereference: curr_sector [nullPointerOutOfMemory]
+ strcpy(curr_sector, "COOTIE");
+        ^
+src/dw_rounding.c:570:28: note: Assuming allocation function fails
+ char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:570:28: note: Assignment 'curr_sector=malloc(sizeof(char)*200)', assigned value is 0
+ char* curr_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:576:9: note: Null pointer dereference
+ strcpy(curr_sector, "COOTIE");
+        ^
+src/dw_rounding.c:577:9: warning: If memory allocation fails, then there is a possible null pointer dereference: prev_flight [nullPointerOutOfMemory]
+ strcpy(prev_flight, "COOTIE");
+        ^
+src/dw_rounding.c:568:28: note: Assuming allocation function fails
+ char* prev_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:568:28: note: Assignment 'prev_flight=malloc(sizeof(char)*200)', assigned value is 0
+ char* prev_flight = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:577:9: note: Null pointer dereference
+ strcpy(prev_flight, "COOTIE");
+        ^
+src/dw_rounding.c:578:9: warning: If memory allocation fails, then there is a possible null pointer dereference: prev_sector [nullPointerOutOfMemory]
+ strcpy(prev_sector, "COOTIE");
+        ^
+src/dw_rounding.c:572:28: note: Assuming allocation function fails
+ char* prev_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:572:28: note: Assignment 'prev_sector=malloc(sizeof(char)*200)', assigned value is 0
+ char* prev_sector = malloc(sizeof(char)*BUFF_SIZE);
+                           ^
+src/dw_rounding.c:578:9: note: Null pointer dereference
+ strcpy(prev_sector, "COOTIE");
+        ^
+src/dw_rounding.c:78:14: style: The scope of the variable 'col_name' can be reduced. [variableScope]
+ const char* col_name;
+             ^
+src/dw_rounding.c:81:9: style: The scope of the variable 'var_value' can be reduced. [variableScope]
+ double var_value;
+        ^
+src/dw_rounding.c:392:14: style: The scope of the variable 'var_name' can be reduced. [variableScope]
+ const char* var_name;
+             ^
+src/dw_rounding.c:521:32: style: The scope of the variable 'iteration' can be reduced. [variableScope]
+ int i, j, subprob, curr_iter, iteration;
+                               ^
+src/dw_rounding.c:522:9: style: The scope of the variable 'val' can be reduced. [variableScope]
+ double val;
+        ^
+src/dw_rounding.c:561:6: style: The scope of the variable 'iteration' can be reduced. [variableScope]
+ int iteration;
+     ^
+src/dw_rounding.c:565:9: style: The scope of the variable 'val' can be reduced. [variableScope]
+ double val;
+        ^
+src/dw_rounding.c:524:12: style: Variable 'temp_info' can be declared as pointer to const [constVariablePointer]
+ sol_info* temp_info;
+           ^
+src/dw_rounding.c:580:12: style: Variable 'temp_info' can be declared as pointer to const [constVariablePointer]
+ sol_info* temp_info;
+           ^
+src/dw_rounding.c:290:15: style: Variable 'coeff' is assigned a value that is never used. [unreadVariable]
+ double coeff = 0.0;
+              ^
+Checking src/dw_rounding.c: DWSOLVER_BUILDING_LIB=DWSOLVER_BUILDING_LIB;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_rounding.c: DWSOLVER_STATIC=DWSOLVER_STATIC;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_rounding.c: HAVE_CLOCK_GETTIME=HAVE_CLOCK_GETTIME...
+Checking src/dw_rounding.c: USE_INTEL_MKL=USE_INTEL_MKL...
+Checking src/dw_rounding.c: USE_NAMED_SEMAPHORES=USE_NAMED_SEMAPHORES...
+Checking src/dw_rounding.c: _WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_rounding.c: __GNUC__=__GNUC__;__clang__=__clang__...
+5/8 files checked 40% done
+Checking src/dw_solver.c ...
+src/dw_solver.c:484:4: warning: If memory allocation fails, then there is a possible null pointer dereference: obj_count [nullPointerOutOfMemory]
+  *obj_count = 0;
+   ^
+src/dw_solver.c:483:10: note: Assuming allocation function fails
+   malloc(sizeof(int));
+         ^
+src/dw_solver.c:483:10: note: Assignment 'obj_count=malloc(sizeof(int))', assigned value is 0
+   malloc(sizeof(int));
+         ^
+src/dw_solver.c:484:4: note: Null pointer dereference
+  *obj_count = 0;
+   ^
+src/dw_solver.c:536:4: warning: If memory allocation fails, then there is a possible null pointer dereference: col_deletion_indicies [nullPointerOutOfMemory]
+   col_deletion_indicies[i+1] =
+   ^
+src/dw_solver.c:533:33: note: Assuming allocation function fails
+  col_deletion_indicies = malloc(sizeof(int)*(D->rows + 1));
+                                ^
+src/dw_solver.c:533:33: note: Assignment 'col_deletion_indicies=malloc(sizeof(int)*(D->rows+1))', assigned value is 0
+  col_deletion_indicies = malloc(sizeof(int)*(D->rows + 1));
+                                ^
+src/dw_solver.c:536:4: note: Null pointer dereference
+   col_deletion_indicies[i+1] =
+   ^
+src/dw_solver.c:962:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->verbosity               = opts->verbosity;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:962:2: note: Null pointer dereference
+ globals->verbosity               = opts->verbosity;
+ ^
+src/dw_solver.c:963:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->mip_gap                 = opts->mip_gap;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:963:2: note: Null pointer dereference
+ globals->mip_gap                 = opts->mip_gap;
+ ^
+src/dw_solver.c:964:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->max_phase1_iterations   = opts->max_phase1_iterations;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:964:2: note: Null pointer dereference
+ globals->max_phase1_iterations   = opts->max_phase1_iterations;
+ ^
+src/dw_solver.c:965:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->max_phase2_iterations   = opts->max_phase2_iterations;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:965:2: note: Null pointer dereference
+ globals->max_phase2_iterations   = opts->max_phase2_iterations;
+ ^
+src/dw_solver.c:966:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->rounding_flag           = opts->rounding_flag;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:966:2: note: Null pointer dereference
+ globals->rounding_flag           = opts->rounding_flag;
+ ^
+src/dw_solver.c:967:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->integerize_flag         = opts->integerize_flag;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:967:2: note: Null pointer dereference
+ globals->integerize_flag         = opts->integerize_flag;
+ ^
+src/dw_solver.c:968:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->enforce_sub_integrality = opts->enforce_sub_integrality;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:968:2: note: Null pointer dereference
+ globals->enforce_sub_integrality = opts->enforce_sub_integrality;
+ ^
+src/dw_solver.c:969:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->print_timing_data       = opts->print_timing_data;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:969:2: note: Null pointer dereference
+ globals->print_timing_data       = opts->print_timing_data;
+ ^
+src/dw_solver.c:970:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->print_final_master      = opts->print_final_master;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:970:2: note: Null pointer dereference
+ globals->print_final_master      = opts->print_final_master;
+ ^
+src/dw_solver.c:971:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->print_relaxed_sol       = opts->print_relaxed_sol;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:971:2: note: Null pointer dereference
+ globals->print_relaxed_sol       = opts->print_relaxed_sol;
+ ^
+src/dw_solver.c:972:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->perturb                 = opts->perturb;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:972:2: note: Null pointer dereference
+ globals->perturb                 = opts->perturb;
+ ^
+src/dw_solver.c:973:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->shift                   = opts->shift;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:973:2: note: Null pointer dereference
+ globals->shift                   = opts->shift;
+ ^
+src/dw_solver.c:979:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->num_clients = num_subproblems;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:979:2: note: Null pointer dereference
+ globals->num_clients = num_subproblems;
+ ^
+src/dw_solver.c:980:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->master_name = malloc(strlen(master_file) + 1);
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:980:2: note: Null pointer dereference
+ globals->master_name = malloc(strlen(master_file) + 1);
+ ^
+src/dw_solver.c:981:15: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ dw_oom_abort(globals->master_name, "globals->master_name");
+              ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:981:15: note: Null pointer dereference
+ dw_oom_abort(globals->master_name, "globals->master_name");
+              ^
+src/dw_solver.c:982:9: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ strcpy(globals->master_name, master_file);
+        ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:982:9: note: Null pointer dereference
+ strcpy(globals->master_name, master_file);
+        ^
+src/dw_solver.c:984:2: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ globals->subproblem_names = malloc(sizeof(char *) * (size_t)num_subproblems);
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:984:2: note: Null pointer dereference
+ globals->subproblem_names = malloc(sizeof(char *) * (size_t)num_subproblems);
+ ^
+src/dw_solver.c:985:15: warning: If memory allocation fails, then there is a possible null pointer dereference: globals [nullPointerOutOfMemory]
+ dw_oom_abort(globals->subproblem_names, "globals->subproblem_names");
+              ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:985:15: note: Null pointer dereference
+ dw_oom_abort(globals->subproblem_names, "globals->subproblem_names");
+              ^
+src/dw_solver.c:876:7: style: The scope of the variable 'k' can be reduced. [variableScope]
+  int k;
+      ^
+src/dw_solver.c:841:9: style: Variable 'integerization_zero_file' can be declared as pointer to const [constVariablePointer]
+  FILE* integerization_zero_file;
+        ^
+src/dw_solver.c:842:33: style: Variable 'integerization_zero_file' is assigned a value that is never used. [unreadVariable]
+  if( (integerization_zero_file = fopen(INTEGERIZED_ZEROS_FILE, "w")) == NULL ) {
+                                ^
+src/dw_solver.c:864:7: style: Variable 't0' is assigned a value that is never used. [unreadVariable]
+   t0 = time(NULL);
+      ^
+src/dw_solver.c:865:7: style: Variable 'c0' is assigned a value that is never used. [unreadVariable]
+   c0 = clock();
+      ^
+Checking src/dw_solver.c: DWSOLVER_BUILDING_LIB=DWSOLVER_BUILDING_LIB;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_solver.c: DWSOLVER_STATIC=DWSOLVER_STATIC;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_solver.c: HAVE_CLOCK_GETTIME=HAVE_CLOCK_GETTIME...
+Checking src/dw_solver.c: USE_NAMED_SEMAPHORES=USE_NAMED_SEMAPHORES...
+Checking src/dw_solver.c: _WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_solver.c: __GNUC__=__GNUC__;__clang__=__clang__...
+6/8 files checked 64% done
+Checking src/dw_subprob.c ...
+src/dw_subprob.c:504:7: warning: If memory allocation fails, then there is a possible null pointer dereference: y [nullPointerOutOfMemory]
+  if( y[i-1] != 0.0 ) {
+      ^
+src/dw_subprob.c:155:36: note: Assuming allocation function fails
+ y                         = calloc(master_cols, sizeof(double));
+                                   ^
+src/dw_subprob.c:155:36: note: Assignment 'y=calloc(master_cols,sizeof(double))', assigned value is 0
+ y                         = calloc(master_cols, sizeof(double));
+                                   ^
+src/dw_subprob.c:263:30: note: Calling function 'prepare_column', 2nd argument 'y' value is 0
+ prepare_column(my_solution, y, my_data);
+                             ^
+src/dw_subprob.c:504:7: note: Null pointer dereference
+  if( y[i-1] != 0.0 ) {
+      ^
+src/dw_subprob.c:498:65: error: If memory allocation fails: pointer addition with NULL pointer. [nullPointerArithmeticOutOfMemory]
+   data->D_row_coords, data->D_col_coords, data->D_nnz, solution+1,
+                                                                ^
+src/dw_subprob.c:153:36: note: Assuming allocation function fails
+ my_solution               = calloc(my_col, sizeof(double));
+                                   ^
+src/dw_subprob.c:153:36: note: Assignment 'my_solution=calloc(my_col,sizeof(double))', assigned value is 0
+ my_solution               = calloc(my_col, sizeof(double));
+                                   ^
+src/dw_subprob.c:263:17: note: Calling function 'prepare_column', 1st argument 'my_solution' value is 0
+ prepare_column(my_solution, y, my_data);
+                ^
+src/dw_subprob.c:498:65: note: Null pointer addition
+   data->D_row_coords, data->D_col_coords, data->D_nnz, solution+1,
+                                                                ^
+src/dw_subprob.c:532:67: error: If memory allocation fails: pointer addition with NULL pointer. [nullPointerArithmeticOutOfMemory]
+ data->new_obj_coeff = dw_ddot(data->num_cols, data->c+1, solution+1);
+                                                                  ^
+src/dw_subprob.c:153:36: note: Assuming allocation function fails
+ my_solution               = calloc(my_col, sizeof(double));
+                                   ^
+src/dw_subprob.c:153:36: note: Assignment 'my_solution=calloc(my_col,sizeof(double))', assigned value is 0
+ my_solution               = calloc(my_col, sizeof(double));
+                                   ^
+src/dw_subprob.c:263:17: note: Calling function 'prepare_column', 1st argument 'my_solution' value is 0
+ prepare_column(my_solution, y, my_data);
+                ^
+src/dw_subprob.c:532:67: note: Null pointer addition
+ data->new_obj_coeff = dw_ddot(data->num_cols, data->c+1, solution+1);
+                                                                  ^
+src/dw_subprob.c:541:12: style: The scope of the variable 'begin' can be reduced. [variableScope]
+ int i, j, begin, end, count;
+           ^
+src/dw_subprob.c:541:19: style: The scope of the variable 'end' can be reduced. [variableScope]
+ int i, j, begin, end, count;
+                  ^
+src/dw_subprob.c:87:12: style: Local variable 'simplex_control_params' shadows outer variable [shadowVariable]
+ glp_smcp *simplex_control_params = (glp_smcp*) malloc(sizeof(glp_smcp));
+           ^
+src/dw.h:152:18: note: Shadowed declaration
+extern glp_smcp* simplex_control_params;
+                 ^
+src/dw_subprob.c:87:12: note: Shadow variable
+ glp_smcp *simplex_control_params = (glp_smcp*) malloc(sizeof(glp_smcp));
+           ^
+src/dw_subprob.c:118:6: style: Variable 'ret' is assigned a value that is never used. [unreadVariable]
+ ret = glp_simplex(lp, simplex_control_params);
+     ^
+Checking src/dw_subprob.c: DWSOLVER_BUILDING_LIB=DWSOLVER_BUILDING_LIB;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_subprob.c: DWSOLVER_STATIC=DWSOLVER_STATIC;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_subprob.c: HAVE_CLOCK_GETTIME=HAVE_CLOCK_GETTIME...
+Checking src/dw_subprob.c: USE_INTEL_MKL=USE_INTEL_MKL...
+src/dw_subprob.c:495:12: error: If memory allocation fails: pointer addition with NULL pointer. [nullPointerArithmeticOutOfMemory]
+   solution+1, &double_zero, y);
+           ^
+src/dw_subprob.c:153:36: note: Assuming allocation function fails
+ my_solution               = calloc(my_col, sizeof(double));
+                                   ^
+src/dw_subprob.c:153:36: note: Assignment 'my_solution=calloc(my_col,sizeof(double))', assigned value is 0
+ my_solution               = calloc(my_col, sizeof(double));
+                                   ^
+src/dw_subprob.c:263:17: note: Calling function 'prepare_column', 1st argument 'my_solution' value is 0
+ prepare_column(my_solution, y, my_data);
+                ^
+src/dw_subprob.c:495:12: note: Null pointer addition
+   solution+1, &double_zero, y);
+           ^
+src/dw_subprob.c:73:15: style: Variable 'matdescra_f' can be declared as pointer to const [constVariablePointer]
+ static char* matdescra_f = "GXXF";
+              ^
+src/dw_subprob.c:70:14: style: Variable 'no_trans' is assigned a value that is never used. [unreadVariable]
+ static char no_trans  = 'N';          // Transpose flags for matrix/vector ops.
+             ^
+src/dw_subprob.c:73:15: style: Variable 'matdescra_f' is assigned a value that is never used. [unreadVariable]
+ static char* matdescra_f = "GXXF";
+              ^
+Checking src/dw_subprob.c: USE_NAMED_SEMAPHORES=USE_NAMED_SEMAPHORES...
+Checking src/dw_subprob.c: _WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_subprob.c: __GNUC__=__GNUC__;__clang__=__clang__...
+7/8 files checked 78% done
+Checking src/dw_support.c ...
+src/dw_support.c:254:10: style: Condition 'pg>1' is always true [knownConditionTrueFalse]
+  if (pg > 1) {
+         ^
+src/dw_support.c:252:13: note: Assignment 'pg=4096', assigned value is 4096
+  long pg = 4096; /* Windows/MinGW: x86-64 page size is always 4096 */
+            ^
+src/dw_support.c:254:10: note: Condition 'pg>1' is always true
+  if (pg > 1) {
+         ^
+src/dw_support.c:541:9: warning: If memory allocation fails, then there is a possible null pointer dereference: buffer [nullPointerOutOfMemory]
+  fgets(buffer, BUFF_SIZE, input_file);
+        ^
+src/dw_support.c:429:32: note: Assuming allocation function fails
+  char* buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+                               ^
+src/dw_support.c:429:18: note: Assignment 'buffer=(char*)malloc(sizeof(char)*200)', assigned value is 0
+  char* buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+                 ^
+src/dw_support.c:536:7: note: Assuming condition is false
+  if( !opened_guide_file ) {
+      ^
+src/dw_support.c:541:9: note: Null pointer dereference
+  fgets(buffer, BUFF_SIZE, input_file);
+        ^
+src/dw_support.c:542:26: warning: If memory allocation fails, then there is a possible null pointer dereference: buffer [nullPointerOutOfMemory]
+  fg->num_clients = atoi(buffer);
+                         ^
+src/dw_support.c:429:32: note: Assuming allocation function fails
+  char* buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+                               ^
+src/dw_support.c:429:18: note: Assignment 'buffer=(char*)malloc(sizeof(char)*200)', assigned value is 0
+  char* buffer = (char*) malloc(sizeof(char)*BUFF_SIZE);
+                 ^
+src/dw_support.c:536:7: note: Assuming condition is false
+  if( !opened_guide_file ) {
+      ^
+src/dw_support.c:542:26: note: Null pointer dereference
+  fg->num_clients = atoi(buffer);
+                         ^
+src/dw_support.c:572:9: warning: If memory allocation fails, then there is a possible null pointer dereference: subproblem_files [nullPointerOutOfMemory]
+   if( (subproblem_files[i] = fopen(fg->subproblem_names[i], "r")) == NULL ) {
+        ^
+src/dw_support.c:556:32: note: Assuming allocation function fails
+  subproblem_files     = malloc(sizeof(FILE*)*fg->num_clients);
+                               ^
+src/dw_support.c:556:32: note: Assignment 'subproblem_files=malloc(sizeof(FILE*)*fg->num_clients)', assigned value is 0
+  subproblem_files     = malloc(sizeof(FILE*)*fg->num_clients);
+                               ^
+src/dw_support.c:567:62: note: Assuming condition is false
+   if (fgets(fg->subproblem_names[i], BUFF_SIZE, input_file) == NULL) {
+                                                             ^
+src/dw_support.c:572:9: note: Null pointer dereference
+   if( (subproblem_files[i] = fopen(fg->subproblem_names[i], "r")) == NULL ) {
+        ^
+src/dw_support.c:636:10: warning: Either the condition 'buffer!=NULL' is redundant or there is possible null pointer dereference: buffer. [nullPointerRedundantCheck]
+  strcpy(buffer, "\0"); /* "Clear" the buffer. */
+         ^
+src/dw_support.c:638:14: note: Assuming that condition 'buffer!=NULL' is not redundant
+  if( buffer != NULL ) {
+             ^
+src/dw_support.c:636:10: note: Null pointer dereference
+  strcpy(buffer, "\0"); /* "Clear" the buffer. */
+         ^
+src/dw_support.c:637:9: warning: Either the condition 'buffer!=NULL' is redundant or there is possible null pointer dereference: buffer. [nullPointerRedundantCheck]
+  fgets(buffer, BUFF_SIZE, input_file);
+        ^
+src/dw_support.c:638:14: note: Assuming that condition 'buffer!=NULL' is not redundant
+  if( buffer != NULL ) {
+             ^
+src/dw_support.c:637:9: note: Null pointer dereference
+  fgets(buffer, BUFF_SIZE, input_file);
+        ^
+src/dw_support.c:671:10: warning: If memory allocation fails, then there is a possible null pointer dereference: local_col_name [nullPointerOutOfMemory]
+  strcpy(local_col_name, var_name);
+         ^
+src/dw_support.c:667:26: note: Assuming allocation function fails
+  local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+                         ^
+src/dw_support.c:667:26: note: Assignment 'local_col_name=malloc(sizeof(char)*200)', assigned value is 0
+  local_col_name = malloc(sizeof(char)*BUFF_SIZE);
+                         ^
+src/dw_support.c:671:10: note: Null pointer dereference
+  strcpy(local_col_name, var_name);
+         ^
+src/dw_support.c:673:11: warning: If memory allocation fails, then there is a possible null pointer dereference: sector_name [nullPointerOutOfMemory]
+  strcpy( sector_name, strtok(NULL, ",") );
+          ^
+src/dw_support.c:669:23: note: Assuming allocation function fails
+  sector_name = malloc(sizeof(char)*BUFF_SIZE);
+                      ^
+src/dw_support.c:669:23: note: Assignment 'sector_name=malloc(sizeof(char)*200)', assigned value is 0
+  sector_name = malloc(sizeof(char)*BUFF_SIZE);
+                      ^
+src/dw_support.c:673:11: note: Null pointer dereference
+  strcpy( sector_name, strtok(NULL, ",") );
+          ^
+src/dw_support.c:674:33: warning: If memory allocation fails, then there is a possible null pointer dereference: sector_name [nullPointerOutOfMemory]
+  fprintf(zero_file, "%s %s\n", sector_name, strtok(NULL, ","));
+                                ^
+src/dw_support.c:669:23: note: Assuming allocation function fails
+  sector_name = malloc(sizeof(char)*BUFF_SIZE);
+                      ^
+src/dw_support.c:669:23: note: Assignment 'sector_name=malloc(sizeof(char)*200)', assigned value is 0
+  sector_name = malloc(sizeof(char)*BUFF_SIZE);
+                      ^
+src/dw_support.c:674:33: note: Null pointer dereference
+  fprintf(zero_file, "%s %s\n", sector_name, strtok(NULL, ","));
+                                ^
+src/dw_support.c:688:11: warning: If memory allocation fails, then there is a possible null pointer dereference: filename [nullPointerOutOfMemory]
+ snprintf(filename, BUFF_SIZE, "basis_iteration_%d", iteration);
+          ^
+src/dw_support.c:685:25: note: Assuming allocation function fails
+ char* filename = malloc(sizeof(char)*BUFF_SIZE);
+                        ^
+src/dw_support.c:685:25: note: Assignment 'filename=malloc(sizeof(char)*200)', assigned value is 0
+ char* filename = malloc(sizeof(char)*BUFF_SIZE);
+                        ^
+src/dw_support.c:688:11: note: Null pointer dereference
+ snprintf(filename, BUFF_SIZE, "basis_iteration_%d", iteration);
+          ^
+src/dw_support.c:59:10: style: The scope of the variable 'vl' can be reduced. [variableScope]
+ va_list vl;
+         ^
+src/dw_support.c:98:19: style: The scope of the variable 'len' can be reduced. [variableScope]
+ int count, i, j, len;
+                  ^
+src/dw_support.c:99:9: style: The scope of the variable 'sign' can be reduced. [variableScope]
+ double sign;
+        ^
+src/dw_support.c:655:14: style: The scope of the variable 'var_name' can be reduced. [variableScope]
+ const char* var_name;
+             ^
+src/dw_support.c:657:8: style: The scope of the variable 'sector_name' can be reduced. [variableScope]
+ char* sector_name;
+       ^
+src/dw_support.c:744:6: style: The scope of the variable 'subprob' can be reduced. [variableScope]
+ int subprob;
+     ^
+src/dw_support.c:745:6: style: The scope of the variable 'iteration' can be reduced. [variableScope]
+ int iteration;
+     ^
+src/dw_support.c:746:14: style: The scope of the variable 'col_name' can be reduced. [variableScope]
+ const char* col_name;
+             ^
+src/dw_support.c:784:6: style: The scope of the variable 'sum' can be reduced. [variableScope]
+ int sum;
+     ^
+src/dw_support.c:786:9: style: The scope of the variable 'bound' can be reduced. [variableScope]
+ double bound;
+        ^
+src/dw_support.c:351:34: style: Parameter 'argv' can be declared as const array [constParameter]
+void print_usage(int argc, char* argv[]) {
+                                 ^
+src/dw_support.c:428:9: style: Unused variable: monolithic_file [unusedVariable]
+  FILE* monolithic_file;
+        ^
+Checking src/dw_support.c: DWSOLVER_BUILDING_LIB=DWSOLVER_BUILDING_LIB;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_support.c: DWSOLVER_STATIC=DWSOLVER_STATIC;_WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_support.c: HAVE_CLOCK_GETTIME=HAVE_CLOCK_GETTIME...
+Checking src/dw_support.c: USE_NAMED_SEMAPHORES=USE_NAMED_SEMAPHORES...
+Checking src/dw_support.c: _SC_PAGESIZE=_SC_PAGESIZE...
+Checking src/dw_support.c: _WIN32=_WIN32;__CYGWIN__=__CYGWIN__...
+Checking src/dw_support.c: __GNUC__=__GNUC__;__clang__=__clang__...
+8/8 files checked 100% done
+src/dw_support.c:155:2: warning: If memory allocation fails, then there is a possible null pointer dereference: fg [ctunullpointerOutOfMemory]
+ fg->verbosity = OUTPUT_NORMAL;
+ ^
+src/dw_solver.c:957:18: note: Assuming allocation function fails
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:957:18: note: Assignment 'globals=malloc(sizeof(struct faux_globals))', assigned value is 0
+ globals = malloc(sizeof(faux_globals));
+                 ^
+src/dw_solver.c:959:14: note: Calling function init_globals, 1st argument is null
+ init_globals(globals);
+             ^
+src/dw_support.c:155:2: note: Dereferencing argument fg that is null
+ fg->verbosity = OUTPUT_NORMAL;
+ ^
+src/dw_rounding.c:380:6: style: The function 'print_zeros' is never used. [unusedFunction]
+void print_zeros(int_thread_data* my_data) {
+     ^
+src/dw_subprob.c:540:6: style: The function 'printD' is never used. [unusedFunction]
+void printD(void) {
+     ^
+src/dw_support.c:72:6: style: The function 'check_degeneracy' is never used. [unusedFunction]
+void check_degeneracy(void) {
+     ^
+src/dw_support.c:320:6: style: The function 'purge_nonbasics' is never used. [unusedFunction]
+void purge_nonbasics(void) {
+     ^
+src/dw_support.c:422:5: style: The function 'process_cmdline' is never used. [unusedFunction]
+int process_cmdline(int argc, char* argv[], faux_globals* fg) {
+    ^
+src/dw_support.c:723:6: style: The function 'check_aux_vars' is never used. [unusedFunction]
+void check_aux_vars(void) {
+     ^
+src/dw_support.c:741:6: style: The function 'get_solution' is never used. [unusedFunction]
+void get_solution(subprob_struct* sub_data) {
+     ^
+src/dw_support.c:781:5: style: The function 'dirty_feas_check' is never used. [unusedFunction]
+int dirty_feas_check(void) {
+    ^
+src/dw_rounding.c:276:6: style: The function 'check_broken_constraints' should have static linkage since it is not used outside of its translation unit. [staticFunction]
+void check_broken_constraints(double* xx) {
+     ^
+src/dw_rounding.c:338:6: style: The function 'print_zeros_simple' should have static linkage since it is not used outside of its translation unit. [staticFunction]
+void print_zeros_simple(int_thread_data* my_data) {
+     ^
+src/dw_rounding.c:520:7: style: The function 'solution_printing_thread' should have static linkage since it is not used outside of its translation unit. [staticFunction]
+void* solution_printing_thread(void* arg) {
+      ^
+src/dw_rounding.c:558:7: style: The function 'rounding_thread' should have static linkage since it is not used outside of its translation unit. [staticFunction]
+void* rounding_thread(void* arg) {
+      ^
+src/dw_subprob.c:412:5: style: The function 'signal_availability' should have static linkage since it is not used outside of its translation unit. [staticFunction]
+int signal_availability(subprob_struct* my_data) {
+    ^
+src/dw_subprob.c:450:6: style: The function 'organize_solution' should have static linkage since it is not used outside of its translation unit. [staticFunction]
+void organize_solution(subprob_struct* data, double* sol, int my_col) {
+     ^
+src/dw_subprob.c:478:6: style: The function 'prepare_column' should have static linkage since it is not used outside of its translation unit. [staticFunction]
+void prepare_column(double* solution, double* y, subprob_struct* data) {
+     ^
+nofile:0:0: information: Active checkers: 113/186 (use --checkers-report=<filename> to see details) [checkersReport]
+
