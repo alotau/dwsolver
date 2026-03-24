@@ -196,10 +196,10 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 	pthread_mutex_unlock(&glpk_mutex); /* always succeeds: unlocking owned mutex */
 
 	if (original_master_lp == NULL) {
-		fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
+		(void)fprintf(stderr, "dw_solver: cannot parse master LP file '%s'\n",
 		        globals->master_name);
 		glp_term_hook(NULL, NULL);
-		if (opt_outfile != NULL) fclose(opt_outfile);
+		if (opt_outfile != NULL) (void)fclose(opt_outfile);
 		return DW_STATUS_ERR_FILE;
 	}
 
@@ -216,7 +216,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 	num_rows    = glp_get_num_rows(original_master_lp);
 
-	fflush(stdout);
+	(void)fflush(stdout);
 	/* These arrays will be re-used over and over in GLPK calls. */
 	val   = (double*) malloc(sizeof(double)*
 			(glp_get_num_cols(original_master_lp) + 1));
@@ -258,7 +258,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 	/* Give each convexity row a name and and fix its bounds at 1.0. */
 	for( i = (D->rows + 1); i <= (D->rows + num_clients); i++ ) {
-		snprintf(local_buffer, BUFF_SIZE, "sub%d_convexity", i - D->rows);
+		(void)snprintf(local_buffer, BUFF_SIZE, "sub%d_convexity", i - D->rows);
 		glp_set_row_name(master_lp, i, local_buffer);
 
 		// Fixing row bounds to zero as a first step toward handling bounding
@@ -484,7 +484,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 		*obj_count = 0;
 
 		if( globals->write_intermediate_opt_files ) {
-			snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp");
+			(void)snprintf(local_buffer, BUFF_SIZE, "phase1_step_0.cpxlp");
 			glp_write_lp(master_lp, NULL, local_buffer);
 		}
 
@@ -500,7 +500,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 					obj_names, obj_coefs, obj_count, md);
 
 			if( globals->write_intermediate_opt_files ) {
-				snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", j+1);
+				(void)snprintf(local_buffer, BUFF_SIZE, "phase1_step_%d.cpxlp", j+1);
 				glp_write_lp(master_lp, NULL, local_buffer);
 			}
 
@@ -652,7 +652,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 				glp_get_num_cols(master_lp));
 
 		if( globals->write_intermediate_opt_files ) {
-			snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", j);
+			(void)snprintf(local_buffer, BUFF_SIZE, "master_step_%d.cpxlp", j);
 			glp_write_lp(master_lp, NULL, local_buffer);
 		}
 
@@ -903,7 +903,7 @@ static dw_status_t dw_solver_run(faux_globals *globals, dw_result_t *result) {
 
 	/* Reset the GLPK hook and close the temporary redirect file. */
 	glp_term_hook(NULL, NULL);
-	if (opt_outfile != NULL) fclose(opt_outfile);
+	if (opt_outfile != NULL) (void)fclose(opt_outfile);
 
 	dw_printf(IMPORTANCE_AVG,
 			"Master made it to the end. Exiting gracefully, dignity intact.\n");
@@ -944,7 +944,7 @@ int dw_solve(const char        *master_file,
 			result->x               = NULL;
 			return DW_STATUS_ERR_FILE;
 		}
-		fclose(fp);
+		(void)fclose(fp);
 	}
 
 	/* Use provided options or library defaults. */
@@ -1044,7 +1044,7 @@ const char *dw_version(void) {
 static int hook(void* info, const char* s) {
 	FILE* outfile = info;
 	DW_PTHREAD_CHECK(pthread_mutex_lock(&fputs_mutex), "pthread_mutex_lock(&fputs_mutex)");
-	fputs(s, outfile);
+	(void)fputs(s, outfile);
 	pthread_mutex_unlock(&fputs_mutex); /* always succeeds: unlocking owned mutex */
 	return 1;
 }

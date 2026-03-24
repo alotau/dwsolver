@@ -121,10 +121,10 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 			/* Lock here is overkill, but it stops warnings from helgrind. */
 			DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 			if( sub_data[index].unbounded != GLP_UNBND )
-				snprintf(obj_names[*obj_count], BUFF_SIZE - 1,
+				(void)snprintf(obj_names[*obj_count], BUFF_SIZE - 1,
 						"lambda_%d_%d", index, signals->current_iteration);
 			else
-				snprintf(obj_names[*obj_count], BUFF_SIZE - 1,
+				(void)snprintf(obj_names[*obj_count], BUFF_SIZE - 1,
 						"theta_%d_%d", index, signals->current_iteration);
 			pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 
@@ -150,13 +150,13 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 			else {
 				i = sub_data[index].len;
 				printf("Unbounded subproblem %d is not going to be handled correctly.\n", index);
-				fflush(stdout);
+				(void)fflush(stdout);
 			}
 
 			/* Now actually add the new column to constraint matrix. */
 			//printf("sub_data[%d].ind[1] = %d\n", index, sub_data[index].ind[1]);
-			fflush(stdout);
-			if( sub_data[index].ind[1] < 1 ) getc(stdin);
+			(void)fflush(stdout);
+			if( sub_data[index].ind[1] < 1 ) (void)getc(stdin);
 			glp_set_mat_col(master_lp, col, i, sub_data[index].ind, sub_data[index].val);
 			glp_set_obj_coef(master_lp, col, 0.0);
 
@@ -200,7 +200,7 @@ int phase_1_iteration(subprob_struct* sub_data, faux_globals* fg, int first_run,
 		glp_create_index(master_lp);
 		for(i = 1; i < md->rows + 1; i++) {
 			if( glp_get_row_lb(master_lp, i) - y_accumulators[i] < 0.0 ) {
-				snprintf(col_name, BUFF_SIZE-1, "y_%d", i);
+				(void)snprintf(col_name, BUFF_SIZE-1, "y_%d", i);
 				//printf("Trying to set %s appropriately.\n", col_name);
 				col = glp_find_col(master_lp, col_name);
 				//printf("Found column to be %d\n", col);
@@ -367,10 +367,10 @@ int phase_2_iteration(subprob_struct* sub_data, faux_globals* fg, master_data* m
 			}
 			DW_PTHREAD_CHECK(pthread_mutex_lock(&next_iteration_mutex), "pthread_mutex_lock(&next_iteration_mutex)");
 			if( sub_data[index].unbounded != GLP_UNBND )
-				snprintf(buffer, BUFF_SIZE - 1,
+				(void)snprintf(buffer, BUFF_SIZE - 1,
 						"lambda_%d_%d", index, signals->current_iteration);
 			else
-				snprintf(buffer, BUFF_SIZE - 1,
+				(void)snprintf(buffer, BUFF_SIZE - 1,
 						"theta_%d_%d", index, signals->current_iteration);
 			pthread_mutex_unlock(&next_iteration_mutex); /* always succeeds: unlocking owned mutex */
 			dw_printf(IMPORTANCE_DIAG, "Master is adding a column called %s.\n",

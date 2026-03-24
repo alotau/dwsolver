@@ -34,6 +34,7 @@
 #include <glpk.h>        /* For all of the main GLPK stuff. */
 #include <stdio.h>       /* printf, etc */
 #include <stdlib.h>      /* malloc, etc */
+#include <string.h>      /* strdup, etc */
 #include <pthread.h>     /* For threading. */
 
 #ifdef USE_INTEL_MKL

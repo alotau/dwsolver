@@ -77,20 +77,21 @@ jobs:
       # ------------------------------------------------------------------ #
       - name: Locate cert.py addon
         run: |
-          cert_path=$(dpkg -L cppcheck 2>/dev/null | grep "cert\.py" | head -1 || true)
-          if [ -z "$cert_path" ]; then
-            cert_path=$(find /usr -name "cert.py" 2>/dev/null | head -1 || true)
-          fi
-          if [ -z "$cert_path" ]; then
-            echo "cert.py not bundled with apt package — downloading from cppcheck GitHub..."
-            cppcheck_version=$(cppcheck --version | sed 's/Cppcheck //')
+          addons_dir=$(dpkg -L cppcheck | grep '/addons$' | head -1)
+          if dpkg -L cppcheck | grep -q 'cert\.py'; then
+            echo "cert.py bundled — using package copy"
+          else
+            ver_full=$(cppcheck --version | sed 's/Cppcheck //')
+            ver_short=$(echo "$ver_full" | sed 's/\.[0-9]*$//')
+            echo "Downloading cert.py (trying $ver_full, fallback $ver_short)..."
             curl -fsSL \
-              "https://raw.githubusercontent.com/danmar/cppcheck/${cppcheck_version}/addons/cert.py" \
-              -o /tmp/cert.py
-            cert_path=/tmp/cert.py
+              "https://raw.githubusercontent.com/danmar/cppcheck/${ver_full}/addons/cert.py" \
+              -o "${addons_dir}/cert.py" 2>/dev/null || \
+            curl -fsSL \
+              "https://raw.githubusercontent.com/danmar/cppcheck/${ver_short}/addons/cert.py" \
+              -o "${addons_dir}/cert.py"
+            echo "Downloaded cert.py to ${addons_dir}/cert.py"
           fi
-          echo "cert_addon=$cert_path" >> $GITHUB_ENV
-          echo "Found cert addon: $cert_path"
 
       # ------------------------------------------------------------------ #
       #  cppcheck — ISO/IEC TS 17961 cert addon scan                       #
@@ -104,7 +105,7 @@ jobs:
             | grep -v '^[[:space:]]*$' \
             > /tmp/cppcheck-suppressions.txt
           cppcheck \
-            --addon="$cert_addon" \
+            --addon=cert \
             --suppressions-list=/tmp/cppcheck-suppressions.txt \
             --error-exitcode=1 \
             --std=c11 \
@@ -138,7 +139,7 @@ jobs:
             src/dw_solver.c \
             src/dw_subprob.c \
             src/dw_support.c \
-            -- -std=c11 -I src -I . -I /usr/include
+            -- -std=c11 -D_POSIX_C_SOURCE=200809L -I src -I . -I /usr/include
 
       # ------------------------------------------------------------------ #
       #  SC-003 Enforcement gate                                            #

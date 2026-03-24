@@ -108,14 +108,14 @@ static int parse_cli(int argc, char *argv[],
 	for( i = 1; i < argc; i++ ) {
 		if( strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--guidefile") == 0 ) {
 			if( i + 1 >= argc ) {
-				fprintf(stderr, "Option %s requires a guide file name.\n", argv[i]);
+				(void)fprintf(stderr, "Option %s requires a guide file name.\n", argv[i]);
 				print_usage(argc, argv);
 				return 1;
 			}
 			i++;
 			gf = fopen(argv[i], "r");
 			if( !gf ) {
-				fprintf(stderr, "Cannot open guide file: %s\n", argv[i]);
+				(void)fprintf(stderr, "Cannot open guide file: %s\n", argv[i]);
 				print_usage(argc, argv);
 				return 1;
 			}
@@ -150,40 +150,55 @@ static int parse_cli(int argc, char *argv[],
 		else if( strcmp(argv[i], "--mip_gap") == 0 ||
 		         strcmp(argv[i], "--mip-gap") == 0 ) {
 			if( i + 1 >= argc ) {
-				fprintf(stderr, "Option %s requires a value.\n", argv[i]);
+				(void)fprintf(stderr, "Option %s requires a value.\n", argv[i]);
 				print_usage(argc, argv);
 				return 1;
 			}
-			double v = atof(argv[++i]);
-			if( v > 0.0 ) opts->mip_gap = v;
-			else fprintf(stderr, "%s is not a valid mip_gap; using default.\n", argv[i]);
+			{
+				char *_ep;
+				char *_sv = argv[++i];
+				double v = strtod(_sv, &_ep);
+				if (_ep == _sv || *_ep != '\0') v = -1.0;
+				if( v > 0.0 ) opts->mip_gap = v;
+				else (void)fprintf(stderr, "%s is not a valid mip_gap; using default.\n", argv[i]);
+			}
 		}
 		else if( strcmp(argv[i], "-r") == 0 ||
 		         strcmp(argv[i], "--round") == 0 )         opts->rounding_flag = 1;
 		else if( strcmp(argv[i], "--write-bases") == 0 )
-			fprintf(stderr, "Warning: --write-bases is not supported by this build; option ignored.\n");
+			(void)fprintf(stderr, "Warning: --write-bases is not supported by this build; option ignored.\n");
 		else if( strcmp(argv[i], "--write-int-probs") == 0 )
-			fprintf(stderr, "Warning: --write-int-probs is not supported by this build; option ignored.\n");
+			(void)fprintf(stderr, "Warning: --write-int-probs is not supported by this build; option ignored.\n");
 		else if( strcmp(argv[i], "--skip-monolithic-read") == 0 ) skip_mono = 1;
 		else if( strcmp(argv[i], "--phase1_max") == 0 ) {
 			if( i + 1 >= argc ) {
-				fprintf(stderr, "Option %s requires a value.\n", argv[i]);
+				(void)fprintf(stderr, "Option %s requires a value.\n", argv[i]);
 				print_usage(argc, argv);
 				return 1;
 			}
-			int v = atoi(argv[++i]);
-			if( v > 0 ) opts->max_phase1_iterations = v;
-			else fprintf(stderr, "%s is not a valid iteration count; using default.\n", argv[i]);
+			{
+				char *_ep;
+				char *_sv = argv[++i];
+				int v = (int)strtol(_sv, &_ep, 10);
+				if (_ep == _sv || *_ep != '\0') v = 0;
+				if( v > 0 ) opts->max_phase1_iterations = v;
+				else (void)fprintf(stderr, "%s is not a valid iteration count; using default.\n", argv[i]);
+			}
 		}
 		else if( strcmp(argv[i], "--phase2_max") == 0 ) {
 			if( i + 1 >= argc ) {
-				fprintf(stderr, "Option %s requires a value.\n", argv[i]);
+				(void)fprintf(stderr, "Option %s requires a value.\n", argv[i]);
 				print_usage(argc, argv);
 				return 1;
 			}
-			int v = atoi(argv[++i]);
-			if( v > 0 ) opts->max_phase2_iterations = v;
-			else fprintf(stderr, "%s is not a valid iteration count; using default.\n", argv[i]);
+			{
+				char *_ep;
+				char *_sv = argv[++i];
+				int v = (int)strtol(_sv, &_ep, 10);
+				if (_ep == _sv || *_ep != '\0') v = 0;
+				if( v > 0 ) opts->max_phase2_iterations = v;
+				else (void)fprintf(stderr, "%s is not a valid iteration count; using default.\n", argv[i]);
+			}
 		}
 		else printf("Command line argument %s not recognized. Trying to continue.\n", argv[i]);
 	}
@@ -195,33 +210,36 @@ static int parse_cli(int argc, char *argv[],
 
 	/* Read number of subproblems. */
 	if( !fgets(buf, CLI_BUFF_SIZE, gf) ) {
-		fprintf(stderr, "Guide file is empty.\n"); fclose(gf); return 1;
+		(void)fprintf(stderr, "Guide file is empty.\n"); (void)fclose(gf); return 1;
 	}
-	n = atoi(buf);
+	{
+		char *_ep;
+		n = (int)strtol(buf, &_ep, 10);
+	}
 	if( n < 1 || n > 26000 ) {
-		fprintf(stderr, "Invalid subproblem count: %d\n", n); fclose(gf); return 1;
+		(void)fprintf(stderr, "Invalid subproblem count: %d\n", n); (void)fclose(gf); return 1;
 	}
 
 	subs = malloc(sizeof(char*) * (size_t)n);
-	if( !subs ) { fclose(gf); return 1; }
+	if( !subs ) { (void)fclose(gf); return 1; }
 
 	/* Read subproblem file names. */
 	for( i = 0; i < n; i++ ) {
 		subs[i] = malloc(CLI_BUFF_SIZE);
-		if( !subs[i] ) { fclose(gf); return 1; }
+		if( !subs[i] ) { (void)fclose(gf); return 1; }
 		if( !fgets(subs[i], CLI_BUFF_SIZE, gf) ) {
-			fprintf(stderr, "Guide file truncated reading subproblem %d\n", i);
-			fclose(gf); return 1;
+			(void)fprintf(stderr, "Guide file truncated reading subproblem %d\n", i);
+			(void)fclose(gf); return 1;
 		}
 		cli_chomp(subs[i]);
 	}
 
 	/* Read master file name. */
 	*master_out = malloc(CLI_BUFF_SIZE);
-	if( !*master_out ) { fclose(gf); return 1; }
+	if( !*master_out ) { (void)fclose(gf); return 1; }
 	if( !fgets(*master_out, CLI_BUFF_SIZE, gf) ) {
-		fprintf(stderr, "Guide file truncated reading master file name\n");
-		fclose(gf); return 1;
+		(void)fprintf(stderr, "Guide file truncated reading master file name\n");
+		(void)fclose(gf); return 1;
 	}
 	cli_chomp(*master_out);
 
@@ -233,11 +251,12 @@ static int parse_cli(int argc, char *argv[],
 	/* Read objective shift (optional). */
 	buf[0] = '\0';
 	if( fgets(buf, CLI_BUFF_SIZE, gf) && buf[0] != '\0' ) {
-		double s = atof(buf);
+		char *_ep;
+		double s = strtod(buf, &_ep);
 		if( s != 0.0 ) opts->shift = s;
 	}
 
-	fclose(gf);
+	(void)fclose(gf);
 	*subs_out  = subs;
 	*nsubs_out = n;
 	return 0;
@@ -258,7 +277,7 @@ int main(int argc, char *argv[]) {
 
 	rc = parse_cli(argc, argv, &opts, &master_file, &subproblem_files, &num_subproblems);
 	if( rc == 1 ) {
-		fprintf(stderr, "Something wrong with command line, exiting.\n");
+		(void)fprintf(stderr, "Something wrong with command line, exiting.\n");
 		return 1;
 	}
 	else if( rc == 2 ) {
