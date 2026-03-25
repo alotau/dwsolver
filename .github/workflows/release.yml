@@ -55,3 +55,12 @@ jobs:
           files: ${{ steps.tarball.outputs.path }}
           generate_release_notes: true
           draft: false
+          body: |
+            ## Security
+
+            For vulnerabilities or security-sensitive changes included in this release,
+            see [SECURITY.md](SECURITY.md) and the `### Security` subsection of
+            [CHANGELOG.md](CHANGELOG.md).
+
+            No known vulnerabilities are introduced or addressed unless noted in the
+            Security subsection of the CHANGELOG entry for this version.

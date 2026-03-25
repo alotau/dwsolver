@@ -8,6 +8,8 @@
  * Build:  make check   (via tests/Makefile.am wired into configure.ac)
  * Run:    ./tests/test_blas
  * Exit:   0 on all-pass, 1 on first failure
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <stdio.h>

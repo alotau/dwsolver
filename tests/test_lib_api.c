@@ -12,6 +12,8 @@
  * EXAMPLE_DIR is injected at compile time by tests/Makefile.am as:
  *   -DEXAMPLE_DIR='"$(top_srcdir)/examples"'
  *
+ *   SPDX-License-Identifier: GPL-3.0-or-later
+ *
  **************************************************************************** */
 
 #include <stdio.h>

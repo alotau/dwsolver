@@ -4,6 +4,8 @@
 [![Linux](https://github.com/alotau/dwsolver/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/alotau/dwsolver/actions/workflows/ci-linux.yml)
 [![Windows](https://github.com/alotau/dwsolver/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/alotau/dwsolver/actions/workflows/ci-windows.yml)
 [![Docker](https://github.com/alotau/dwsolver/actions/workflows/ci-docker.yml/badge.svg)](https://github.com/alotau/dwsolver/actions/workflows/ci-docker.yml)
+<!-- Replace NNNNN with the real project ID after badge registration (see CONTRIBUTING.md task T024) -->
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/NNNNN/badge)](https://bestpractices.coreinfrastructure.org/projects/NNNNN)
 
 ## Overview
 The Dantzig-Wolfe Solver program is a stand-alone implementation of the
