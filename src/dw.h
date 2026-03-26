@@ -29,6 +29,8 @@
  *
  *   Contact: Joseph Rios <Joseph.L.Rios@nasa.gov>
  *
+ *   SPDX-License-Identifier: GPL-3.0-or-later
+ *
  **************************************************************************** */
 
 #include <semaphore.h>
